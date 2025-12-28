@@ -1,0 +1,255 @@
+package com.noucall.app.utils
+
+import android.content.Context
+import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
+class SharedPreferencesManager(context: Context) {
+    
+    private val sharedPreferences: SharedPreferences = 
+        context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE)
+    
+    private val gson = Gson()
+    
+    companion object {
+        private var instance: SharedPreferencesManager? = null
+        
+        fun getInstance(context: Context): SharedPreferencesManager {
+            if (instance == null) {
+                instance = SharedPreferencesManager(context.applicationContext)
+            }
+            return instance!!
+        }
+        
+        // Convenience methods
+        fun isBlockingEnabled(context: Context): Boolean {
+            return getInstance(context).isBlockingEnabled()
+        }
+        
+        fun setBlockingEnabled(context: Context, enabled: Boolean) {
+            getInstance(context).setBlockingEnabled(enabled)
+        }
+        
+        fun getBlockedPrefixes(context: Context): List<String> {
+            return getInstance(context).getBlockedPrefixes()
+        }
+        
+        fun addBlockedPrefix(context: Context, prefix: String) {
+            getInstance(context).addBlockedPrefix(prefix)
+        }
+        
+        fun removeBlockedPrefix(context: Context, prefix: String) {
+            getInstance(context).removeBlockedPrefix(prefix)
+        }
+        
+        fun getWhitelistedCountries(context: Context): List<String> {
+            return getInstance(context).getWhitelistedCountries()
+        }
+        
+        fun addWhitelistedCountry(context: Context, country: String) {
+            getInstance(context).addWhitelistedCountry(country)
+        }
+        
+        fun removeWhitelistedCountry(context: Context, country: String) {
+            getInstance(context).removeWhitelistedCountry(country)
+        }
+        
+        fun isDarkMode(context: Context): Boolean {
+            return getInstance(context).isDarkMode()
+        }
+        
+        fun setDarkMode(context: Context, isDarkMode: Boolean) {
+            getInstance(context).setDarkMode(isDarkMode)
+        }
+        
+        fun getBlockedCallsCount(context: Context): Int {
+            return getInstance(context).getBlockedCallsCount()
+        }
+        
+        fun incrementBlockedCallsCount(context: Context) {
+            getInstance(context).incrementBlockedCallsCount()
+        }
+        
+        fun getBlockedSmsCount(context: Context): Int {
+            return getInstance(context).getBlockedSmsCount()
+        }
+        
+        fun incrementBlockedSmsCount(context: Context) {
+            getInstance(context).incrementBlockedSmsCount()
+        }
+        
+        fun addBlockedCallToHistory(context: Context, phoneNumber: String, timestamp: Long) {
+            getInstance(context).addBlockedCallToHistory(phoneNumber, timestamp)
+        }
+        
+        fun addBlockedSmsToHistory(context: Context, phoneNumber: String, message: String, timestamp: Long) {
+            getInstance(context).addBlockedSmsToHistory(phoneNumber, message, timestamp)
+        }
+        
+        fun clearHistory(context: Context) {
+            getInstance(context).clearHistory()
+        }
+        
+        fun getBlockedCallsHistory(context: Context): List<BlockedCall> {
+            return getInstance(context).getBlockedCallsHistory()
+        }
+        
+        fun getBlockedSmsHistory(context: Context): List<BlockedSms> {
+            return getInstance(context).getBlockedSmsHistory()
+        }
+    }
+    
+    // Blocking enabled status
+    fun isBlockingEnabled(): Boolean {
+        return sharedPreferences.getBoolean(Constants.KEY_BLOCKING_ENABLED, false)
+    }
+    
+    fun setBlockingEnabled(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.KEY_BLOCKING_ENABLED, enabled).apply()
+    }
+    
+    // Blocked prefixes management
+    fun getBlockedPrefixes(): List<String> {
+        val prefixesJson = sharedPreferences.getString(Constants.KEY_BLOCKED_PREFIXES, null)
+        return if (prefixesJson != null) {
+            val type = object : TypeToken<List<String>>() {}.type
+            gson.fromJson(prefixesJson, type) ?: Constants.DEFAULT_BLOCKED_PREFIXES
+        } else {
+            Constants.DEFAULT_BLOCKED_PREFIXES
+        }
+    }
+    
+    fun setBlockedPrefixes(prefixes: List<String>) {
+        val prefixesJson = gson.toJson(prefixes)
+        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_PREFIXES, prefixesJson).apply()
+    }
+    
+    fun addBlockedPrefix(prefix: String) {
+        val currentPrefixes = getBlockedPrefixes().toMutableList()
+        if (!currentPrefixes.contains(prefix)) {
+            currentPrefixes.add(prefix)
+            setBlockedPrefixes(currentPrefixes)
+        }
+    }
+    
+    fun removeBlockedPrefix(prefix: String) {
+        val currentPrefixes = getBlockedPrefixes().toMutableList()
+        currentPrefixes.remove(prefix)
+        setBlockedPrefixes(currentPrefixes)
+    }
+    
+    // Whitelisted countries management
+    fun getWhitelistedCountries(): List<String> {
+        val countriesJson = sharedPreferences.getString(Constants.KEY_WHITELISTED_COUNTRIES, null)
+        return if (countriesJson != null) {
+            val type = object : TypeToken<List<String>>() {}.type
+            gson.fromJson(countriesJson, type) ?: Constants.DEFAULT_WHITELISTED_COUNTRIES
+        } else {
+            Constants.DEFAULT_WHITELISTED_COUNTRIES
+        }
+    }
+    
+    fun setWhitelistedCountries(countries: List<String>) {
+        val countriesJson = gson.toJson(countries)
+        sharedPreferences.edit().putString(Constants.KEY_WHITELISTED_COUNTRIES, countriesJson).apply()
+    }
+    
+    fun addWhitelistedCountry(country: String) {
+        val currentCountries = getWhitelistedCountries().toMutableList()
+        if (!currentCountries.contains(country)) {
+            currentCountries.add(country)
+            setWhitelistedCountries(currentCountries)
+        }
+    }
+    
+    fun removeWhitelistedCountry(country: String) {
+        val currentCountries = getWhitelistedCountries().toMutableList()
+        currentCountries.remove(country)
+        setWhitelistedCountries(currentCountries)
+    }
+    
+    // Theme management
+    fun isDarkMode(): Boolean {
+        return sharedPreferences.getBoolean(Constants.KEY_DARK_MODE, false)
+    }
+    
+    fun setDarkMode(isDarkMode: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.KEY_DARK_MODE, isDarkMode).apply()
+    }
+    
+    // Statistics management
+    fun getBlockedCallsCount(): Int {
+        return sharedPreferences.getInt(Constants.KEY_BLOCKED_CALLS_COUNT, 0)
+    }
+    
+    fun incrementBlockedCallsCount() {
+        val currentCount = getBlockedCallsCount()
+        sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_CALLS_COUNT, currentCount + 1).apply()
+    }
+    
+    fun getBlockedSmsCount(): Int {
+        return sharedPreferences.getInt(Constants.KEY_BLOCKED_SMS_COUNT, 0)
+    }
+    
+    fun incrementBlockedSmsCount() {
+        val currentCount = getBlockedSmsCount()
+        sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_SMS_COUNT, currentCount + 1).apply()
+    }
+    
+    // History management
+    fun addBlockedCallToHistory(phoneNumber: String, timestamp: Long) {
+        val history = getBlockedCallsHistory().toMutableList()
+        history.add(BlockedCall(phoneNumber, timestamp))
+        val historyJson = gson.toJson(history)
+        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_CALLS_HISTORY, historyJson).apply()
+    }
+    
+    fun getBlockedCallsHistory(): List<BlockedCall> {
+        val historyJson = sharedPreferences.getString(Constants.KEY_BLOCKED_CALLS_HISTORY, null)
+        return if (historyJson != null) {
+            val type = object : TypeToken<List<BlockedCall>>() {}.type
+            gson.fromJson(historyJson, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
+    
+    fun addBlockedSmsToHistory(phoneNumber: String, message: String, timestamp: Long) {
+        val history = getBlockedSmsHistory().toMutableList()
+        history.add(BlockedSms(phoneNumber, message, timestamp))
+        val historyJson = gson.toJson(history)
+        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_SMS_HISTORY, historyJson).apply()
+    }
+    
+    fun getBlockedSmsHistory(): List<BlockedSms> {
+        val historyJson = sharedPreferences.getString(Constants.KEY_BLOCKED_SMS_HISTORY, null)
+        return if (historyJson != null) {
+            val type = object : TypeToken<List<BlockedSms>>() {}.type
+            gson.fromJson(historyJson, type) ?: emptyList()
+        } else {
+            emptyList()
+        }
+    }
+    
+    fun clearHistory() {
+        sharedPreferences.edit()
+            .remove(Constants.KEY_BLOCKED_CALLS_HISTORY)
+            .remove(Constants.KEY_BLOCKED_SMS_HISTORY)
+            .putInt(Constants.KEY_BLOCKED_CALLS_COUNT, 0)
+            .putInt(Constants.KEY_BLOCKED_SMS_COUNT, 0)
+            .apply()
+    }
+}
+
+// Data classes for history
+data class BlockedCall(
+    val phoneNumber: String,
+    val timestamp: Long
+)
+
+data class BlockedSms(
+    val phoneNumber: String,
+    val message: String,
+    val timestamp: Long
+)

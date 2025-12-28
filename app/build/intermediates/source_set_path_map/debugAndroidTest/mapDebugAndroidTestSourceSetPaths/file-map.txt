@@ -1,0 +1,6 @@
+com.noucall.app.test.app-core-1.5.0-0 C:\Users\boby_\.gradle\caches\8.10.2\transforms\a0221b37238ef81029dc762b5d929959\transformed\core-1.5.0\res
+com.noucall.app.test.app-annotation-experimental-1.3.0-1 C:\Users\boby_\.gradle\caches\8.10.2\transforms\d0ad7849ba8c57d1a494434e5e52168a\transformed\annotation-experimental-1.3.0\res
+com.noucall.app.test.app-androidTest-2 C:\Users\boby_\Projet\NoUCall\app\build\generated\res\resValues\androidTest\debug
+com.noucall.app.test.app-mergeDebugAndroidTestResources-3 C:\Users\boby_\Projet\NoUCall\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.noucall.app.test.app-mergeDebugAndroidTestResources-4 C:\Users\boby_\Projet\NoUCall\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.noucall.app.test.app-debugAndroidTest-5 C:\Users\boby_\Projet\NoUCall\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources

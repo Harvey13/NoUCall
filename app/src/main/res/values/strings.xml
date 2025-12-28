@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">NoUCall</string>
+    <string name="title_prefix_management">Gestion des Préfixes</string>
+    <string name="title_statistics">Statistiques</string>
+    <string name="title_whitelist">Liste Blanche</string>
+    <string name="add_prefix">Ajouter un préfixe</string>
+    <string name="blocked_prefixes">Préfixes Bloqués</string>
+    <string name="whitelisted_countries">Pays Autorisés</string>
+    <string name="blocked_calls">Appels Bloqués</string>
+    <string name="blocked_sms">SMS Bloqués</string>
+    <string name="total_blocked">Total Bloqué</string>
+    <string name="enable_blocking">Activer le Blocage</string>
+    <string name="disable_blocking">Désactiver le Blocage</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Modifier</string>
+    <string name="save">Enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="prefix_hint">Ex: 09 48</string>
+    <string name="country_hint">Ex: France</string>
+    <string name="dark_mode">Mode Sombre</string>
+    <string name="light_mode">Mode Clair</string>
+    <string name="theme_settings">Paramètres de Thème</string>
+    <string name="commercial_call_prefixes">Préfixes Démarchage Commercial</string>
+    <string name="permission_required">Permission Requise</string>
+    <string name="permission_call_phone">L\'application nécessite la permission de téléphoner pour bloquer les appels</string>
+    <string name="permission_read_phone_state">L\'application nécessite la permission de lire l\'état du téléphone</string>
+    <string name="permission_receive_sms">L\'application nécessite la permission de recevoir les SMS</string>
+    <string name="permission_system_alert_window">L\'application nécessite la permission d\'afficher par-dessus les autres applications pour bloquer les appels</string>
+    <string name="grant_permission">Accorder la Permission</string>
+    <string name="blocking_enabled">Blocage activé</string>
+    <string name="blocking_disabled">Blocage désactivé</string>
+    <string name="no_data">Aucune donnée</string>
+    <string name="today">Aujourd\'hui</string>
+    <string name="this_week">Cette semaine</string>
+    <string name="this_month">Ce mois</string>
+    <string name="all_time">Depuis le début</string>
+</resources>
