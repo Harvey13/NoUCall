@@ -3967,6 +3967,7 @@ layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
 menu main_menu
 menu statistics_menu
+mipmap ic_launcher
 plurals mtrl_badge_content_description
 string abc_action_bar_home_description
 string abc_action_bar_up_description

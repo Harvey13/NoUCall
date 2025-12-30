@@ -114,6 +114,7 @@ layout item_prefix
 layout item_whitelist
 menu main_menu
 menu statistics_menu
+mipmap ic_launcher
 string add_prefix
 string all_time
 string app_name
