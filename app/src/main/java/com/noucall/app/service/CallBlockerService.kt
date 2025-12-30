@@ -32,6 +32,11 @@ class CallBlockerService : Service() {
     
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("CallBlockerService", "onStartCommand called with action: ${intent?.action}")
+
+        // Start foreground service with notification
+        val notification = createForegroundNotification()
+        startForeground(NOTIFICATION_ID, notification)
+
         when (intent?.action) {
             ACTION_BLOCK_CALL -> {
                 val phoneNumber = intent.getStringExtra(EXTRA_PHONE_NUMBER)
@@ -137,6 +142,15 @@ class CallBlockerService : Service() {
         }
     }
     
+    private fun createForegroundNotification(): Notification {
+        return NotificationCompat.Builder(this, Constants.CHANNEL_BLOCKED_CALLS)
+            .setContentTitle("NoUCall - Service actif")
+            .setContentText("Service de blocage d'appels en cours")
+            .setSmallIcon(R.drawable.ic_block)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
+    }
+
     private fun showBlockedCallNotification(phoneNumber: String) {
         val notification = NotificationCompat.Builder(this, Constants.CHANNEL_BLOCKED_CALLS)
             .setContentTitle("Appel Bloqué")
@@ -145,8 +159,8 @@ class CallBlockerService : Service() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .build()
-        
-        notificationManager.notify(NOTIFICATION_ID, notification)
+
+        notificationManager.notify(NOTIFICATION_ID + 1, notification) // Different ID for blocked call notification
     }
     
     private fun createNotificationChannel() {

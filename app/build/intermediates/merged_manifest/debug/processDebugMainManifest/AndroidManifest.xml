@@ -27,10 +27,13 @@
 
     <!-- Permission for notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Permission for foreground service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <permission
         android:name="com.noucall.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -79,11 +82,22 @@
             android:exported="false"
             android:parentActivityName="com.noucall.app.MainActivity" />
 
-        <!-- Call Receiver Service -->
+        <!-- Call Blocker Service -->
         <service
             android:name="com.noucall.app.service.CallBlockerService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="phoneCall" />
+
+        <!-- Call Receiver -->
+        <receiver
+            android:name="com.noucall.app.receiver.CallBlockerReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter android:priority="1000" >
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
 
         <!-- SMS Receiver -->
         <receiver
@@ -94,8 +108,6 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-
-        <!-- Call Receiver - registered programmatically -->
 
         <provider
             android:name="androidx.startup.InitializationProvider"

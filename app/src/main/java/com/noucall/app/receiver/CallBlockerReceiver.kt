@@ -16,7 +16,9 @@ class CallBlockerReceiver : BroadcastReceiver() {
     
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("CallBlockerReceiver", "onReceive called with action: ${intent.action}")
-        if (!SharedPreferencesManager.isBlockingEnabled(context)) {
+        val blockingEnabled = SharedPreferencesManager.isBlockingEnabled(context)
+        Log.d("CallBlockerReceiver", "Blocking enabled: $blockingEnabled")
+        if (!blockingEnabled) {
             Log.d("CallBlockerReceiver", "Blocking is disabled")
             return
         }

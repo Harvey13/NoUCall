@@ -105,7 +105,6 @@ id tv_no_sms_data
 id tv_phone_number
 id tv_prefix
 id tv_timestamp
-id tv_total_blocked
 layout activity_main
 layout activity_statistics
 layout item_blocked_call

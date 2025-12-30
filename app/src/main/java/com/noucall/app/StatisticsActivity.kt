@@ -30,9 +30,14 @@ class StatisticsActivity : AppCompatActivity() {
         
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        
+
         setupUI()
         loadStatistics()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadStatistics() // Refresh data when returning to the activity
     }
     
     private fun applyTheme() {
@@ -60,11 +65,10 @@ class StatisticsActivity : AppCompatActivity() {
     private fun loadStatistics() {
         val blockedCallsCount = SharedPreferencesManager.getBlockedCallsCount(this)
         val blockedSmsCount = SharedPreferencesManager.getBlockedSmsCount(this)
-        
+
         binding.tvBlockedCalls.text = getString(R.string.blocked_calls, blockedCallsCount)
         binding.tvBlockedSms.text = getString(R.string.blocked_sms, blockedSmsCount)
-        binding.tvTotalBlocked.text = getString(R.string.total_blocked, blockedCallsCount + blockedSmsCount)
-        
+
         loadBlockedCallsHistory()
         loadBlockedSmsHistory()
     }
