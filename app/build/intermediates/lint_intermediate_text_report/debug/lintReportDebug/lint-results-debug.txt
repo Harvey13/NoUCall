@@ -1,0 +1,565 @@
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\service\CallBlockerService.kt:111: Error: Call requires permission which may be rejected by user: code should explicitly check to see if permission is available (with checkPermission) or explicitly handle a potential SecurityException [MissingPermission]
+                    telecomManager.endCall()
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "MissingPermission":
+   This check scans through your code and libraries and looks at the APIs
+   being used, and checks this against the set of permissions required to
+   access those APIs. If the code using those APIs is called at runtime, then
+   the program will crash.
+
+   Furthermore, for permissions that are revocable (with targetSdkVersion 23),
+   client code must also be prepared to handle the calls throwing an exception
+   if the user rejects the request for permission at runtime.
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\utils\PermissionManager.kt:95: Warning: Field requires API level 26 (current min is 23): android.Manifest.permission#ANSWER_PHONE_CALLS [InlinedApi]
+            missingPermissions.add(Manifest.permission.ANSWER_PHONE_CALLS)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\utils\PermissionManager.kt:107: Warning: Field requires API level 33 (current min is 23): android.Manifest.permission#POST_NOTIFICATIONS [InlinedApi]
+            missingPermissions.add(Manifest.permission.POST_NOTIFICATIONS)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "InlinedApi":
+   This check scans through all the Android API field references in the
+   application and flags certain constants, such as static final integers and
+   Strings, which were introduced in later versions. These will actually be
+   copied into the class files rather than being referenced, which means that
+   the value is available even when running on older devices. In some cases
+   that's fine, and in other cases it can result in a runtime crash or
+   incorrect behavior. It depends on the context, so consider the code
+   carefully and decide whether it's safe and can be suppressed or whether the
+   code needs to be guarded.
+
+   If you really want to use this API and don't need to support older devices
+   just set the minSdkVersion in your build.gradle or AndroidManifest.xml
+   files.
+
+   If your code is deliberately accessing newer APIs, and you have ensured
+   (e.g. with conditional execution) that this code will only ever be called
+   on a supported platform, then you can annotate your class or method with
+   the @TargetApi annotation specifying the local minimum SDK to apply, such
+   as @TargetApi(11), such that this check considers 11 rather than your
+   manifest file's minimum SDK as the required API level.
+
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:13: Warning: Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details. [OldTargetApi]
+        targetSdk 34
+        ~~~~~~~~~~~~
+
+   Explanation for issues of type "OldTargetApi":
+   When your application or sdk runs on a version of Android that is more
+   recent than your targetSdkVersion specifies that it has been tested with,
+   various compatibility modes kick in. This ensures that your application
+   continues to work, but it may look out of place. For example, if the
+   targetSdkVersion is less than 14, your app may get an option button in the
+   UI.
+
+   To fix this issue, set the targetSdkVersion to the highest available value.
+   Then test your app to make sure everything works correctly. You may want to
+   consult the compatibility notes to see what changes apply to each version
+   you are adding support for:
+   https://developer.android.com/reference/android/os/Build.VERSION_CODES.html
+   as well as follow this guide:
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.
+   html
+
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.html
+
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:39: Warning: A newer version of androidx.core:core-ktx than 1.12.0 is available: 1.17.0 [GradleDependency]
+    implementation 'androidx.core:core-ktx:1.12.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:40: Warning: A newer version of androidx.appcompat:appcompat than 1.6.1 is available: 1.7.1 [GradleDependency]
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:41: Warning: A newer version of com.google.android.material:material than 1.10.0 is available: 1.13.0 [GradleDependency]
+    implementation 'com.google.android.material:material:1.10.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:42: Warning: A newer version of androidx.constraintlayout:constraintlayout than 2.1.4 is available: 2.2.1 [GradleDependency]
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:43: Warning: A newer version of androidx.lifecycle:lifecycle-viewmodel-ktx than 2.7.0 is available: 2.10.0 [GradleDependency]
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:44: Warning: A newer version of androidx.lifecycle:lifecycle-livedata-ktx than 2.7.0 is available: 2.10.0 [GradleDependency]
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:46: Warning: A newer version of androidx.work:work-runtime-ktx than 2.8.1 is available: 2.11.0 [GradleDependency]
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:50: Warning: A newer version of androidx.test.ext:junit than 1.1.5 is available: 1.3.0 [GradleDependency]
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\build.gradle:51: Warning: A newer version of androidx.test.espresso:espresso-core than 3.5.1 is available: 3.7.0 [GradleDependency]
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "GradleDependency":
+   This detector looks for usages of libraries where the version you are using
+   is not the current stable release. Using older versions is fine, and there
+   are cases where you deliberately want to stick with an older version.
+   However, you may simply not be aware that a more recent version is
+   available, and that is what this lint check helps find.
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_blocked_call.xml:27: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+                android:tint="@color/blocked_red" />
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_blocked_sms.xml:27: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+                android:tint="@color/blocked_red" />
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_prefix.xml:22: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+            android:tint="@color/blocked_red" />
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_whitelist.xml:22: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+            android:tint="@color/allowed_green" />
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UseAppTint":
+   ImageView or ImageButton uses android:tint instead of app:tint
+
+   Vendor: Android Open Source Project
+   Identifier: androidx.appcompat
+   Feedback: https://issuetracker.google.com/issues/new?component=460343
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\StatisticsActivity.kt:64: Error: Format string 'blocked_calls' is not a valid format string so it should not be passed to String.format [StringFormatInvalid]
+        binding.tvBlockedCalls.text = getString(R.string.blocked_calls, blockedCallsCount)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:9: This definition does not require arguments
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\StatisticsActivity.kt:64: Error: Format string 'blocked_calls' is not a valid format string so it should not be passed to String.format [StringFormatInvalid]
+        binding.tvBlockedCalls.text = getString(R.string.blocked_calls, blockedCallsCount)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:9: This definition does not require arguments
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\StatisticsActivity.kt:65: Error: Format string 'blocked_sms' is not a valid format string so it should not be passed to String.format [StringFormatInvalid]
+        binding.tvBlockedSms.text = getString(R.string.blocked_sms, blockedSmsCount)
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:10: This definition does not require arguments
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\StatisticsActivity.kt:65: Error: Format string 'blocked_sms' is not a valid format string so it should not be passed to String.format [StringFormatInvalid]
+        binding.tvBlockedSms.text = getString(R.string.blocked_sms, blockedSmsCount)
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:10: This definition does not require arguments
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\StatisticsActivity.kt:66: Error: Format string 'total_blocked' is not a valid format string so it should not be passed to String.format [StringFormatInvalid]
+        binding.tvTotalBlocked.text = getString(R.string.total_blocked, blockedCallsCount + blockedSmsCount)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:11: This definition does not require arguments
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\StatisticsActivity.kt:66: Error: Format string 'total_blocked' is not a valid format string so it should not be passed to String.format [StringFormatInvalid]
+        binding.tvTotalBlocked.text = getString(R.string.total_blocked, blockedCallsCount + blockedSmsCount)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:11: This definition does not require arguments
+
+   Explanation for issues of type "StringFormatInvalid":
+   If a string contains a '%' character, then the string may be a formatting
+   string which will be passed to String.format from Java code to replace each
+   '%' occurrence with specific values.
+
+   This lint warning checks for two related problems:
+   (1) Formatting strings that are invalid, meaning that String.format will
+   throw exceptions at runtime when attempting to use the format string.
+   (2) Strings containing '%' that are not formatting strings getting passed
+   to a String.format call. In this case the '%' will need to be escaped as
+   '%%'.
+
+   NOTE: Not all Strings which look like formatting strings are intended for
+   use by String.format; for example, they may contain date formats intended
+   for android.text.format.Time#format(). Lint cannot always figure out that a
+   String is a date format, so you may get false warnings in those scenarios.
+   See the suppress help topic for information on how to suppress errors in
+   that case.
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\AndroidManifest.xml:6: Error: Permission exists without corresponding hardware <uses-feature android:name="android.hardware.telephony" required="false"> tag [PermissionImpliesUnsupportedChromeOsHardware]
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+     ~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\AndroidManifest.xml:11: Error: Permission exists without corresponding hardware <uses-feature android:name="android.hardware.telephony" required="false"> tag [PermissionImpliesUnsupportedChromeOsHardware]
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+     ~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\AndroidManifest.xml:12: Error: Permission exists without corresponding hardware <uses-feature android:name="android.hardware.telephony" required="false"> tag [PermissionImpliesUnsupportedChromeOsHardware]
+    <uses-permission android:name="android.permission.READ_SMS" />
+     ~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\AndroidManifest.xml:13: Error: Permission exists without corresponding hardware <uses-feature android:name="android.hardware.telephony" required="false"> tag [PermissionImpliesUnsupportedChromeOsHardware]
+    <uses-permission android:name="android.permission.SEND_SMS" />
+     ~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "PermissionImpliesUnsupportedChromeOsHardware":
+   The <uses-permission> element should not require a permission that implies
+   an unsupported large screen hardware feature. Google Play assumes that
+   certain hardware related permissions indicate that the underlying hardware
+   features are required by default. To fix the issue, consider declaring the
+   corresponding <uses-feature> element with required="false" attribute.
+
+   https://developer.android.com/topic/arc/manifest.html#implied-features
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\AndroidManifest.xml:59: Warning: BroadcastReceivers that declare an intent-filter for SMS_DELIVER or SMS_RECEIVED must ensure that the caller has the BROADCAST_SMS permission, otherwise it is possible for malicious actors to spoof intents [UnprotectedSMSBroadcastReceiver]
+        <receiver
+         ~~~~~~~~
+
+   Explanation for issues of type "UnprotectedSMSBroadcastReceiver":
+   BroadcastReceivers that declare an intent-filter for SMS_DELIVER or
+   SMS_RECEIVED must ensure that the caller has the BROADCAST_SMS permission,
+   otherwise it is possible for malicious actors to spoof intents.
+
+   https://goo.gle/UnprotectedSMSBroadcastReceiver
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\receiver\CallBlockerReceiver.kt:15: Warning: This broadcast receiver declares an intent-filter for a protected broadcast action string, which can only be sent by the system, not third-party applications. However, the receiver's onReceive method does not appear to call getAction to ensure that the received Intent's action string matches the expected value, potentially making it possible for another actor to send a spoofed intent with no action string or a different action string and cause undesired behavior. In this case, it is possible that the onReceive method passed the received Intent to another method that checked the action string. If so, this finding can safely be ignored. [UnsafeProtectedBroadcastReceiver]
+    override fun onReceive(context: Context, intent: Intent) {
+                 ~~~~~~~~~
+
+   Explanation for issues of type "UnsafeProtectedBroadcastReceiver":
+   `BroadcastReceiver`s that declare an intent-filter for a
+   protected-broadcast action string must check that the received intent's
+   action string matches the expected value, otherwise it is possible for
+   malicious actors to spoof intents.
+
+   https://goo.gle/UnsafeProtectedBroadcastReceiver
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\java\com\noucall\app\receiver\SmsBlockerReceiver.kt:24: Warning: Unnecessary; SDK_INT is always >= 23 [ObsoleteSdkInt]
+                val smsMessage = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "ObsoleteSdkInt":
+   This check flags version checks that are not necessary, because the
+   minSdkVersion (or surrounding known API level) is already at least as high
+   as the version checked for.
+
+   Similarly, it also looks for resources in -vNN folders, such as values-v14
+   where the version qualifier is less than or equal to the minSdkVersion,
+   where the contents should be merged into the best folder.
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_blocked_call.xml:17: Warning: This tag and its children can be replaced by one <TextView/> and a compound drawable [UseCompoundDrawables]
+        <LinearLayout
+         ~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_blocked_sms.xml:17: Warning: This tag and its children can be replaced by one <TextView/> and a compound drawable [UseCompoundDrawables]
+        <LinearLayout
+         ~~~~~~~~~~~~
+
+   Explanation for issues of type "UseCompoundDrawables":
+   A LinearLayout which contains an ImageView and a TextView can be more
+   efficiently handled as a compound drawable (a single TextView, using the
+   drawableTop, drawableLeft, drawableRight and/or drawableBottom attributes
+   to draw one or more images adjacent to the text).
+
+   If the two widgets are offset from each other with margins, this can be
+   replaced with a drawablePadding attribute.
+
+   There's a lint quickfix to perform this conversion in the Eclipse plugin.
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:12: Warning: The resource R.color.md_theme_light_tertiary appears to be unused [UnusedResources]
+    <color name="md_theme_light_tertiary">#7D5260</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:13: Warning: The resource R.color.md_theme_light_onTertiary appears to be unused [UnusedResources]
+    <color name="md_theme_light_onTertiary">#FFFFFF</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:14: Warning: The resource R.color.md_theme_light_tertiaryContainer appears to be unused [UnusedResources]
+    <color name="md_theme_light_tertiaryContainer">#FFD8E4</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:15: Warning: The resource R.color.md_theme_light_onTertiaryContainer appears to be unused [UnusedResources]
+    <color name="md_theme_light_onTertiaryContainer">#31111D</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:16: Warning: The resource R.color.md_theme_light_error appears to be unused [UnusedResources]
+    <color name="md_theme_light_error">#BA1A1A</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:17: Warning: The resource R.color.md_theme_light_errorContainer appears to be unused [UnusedResources]
+    <color name="md_theme_light_errorContainer">#FFDAD6</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:18: Warning: The resource R.color.md_theme_light_onError appears to be unused [UnusedResources]
+    <color name="md_theme_light_onError">#FFFFFF</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:19: Warning: The resource R.color.md_theme_light_onErrorContainer appears to be unused [UnusedResources]
+    <color name="md_theme_light_onErrorContainer">#410002</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:20: Warning: The resource R.color.md_theme_light_background appears to be unused [UnusedResources]
+    <color name="md_theme_light_background">#FFFBFE</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:21: Warning: The resource R.color.md_theme_light_onBackground appears to be unused [UnusedResources]
+    <color name="md_theme_light_onBackground">#1C1B1F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:22: Warning: The resource R.color.md_theme_light_surface appears to be unused [UnusedResources]
+    <color name="md_theme_light_surface">#FFFBFE</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:23: Warning: The resource R.color.md_theme_light_onSurface appears to be unused [UnusedResources]
+    <color name="md_theme_light_onSurface">#1C1B1F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:24: Warning: The resource R.color.md_theme_light_surfaceVariant appears to be unused [UnusedResources]
+    <color name="md_theme_light_surfaceVariant">#E7E0EC</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:25: Warning: The resource R.color.md_theme_light_onSurfaceVariant appears to be unused [UnusedResources]
+    <color name="md_theme_light_onSurfaceVariant">#49454F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:26: Warning: The resource R.color.md_theme_light_outline appears to be unused [UnusedResources]
+    <color name="md_theme_light_outline">#79747E</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:27: Warning: The resource R.color.md_theme_light_outlineVariant appears to be unused [UnusedResources]
+    <color name="md_theme_light_outlineVariant">#CAC4D0</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:28: Warning: The resource R.color.md_theme_light_scrim appears to be unused [UnusedResources]
+    <color name="md_theme_light_scrim">#000000</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:29: Warning: The resource R.color.md_theme_light_inverseSurface appears to be unused [UnusedResources]
+    <color name="md_theme_light_inverseSurface">#313033</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:30: Warning: The resource R.color.md_theme_light_inverseOnSurface appears to be unused [UnusedResources]
+    <color name="md_theme_light_inverseOnSurface">#F4EFF4</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:31: Warning: The resource R.color.md_theme_light_inversePrimary appears to be unused [UnusedResources]
+    <color name="md_theme_light_inversePrimary">#D0BCFF</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:32: Warning: The resource R.color.md_theme_light_surfaceDim appears to be unused [UnusedResources]
+    <color name="md_theme_light_surfaceDim">#DDD8DD</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:33: Warning: The resource R.color.md_theme_light_surfaceBright appears to be unused [UnusedResources]
+    <color name="md_theme_light_surfaceBright">#FFFBFE</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:34: Warning: The resource R.color.md_theme_light_surfaceContainerLowest appears to be unused [UnusedResources]
+    <color name="md_theme_light_surfaceContainerLowest">#FFFFFF</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:35: Warning: The resource R.color.md_theme_light_surfaceContainerLow appears to be unused [UnusedResources]
+    <color name="md_theme_light_surfaceContainerLow">#F7F2FA</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:36: Warning: The resource R.color.md_theme_light_surfaceContainer appears to be unused [UnusedResources]
+    <color name="md_theme_light_surfaceContainer">#F1ECF4</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:37: Warning: The resource R.color.md_theme_light_surfaceContainerHigh appears to be unused [UnusedResources]
+    <color name="md_theme_light_surfaceContainerHigh">#ECE6F0</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:38: Warning: The resource R.color.md_theme_light_surfaceContainerHighest appears to be unused [UnusedResources]
+    <color name="md_theme_light_surfaceContainerHighest">#E6E0E9</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:41: Warning: The resource R.color.md_theme_dark_primary appears to be unused [UnusedResources]
+    <color name="md_theme_dark_primary">#D0BCFF</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:42: Warning: The resource R.color.md_theme_dark_onPrimary appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onPrimary">#381E72</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:43: Warning: The resource R.color.md_theme_dark_primaryContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_primaryContainer">#4F378B</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:44: Warning: The resource R.color.md_theme_dark_onPrimaryContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onPrimaryContainer">#EADDFF</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:45: Warning: The resource R.color.md_theme_dark_secondary appears to be unused [UnusedResources]
+    <color name="md_theme_dark_secondary">#CCC2DC</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:46: Warning: The resource R.color.md_theme_dark_onSecondary appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onSecondary">#332D41</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:47: Warning: The resource R.color.md_theme_dark_secondaryContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_secondaryContainer">#494458</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:48: Warning: The resource R.color.md_theme_dark_onSecondaryContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onSecondaryContainer">#E8DEF8</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:49: Warning: The resource R.color.md_theme_dark_tertiary appears to be unused [UnusedResources]
+    <color name="md_theme_dark_tertiary">#EFB8C8</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:50: Warning: The resource R.color.md_theme_dark_onTertiary appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onTertiary">#492532</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:51: Warning: The resource R.color.md_theme_dark_tertiaryContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_tertiaryContainer">#633B48</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:52: Warning: The resource R.color.md_theme_dark_onTertiaryContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onTertiaryContainer">#FFD8E4</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:53: Warning: The resource R.color.md_theme_dark_error appears to be unused [UnusedResources]
+    <color name="md_theme_dark_error">#FFB4AB</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:54: Warning: The resource R.color.md_theme_dark_errorContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_errorContainer">#93000A</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:55: Warning: The resource R.color.md_theme_dark_onError appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onError">#690005</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:56: Warning: The resource R.color.md_theme_dark_onErrorContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onErrorContainer">#FFDAD6</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:57: Warning: The resource R.color.md_theme_dark_background appears to be unused [UnusedResources]
+    <color name="md_theme_dark_background">#1C1B1F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:58: Warning: The resource R.color.md_theme_dark_onBackground appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onBackground">#E6E0E9</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:59: Warning: The resource R.color.md_theme_dark_surface appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surface">#1C1B1F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:60: Warning: The resource R.color.md_theme_dark_onSurface appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onSurface">#E6E0E9</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:61: Warning: The resource R.color.md_theme_dark_surfaceVariant appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surfaceVariant">#49454F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:62: Warning: The resource R.color.md_theme_dark_onSurfaceVariant appears to be unused [UnusedResources]
+    <color name="md_theme_dark_onSurfaceVariant">#CAC4D0</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:63: Warning: The resource R.color.md_theme_dark_outline appears to be unused [UnusedResources]
+    <color name="md_theme_dark_outline">#938F99</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:64: Warning: The resource R.color.md_theme_dark_outlineVariant appears to be unused [UnusedResources]
+    <color name="md_theme_dark_outlineVariant">#49454F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:65: Warning: The resource R.color.md_theme_dark_scrim appears to be unused [UnusedResources]
+    <color name="md_theme_dark_scrim">#000000</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:66: Warning: The resource R.color.md_theme_dark_inverseSurface appears to be unused [UnusedResources]
+    <color name="md_theme_dark_inverseSurface">#E6E0E9</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:67: Warning: The resource R.color.md_theme_dark_inverseOnSurface appears to be unused [UnusedResources]
+    <color name="md_theme_dark_inverseOnSurface">#313033</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:68: Warning: The resource R.color.md_theme_dark_inversePrimary appears to be unused [UnusedResources]
+    <color name="md_theme_dark_inversePrimary">#6750A4</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:69: Warning: The resource R.color.md_theme_dark_surfaceDim appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surfaceDim">#1C1B1F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:70: Warning: The resource R.color.md_theme_dark_surfaceBright appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surfaceBright">#423F43</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:71: Warning: The resource R.color.md_theme_dark_surfaceContainerLowest appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surfaceContainerLowest">#100F13</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:72: Warning: The resource R.color.md_theme_dark_surfaceContainerLow appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surfaceContainerLow">#1C1B1F</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:73: Warning: The resource R.color.md_theme_dark_surfaceContainer appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surfaceContainer">#201F23</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:74: Warning: The resource R.color.md_theme_dark_surfaceContainerHigh appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surfaceContainerHigh">#2B2930</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:75: Warning: The resource R.color.md_theme_dark_surfaceContainerHighest appears to be unused [UnusedResources]
+    <color name="md_theme_dark_surfaceContainerHighest">#36343B</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:78: Warning: The resource R.color.black appears to be unused [UnusedResources]
+    <color name="black">#FF000000</color>
+           ~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:79: Warning: The resource R.color.white appears to be unused [UnusedResources]
+    <color name="white">#FFFFFFFF</color>
+           ~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:80: Warning: The resource R.color.red appears to be unused [UnusedResources]
+    <color name="red">#FF0000</color>
+           ~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:81: Warning: The resource R.color.green appears to be unused [UnusedResources]
+    <color name="green">#00FF00</color>
+           ~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:82: Warning: The resource R.color.blue appears to be unused [UnusedResources]
+    <color name="blue">#0000FF</color>
+           ~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\colors.xml:85: Warning: The resource R.color.warning_orange appears to be unused [UnusedResources]
+    <color name="warning_orange">#FF9800</color>
+           ~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:3: Warning: The resource R.string.title_prefix_management appears to be unused [UnusedResources]
+    <string name="title_prefix_management">Gestion des Préfixes</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:12: Warning: The resource R.string.enable_blocking appears to be unused [UnusedResources]
+    <string name="enable_blocking">Activer le Blocage</string>
+            ~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:13: Warning: The resource R.string.disable_blocking appears to be unused [UnusedResources]
+    <string name="disable_blocking">Désactiver le Blocage</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:20: Warning: The resource R.string.dark_mode appears to be unused [UnusedResources]
+    <string name="dark_mode">Mode Sombre</string>
+            ~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:21: Warning: The resource R.string.light_mode appears to be unused [UnusedResources]
+    <string name="light_mode">Mode Clair</string>
+            ~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:23: Warning: The resource R.string.commercial_call_prefixes appears to be unused [UnusedResources]
+    <string name="commercial_call_prefixes">Préfixes Démarchage Commercial</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:24: Warning: The resource R.string.permission_required appears to be unused [UnusedResources]
+    <string name="permission_required">Permission Requise</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:26: Warning: The resource R.string.permission_read_phone_state appears to be unused [UnusedResources]
+    <string name="permission_read_phone_state">L\'application nécessite la permission de lire l\'état du téléphone</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:29: Warning: The resource R.string.grant_permission appears to be unused [UnusedResources]
+    <string name="grant_permission">Accorder la Permission</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:33: Warning: The resource R.string.today appears to be unused [UnusedResources]
+    <string name="today">Aujourd\'hui</string>
+            ~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:34: Warning: The resource R.string.this_week appears to be unused [UnusedResources]
+    <string name="this_week">Cette semaine</string>
+            ~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:35: Warning: The resource R.string.this_month appears to be unused [UnusedResources]
+    <string name="this_month">Ce mois</string>
+            ~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\strings.xml:36: Warning: The resource R.string.all_time appears to be unused [UnusedResources]
+    <string name="all_time">Depuis le début</string>
+            ~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\themes.xml:20: Warning: The resource R.style.Theme_NoUCall_Light appears to be unused [UnusedResources]
+    <style name="Theme.NoUCall.Light" parent="Theme.NoUCall">
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\values\themes.xml:36: Warning: The resource R.style.Theme_NoUCall_Dark appears to be unused [UnusedResources]
+    <style name="Theme.NoUCall.Dark" parent="Theme.NoUCall">
+           ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests =true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests =true.
+   ,
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_blocked_call.xml:23: Warning: Missing contentDescription attribute on image [ContentDescription]
+            <ImageView
+             ~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_blocked_sms.xml:23: Warning: Missing contentDescription attribute on image [ContentDescription]
+            <ImageView
+             ~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_prefix.xml:18: Warning: Missing contentDescription attribute on image [ContentDescription]
+        <ImageView
+         ~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\item_whitelist.xml:18: Warning: Missing contentDescription attribute on image [ContentDescription]
+        <ImageView
+         ~~~~~~~~~
+
+   Explanation for issues of type "ContentDescription":
+   Non-textual widgets like ImageViews and ImageButtons should use the
+   contentDescription attribute to specify a textual description of the widget
+   such that screen readers and other accessibility tools can adequately
+   describe the user interface.
+
+   Note that elements in application screens that are purely decorative and do
+   not provide any content or enable a user action should not have
+   accessibility content descriptions. In this case, set their descriptions to
+   @null. If your app's minSdkVersion is 16 or higher, you can instead set
+   these graphical elements' android:importantForAccessibility attributes to
+   no.
+
+   Note that for text fields, you should not set both the hint and the
+   contentDescription attributes since the hint will never be shown. Just set
+   the hint.
+
+   https://developer.android.com/guide/topics/ui/accessibility/apps#special-cases
+
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\activity_main.xml:47: Warning: Hardcoded string "Blocage d'appels/SMS", should use @string resource [HardcodedText]
+                android:text="Blocage d'appels/SMS"
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\activity_statistics.xml:158: Warning: Hardcoded string "Historique des appels bloqués", should use @string resource [HardcodedText]
+                    android:text="Historique des appels bloqués"
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\layout\activity_statistics.xml:191: Warning: Hardcoded string "Historique des SMS bloqués", should use @string resource [HardcodedText]
+                    android:text="Historique des SMS bloqués"
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\boby_\Projet\NoUCall\app\src\main\res\menu\statistics_menu.xml:8: Warning: Hardcoded string "Clear History", should use @string resource [HardcodedText]
+        android:title="Clear History"
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "HardcodedText":
+   Hardcoding text attributes directly in layout files is bad for several
+   reasons:
+
+   * When creating configuration variations (for example for landscape or
+   portrait) you have to repeat the actual text (and keep it up to date when
+   making changes)
+
+   * The application cannot be translated to other languages by just adding
+   new translations for existing string resources.
+
+   There are quickfixes to automatically extract this hardcoded string into a
+   resource lookup.
+
+15 errors, 108 warnings
