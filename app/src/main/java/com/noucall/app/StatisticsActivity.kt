@@ -1,5 +1,9 @@
 package com.noucall.app
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -18,6 +22,14 @@ class StatisticsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStatisticsBinding
     private lateinit var blockedCallAdapter: BlockedCallAdapter
     private lateinit var blockedSmsAdapter: BlockedSmsAdapter
+    
+    private val statisticsUpdateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == "com.noucall.app.STATISTICS_UPDATED") {
+                loadStatistics()
+            }
+        }
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +50,18 @@ class StatisticsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadStatistics() // Refresh data when returning to the activity
+        // Register for statistics updates
+        registerReceiver(statisticsUpdateReceiver, IntentFilter("com.noucall.app.STATISTICS_UPDATED"))
+    }
+    
+    override fun onPause() {
+        super.onPause()
+        // Unregister receiver to avoid leaks
+        try {
+            unregisterReceiver(statisticsUpdateReceiver)
+        } catch (e: IllegalArgumentException) {
+            // Receiver not registered
+        }
     }
     
     private fun applyTheme() {
@@ -66,8 +90,8 @@ class StatisticsActivity : AppCompatActivity() {
         val blockedCallsCount = SharedPreferencesManager.getBlockedCallsCount(this)
         val blockedSmsCount = SharedPreferencesManager.getBlockedSmsCount(this)
 
-        binding.tvBlockedCalls.text = getString(R.string.blocked_calls, blockedCallsCount)
-        binding.tvBlockedSms.text = getString(R.string.blocked_sms, blockedSmsCount)
+        binding.tvBlockedCalls.text = "Appels Bloqués\n$blockedCallsCount"
+        binding.tvBlockedSms.text = "SMS Bloqués\n$blockedSmsCount"
 
         loadBlockedCallsHistory()
         loadBlockedSmsHistory()

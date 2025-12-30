@@ -1,10 +1,12 @@
 package com.noucall.app.utils
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.ref.WeakReference
 
 class SharedPreferencesManager(context: Context) {
     
@@ -15,10 +17,12 @@ class SharedPreferencesManager(context: Context) {
     
     companion object {
         private var instance: SharedPreferencesManager? = null
+        private var contextReference: WeakReference<Context>? = null
         
         fun getInstance(context: Context): SharedPreferencesManager {
             if (instance == null) {
                 instance = SharedPreferencesManager(context.applicationContext)
+                contextReference = WeakReference(context.applicationContext)
             }
             return instance!!
         }
@@ -190,6 +194,8 @@ class SharedPreferencesManager(context: Context) {
     fun incrementBlockedCallsCount() {
         val currentCount = getBlockedCallsCount()
         sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_CALLS_COUNT, currentCount + 1).commit()
+        // Send broadcast to update UI
+        contextReference?.get()?.sendBroadcast(Intent("com.noucall.app.STATISTICS_UPDATED"))
     }
     
     fun getBlockedSmsCount(): Int {
@@ -199,6 +205,8 @@ class SharedPreferencesManager(context: Context) {
     fun incrementBlockedSmsCount() {
         val currentCount = getBlockedSmsCount()
         sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_SMS_COUNT, currentCount + 1).commit()
+        // Send broadcast to update UI
+        contextReference?.get()?.sendBroadcast(Intent("com.noucall.app.STATISTICS_UPDATED"))
     }
     
     // History management

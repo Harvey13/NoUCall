@@ -58,16 +58,10 @@
                             android:id="@+id/tv_blocked_calls"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="24sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="@color/blocked_red"
                             tools:text="0" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/blocked_calls"
-                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -93,16 +87,10 @@
                             android:id="@+id/tv_blocked_sms"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="24sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="@color/blocked_red"
                             tools:text="0" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/blocked_sms"
-                            android:textSize="14sp" />
 
                     </LinearLayout>
 
