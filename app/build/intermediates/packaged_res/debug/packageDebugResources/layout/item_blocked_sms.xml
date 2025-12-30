@@ -36,6 +36,14 @@
                 android:textStyle="bold"
                 tools:text="+33 9 48 12 34 56" />
 
+            <TextView
+                android:id="@+id/tv_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                tools:text="28/12/2025 13:45" />
+
         </LinearLayout>
 
         <TextView
@@ -47,15 +55,6 @@
             android:maxLines="2"
             android:ellipsize="end"
             tools:text="Ceci est un message de démarchage commercial qui a été bloqué..." />
-
-        <TextView
-            android:id="@+id/tv_timestamp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            tools:text="28/12/2025 13:45" />
 
     </LinearLayout>
 
