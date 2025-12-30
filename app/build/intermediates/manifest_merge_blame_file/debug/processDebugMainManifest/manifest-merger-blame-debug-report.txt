@@ -162,7 +162,7 @@
 90            android:foregroundServiceType="phoneCall" />
 90-->C:\Users\boby_\Projet\NoUCall\app\src\main\AndroidManifest.xml:70:13-54
 91
-92        <!-- Call Receiver -->
+92        <!-- Call Blocker Receiver -->
 93        <receiver
 93-->C:\Users\boby_\Projet\NoUCall\app\src\main\AndroidManifest.xml:73:9-80:20
 94            android:name="com.noucall.app.receiver.CallBlockerReceiver"

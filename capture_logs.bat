@@ -13,7 +13,7 @@ if %DEVICE_COUNT%==1 (
     for /f "tokens=1" %%a in ('findstr /c:"device" temp_devices.txt ^| findstr /v "List"') do set DEVICE_ID=%%a
     echo Only one device found: !DEVICE_ID!
     echo Using device !DEVICE_ID!...
-    adb -s !DEVICE_ID! logcat | findstr CallBlocker
+    adb -s !DEVICE_ID! logcat | findstr "CallBlocker MainActivity SPManager com.noucall.app BroadcastQueue ActivityManager"
 ) else (
     type temp_devices.txt
     echo.
@@ -26,10 +26,10 @@ if %DEVICE_COUNT%==1 (
             goto :found
         )
         :found
-        adb -s !DEVICE_ID! logcat | findstr CallBlocker
+        adb -s !DEVICE_ID! logcat | findstr "CallBlocker MainActivity SPManager com.noucall.app BroadcastQueue ActivityManager"
     ) else (
         echo Using device !DEVICE_ID!...
-        adb -s !DEVICE_ID! logcat | findstr CallBlocker
+        adb -s !DEVICE_ID! logcat | findstr "CallBlocker MainActivity SPManager com.noucall.app BroadcastQueue ActivityManager"
     )
 )
 

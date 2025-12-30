@@ -28,14 +28,12 @@ class CallBlockerService : Service() {
         super.onCreate()
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel()
+        val notification = createForegroundNotification()
+        startForeground(NOTIFICATION_ID, notification)
     }
     
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("CallBlockerService", "onStartCommand called with action: ${intent?.action}")
-
-        // Start foreground service with notification
-        val notification = createForegroundNotification()
-        startForeground(NOTIFICATION_ID, notification)
 
         when (intent?.action) {
             ACTION_BLOCK_CALL -> {

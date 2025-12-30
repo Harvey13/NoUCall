@@ -2,6 +2,7 @@ package com.noucall.app.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -102,11 +103,14 @@ class SharedPreferencesManager(context: Context) {
     
     // Blocking enabled status
     fun isBlockingEnabled(): Boolean {
-        return sharedPreferences.getBoolean(Constants.KEY_BLOCKING_ENABLED, false)
+        val isEnabled = sharedPreferences.getBoolean(Constants.KEY_BLOCKING_ENABLED, false)
+        Log.d("SPManager", "isBlockingEnabled read as: $isEnabled")
+        return isEnabled
     }
     
     fun setBlockingEnabled(enabled: Boolean) {
-        sharedPreferences.edit().putBoolean(Constants.KEY_BLOCKING_ENABLED, enabled).apply()
+        Log.d("SPManager", "setBlockingEnabled called with: $enabled")
+        sharedPreferences.edit().putBoolean(Constants.KEY_BLOCKING_ENABLED, enabled).commit()
     }
     
     // Blocked prefixes management
@@ -122,7 +126,7 @@ class SharedPreferencesManager(context: Context) {
     
     fun setBlockedPrefixes(prefixes: List<String>) {
         val prefixesJson = gson.toJson(prefixes)
-        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_PREFIXES, prefixesJson).apply()
+        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_PREFIXES, prefixesJson).commit()
     }
     
     fun addBlockedPrefix(prefix: String) {
@@ -152,7 +156,7 @@ class SharedPreferencesManager(context: Context) {
     
     fun setWhitelistedCountries(countries: List<String>) {
         val countriesJson = gson.toJson(countries)
-        sharedPreferences.edit().putString(Constants.KEY_WHITELISTED_COUNTRIES, countriesJson).apply()
+        sharedPreferences.edit().putString(Constants.KEY_WHITELISTED_COUNTRIES, countriesJson).commit()
     }
     
     fun addWhitelistedCountry(country: String) {
@@ -175,7 +179,7 @@ class SharedPreferencesManager(context: Context) {
     }
     
     fun setDarkMode(isDarkMode: Boolean) {
-        sharedPreferences.edit().putBoolean(Constants.KEY_DARK_MODE, isDarkMode).apply()
+        sharedPreferences.edit().putBoolean(Constants.KEY_DARK_MODE, isDarkMode).commit()
     }
     
     // Statistics management
@@ -185,7 +189,7 @@ class SharedPreferencesManager(context: Context) {
     
     fun incrementBlockedCallsCount() {
         val currentCount = getBlockedCallsCount()
-        sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_CALLS_COUNT, currentCount + 1).apply()
+        sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_CALLS_COUNT, currentCount + 1).commit()
     }
     
     fun getBlockedSmsCount(): Int {
@@ -194,7 +198,7 @@ class SharedPreferencesManager(context: Context) {
     
     fun incrementBlockedSmsCount() {
         val currentCount = getBlockedSmsCount()
-        sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_SMS_COUNT, currentCount + 1).apply()
+        sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_SMS_COUNT, currentCount + 1).commit()
     }
     
     // History management
@@ -202,7 +206,7 @@ class SharedPreferencesManager(context: Context) {
         val history = getBlockedCallsHistory().toMutableList()
         history.add(BlockedCall(phoneNumber, timestamp))
         val historyJson = gson.toJson(history)
-        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_CALLS_HISTORY, historyJson).apply()
+        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_CALLS_HISTORY, historyJson).commit()
     }
     
     fun getBlockedCallsHistory(): List<BlockedCall> {
@@ -219,7 +223,7 @@ class SharedPreferencesManager(context: Context) {
         val history = getBlockedSmsHistory().toMutableList()
         history.add(BlockedSms(phoneNumber, message, timestamp))
         val historyJson = gson.toJson(history)
-        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_SMS_HISTORY, historyJson).apply()
+        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_SMS_HISTORY, historyJson).commit()
     }
     
     fun getBlockedSmsHistory(): List<BlockedSms> {
@@ -238,7 +242,7 @@ class SharedPreferencesManager(context: Context) {
             .remove(Constants.KEY_BLOCKED_SMS_HISTORY)
             .putInt(Constants.KEY_BLOCKED_CALLS_COUNT, 0)
             .putInt(Constants.KEY_BLOCKED_SMS_COUNT, 0)
-            .apply()
+            .commit()
     }
 }
 

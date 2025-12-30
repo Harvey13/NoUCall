@@ -89,7 +89,7 @@
             android:exported="false"
             android:foregroundServiceType="phoneCall" />
 
-        <!-- Call Receiver -->
+        <!-- Call Blocker Receiver -->
         <receiver
             android:name="com.noucall.app.receiver.CallBlockerReceiver"
             android:enabled="true"

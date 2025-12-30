@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -135,6 +136,10 @@ class MainActivity : AppCompatActivity() {
         }
         
         binding.switchBlocking.setOnCheckedChangeListener { _, isChecked ->
+            Log.d("MainActivity", "Switch toggled. isChecked: $isChecked")
+            // Save the state immediately
+            sharedPreferences.edit().putBoolean(Constants.KEY_BLOCKING_ENABLED, isChecked).commit()
+            
             if (isChecked) {
                 checkAndRequestPermissions()
             } else {
