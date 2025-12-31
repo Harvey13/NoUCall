@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.noucall.app.R
+import com.noucall.app.data.BlockedPrefix
 
 class PrefixAdapter(
-    private val onItemClick: (String) -> Unit
-) : ListAdapter<String, PrefixAdapter.PrefixViewHolder>(PrefixDiffCallback()) {
+    private val onItemClick: (BlockedPrefix) -> Unit
+) : ListAdapter<BlockedPrefix, PrefixAdapter.PrefixViewHolder>(PrefixDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrefixViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -28,27 +29,27 @@ class PrefixAdapter(
         private val tvPrefix: TextView = itemView.findViewById(R.id.tv_prefix)
         private val btnDelete: ImageButton = itemView.findViewById(R.id.btn_delete)
 
-        fun bind(prefix: String) {
-            tvPrefix.text = prefix
+        fun bind(blockedPrefix: BlockedPrefix) {
+            tvPrefix.text = "${blockedPrefix.prefix} - ${blockedPrefix.comment}"
             
             itemView.setOnClickListener {
-                onItemClick(prefix)
+                onItemClick(blockedPrefix)
             }
             
             btnDelete.setOnClickListener {
                 // Handle delete action
-                onItemClick(prefix)
+                onItemClick(blockedPrefix)
             }
         }
     }
 }
 
-class PrefixDiffCallback : DiffUtil.ItemCallback<String>() {
-    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-        return oldItem == newItem
+class PrefixDiffCallback : DiffUtil.ItemCallback<BlockedPrefix>() {
+    override fun areItemsTheSame(oldItem: BlockedPrefix, newItem: BlockedPrefix): Boolean {
+        return oldItem.prefix == newItem.prefix
     }
 
-    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+    override fun areContentsTheSame(oldItem: BlockedPrefix, newItem: BlockedPrefix): Boolean {
         return oldItem == newItem
     }
 }

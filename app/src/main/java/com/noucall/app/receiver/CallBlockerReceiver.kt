@@ -8,8 +8,8 @@ import android.os.Build
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import android.util.Log
+import com.noucall.app.data.BlockedPrefix
 import com.noucall.app.service.CallBlockerService
-import com.noucall.app.utils.Constants
 import com.noucall.app.utils.SharedPreferencesManager
 
 class CallBlockerReceiver : BroadcastReceiver() {
@@ -58,7 +58,8 @@ class CallBlockerReceiver : BroadcastReceiver() {
         Log.d("CallBlockerReceiver", "Original number: '$phoneNumber', normalized: '$normalizedPhoneNumber', national: '$nationalNumber'")
 
         // Check if the phone number starts with any blocked prefix
-        for (prefix in blockedPrefixes) {
+        for (blockedPrefix in blockedPrefixes) {
+            val prefix = blockedPrefix.prefix
             val normalizedPrefix = prefix.replace(" ", "").replace("-", "").trim()
 
             Log.d("CallBlockerReceiver", "Checking prefix: '$normalizedPrefix' against national number: '$nationalNumber'")

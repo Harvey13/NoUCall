@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.noucall.app.data.BlockedPrefix
 import java.lang.ref.WeakReference
 
 class SharedPreferencesManager(context: Context) {
@@ -36,12 +37,12 @@ class SharedPreferencesManager(context: Context) {
             getInstance(context).setBlockingEnabled(enabled)
         }
         
-        fun getBlockedPrefixes(context: Context): List<String> {
+        fun getBlockedPrefixes(context: Context): List<BlockedPrefix> {
             return getInstance(context).getBlockedPrefixes()
         }
         
-        fun addBlockedPrefix(context: Context, prefix: String) {
-            getInstance(context).addBlockedPrefix(prefix)
+        fun addBlockedPrefix(context: Context, prefix: String, comment: String = "") {
+            getInstance(context).addBlockedPrefix(prefix, comment)
         }
         
         fun removeBlockedPrefix(context: Context, prefix: String) {
@@ -118,32 +119,58 @@ class SharedPreferencesManager(context: Context) {
     }
     
     // Blocked prefixes management
-    fun getBlockedPrefixes(): List<String> {
+    fun getBlockedPrefixes(): List<BlockedPrefix> {
         val prefixesJson = sharedPreferences.getString(Constants.KEY_BLOCKED_PREFIXES, null)
         return if (prefixesJson != null) {
-            val type = object : TypeToken<List<String>>() {}.type
-            gson.fromJson(prefixesJson, type) ?: Constants.DEFAULT_BLOCKED_PREFIXES
+            try {
+                // Try to parse as List<BlockedPrefix>
+                val type = object : TypeToken<List<BlockedPrefix>>() {}.type
+                gson.fromJson(prefixesJson, type)
+            } catch (e: Exception) {
+                // If parsing fails, try to parse as List<String> and migrate
+                try {
+                    val stringType = object : TypeToken<List<String>>() {}.type
+                    val oldPrefixes = gson.fromJson<List<String>>(prefixesJson, stringType)
+                    // Migrate to BlockedPrefix with default comment for known prefixes
+                    oldPrefixes.map { prefix ->
+                        val comment = if (Constants.DEFAULT_BLOCKED_PREFIXES.contains(prefix)) {
+                            "Démarchage Commercial"
+                        } else {
+                            ""
+                        }
+                        BlockedPrefix(prefix, comment)
+                    }
+                } catch (e2: Exception) {
+                    // If both fail, return default
+                    Constants.DEFAULT_BLOCKED_PREFIXES.map { BlockedPrefix(it, "Démarchage Commercial") }
+                }
+            }
         } else {
-            Constants.DEFAULT_BLOCKED_PREFIXES
+            Constants.DEFAULT_BLOCKED_PREFIXES.map { BlockedPrefix(it, "Démarchage Commercial") }
         }
     }
     
-    fun setBlockedPrefixes(prefixes: List<String>) {
+    fun setBlockedPrefixes(prefixes: List<BlockedPrefix>) {
         val prefixesJson = gson.toJson(prefixes)
         sharedPreferences.edit().putString(Constants.KEY_BLOCKED_PREFIXES, prefixesJson).commit()
     }
     
-    fun addBlockedPrefix(prefix: String) {
+    fun addBlockedPrefix(prefix: String, comment: String = "") {
         val currentPrefixes = getBlockedPrefixes().toMutableList()
-        if (!currentPrefixes.contains(prefix)) {
-            currentPrefixes.add(prefix)
+        if (!currentPrefixes.any { it.prefix == prefix }) {
+            val finalComment = if (comment.isEmpty() && Constants.DEFAULT_BLOCKED_PREFIXES.contains(prefix)) {
+                "Démarchage Commercial"
+            } else {
+                comment
+            }
+            currentPrefixes.add(BlockedPrefix(prefix, finalComment))
             setBlockedPrefixes(currentPrefixes)
         }
     }
     
     fun removeBlockedPrefix(prefix: String) {
         val currentPrefixes = getBlockedPrefixes().toMutableList()
-        currentPrefixes.remove(prefix)
+        currentPrefixes.removeAll { it.prefix == prefix }
         setBlockedPrefixes(currentPrefixes)
     }
     

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.telephony.SmsMessage
 import android.util.Log
+import com.noucall.app.data.BlockedPrefix
 import com.noucall.app.utils.Constants
 import com.noucall.app.utils.SharedPreferencesManager
 
@@ -49,7 +50,8 @@ class SmsBlockerReceiver : BroadcastReceiver() {
         val whitelistedCountries = SharedPreferencesManager.getWhitelistedCountries(context)
         
         // Check if the sender number starts with any blocked prefix
-        for (prefix in blockedPrefixes) {
+        for (blockedPrefix in blockedPrefixes) {
+            val prefix = blockedPrefix.prefix
             val normalizedPrefix = prefix.replace(" ", "").trim()
             val normalizedSender = sender.replace(" ", "").replace("+", "").trim()
             

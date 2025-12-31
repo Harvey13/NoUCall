@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.noucall.app.adapter.CountryAutoCompleteAdapter
 import com.noucall.app.adapter.PrefixAdapter
 import com.noucall.app.adapter.WhitelistAdapter
+import com.noucall.app.data.BlockedPrefix
 import com.noucall.app.data.Country
 import com.noucall.app.data.CountryData
 import com.noucall.app.databinding.ActivityMainBinding
@@ -296,7 +297,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadBlockedPrefixes() {
         val prefixes = SharedPreferencesManager.getBlockedPrefixes(this)
-        prefixAdapter.submitList(prefixes.toMutableList())
+        prefixAdapter.submitList(prefixes)
     }
 
     private fun loadWhitelistedCountries() {
@@ -319,7 +320,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAddPrefixDialog() {
-        val editText = EditText(this).apply {
+        val container = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        val prefixEditText = EditText(this).apply {
             hint = getString(R.string.prefix_hint)
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -327,14 +336,26 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        val commentEditText = EditText(this).apply {
+            hint = "Commentaire (optionnel)"
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        container.addView(prefixEditText)
+        container.addView(commentEditText)
+
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle(R.string.add_prefix)
-            .setView(editText)
+            .setView(container)
             .setPositiveButton(R.string.save) { _, _ ->
-                val value = editText.text.toString().trim()
-                if (value.isNotEmpty()) {
-                    SharedPreferencesManager.addBlockedPrefix(this, value)
-                    val updated = SharedPreferencesManager.getBlockedPrefixes(this).toMutableList()
+                val prefix = prefixEditText.text.toString().trim()
+                val comment = commentEditText.text.toString().trim()
+                if (prefix.isNotEmpty()) {
+                    SharedPreferencesManager.addBlockedPrefix(this, prefix, comment)
+                    val updated = SharedPreferencesManager.getBlockedPrefixes(this)
                     prefixAdapter.submitList(updated)
                 }
             }
@@ -342,34 +363,57 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun showEditPrefixDialog(prefix: String) {
-        val editText = EditText(this).apply {
-            setText(prefix)
-            setSelection(text.length)
+    private fun showEditPrefixDialog(blockedPrefix: BlockedPrefix) {
+        val container = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
 
+        val prefixEditText = EditText(this).apply {
+            setText(blockedPrefix.prefix)
+            setSelection(text.length)
+            hint = getString(R.string.prefix_hint)
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        val commentEditText = EditText(this).apply {
+            setText(blockedPrefix.comment)
+            setSelection(text.length)
+            hint = "Commentaire"
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        container.addView(prefixEditText)
+        container.addView(commentEditText)
+
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle(R.string.edit)
-            .setView(editText)
+            .setView(container)
             .setPositiveButton(R.string.save) { _, _ ->
-                val newValue = editText.text.toString().trim()
-                if (newValue.isNotEmpty()) {
+                val newPrefix = prefixEditText.text.toString().trim()
+                val newComment = commentEditText.text.toString().trim()
+                if (newPrefix.isNotEmpty()) {
                     val current = SharedPreferencesManager.getBlockedPrefixes(this).toMutableList()
-                    val index = current.indexOf(prefix)
+                    val index = current.indexOfFirst { it.prefix == blockedPrefix.prefix }
                     if (index >= 0) {
-                        current[index] = newValue
+                        current[index] = BlockedPrefix(newPrefix, newComment)
                         SharedPreferencesManager.getInstance(this).setBlockedPrefixes(current)
-                        prefixAdapter.submitList(current.toMutableList())
+                        prefixAdapter.submitList(current)
                     }
                 }
             }
             .setNegativeButton(R.string.delete) { _, _ ->
-                SharedPreferencesManager.removeBlockedPrefix(this, prefix)
-                val updated = SharedPreferencesManager.getBlockedPrefixes(this).toMutableList()
+                SharedPreferencesManager.removeBlockedPrefix(this, blockedPrefix.prefix)
+                val updated = SharedPreferencesManager.getBlockedPrefixes(this)
                 prefixAdapter.submitList(updated)
             }
             .setNeutralButton(R.string.cancel, null)
