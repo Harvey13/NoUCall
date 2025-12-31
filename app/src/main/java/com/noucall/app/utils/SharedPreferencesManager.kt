@@ -147,14 +147,18 @@ class SharedPreferencesManager(context: Context) {
     }
     
     fun addBlockedPrefix(prefix: String, comment: String = "") {
+        // Normalize prefix before adding
+        val normalizedPrefix = prefix.replace("[^0-9]".toRegex(), "")
+        if (normalizedPrefix.isEmpty()) return
+        
         val currentPrefixes = getBlockedPrefixes().toMutableList()
-        if (!currentPrefixes.any { it.prefix == prefix }) {
-            val finalComment = if (comment.isEmpty() && Constants.DEFAULT_BLOCKED_PREFIXES.contains(prefix)) {
+        if (!currentPrefixes.any { it.prefix == normalizedPrefix }) {
+            val finalComment = if (comment.isEmpty() && Constants.DEFAULT_BLOCKED_PREFIXES.contains(normalizedPrefix)) {
                 "Démarchage Commercial"
             } else {
                 comment
             }
-            currentPrefixes.add(BlockedPrefix(prefix, finalComment))
+            currentPrefixes.add(BlockedPrefix(normalizedPrefix, finalComment))
             setBlockedPrefixes(currentPrefixes)
         }
     }

@@ -30,11 +30,22 @@ class PrefixAdapter(
         private val btnEdit: ImageButton = itemView.findViewById(R.id.btn_edit)
 
         fun bind(blockedPrefix: BlockedPrefix) {
-            tvPrefix.text = "${blockedPrefix.prefix} - ${blockedPrefix.comment}"
+            // Format prefix for display (add space after first 2 digits for readability)
+            val formattedPrefix = formatPrefixForDisplay(blockedPrefix.prefix)
+            tvPrefix.text = "$formattedPrefix - ${blockedPrefix.comment}"
             
             // Only the edit button is clickable, not the whole item
             btnEdit.setOnClickListener {
                 onItemClick(blockedPrefix)
+            }
+        }
+        
+        private fun formatPrefixForDisplay(prefix: String): String {
+            // Add space after first 2 digits for readability (e.g., "0948" -> "09 48")
+            return if (prefix.length >= 2) {
+                prefix.substring(0, 2) + " " + prefix.substring(2)
+            } else {
+                prefix
             }
         }
     }

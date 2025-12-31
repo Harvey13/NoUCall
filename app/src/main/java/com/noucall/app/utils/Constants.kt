@@ -12,14 +12,14 @@ object Constants {
     const val KEY_BLOCKED_CALLS_COUNT = "blocked_calls_count"
     const val KEY_BLOCKED_CALLS_HISTORY = "blocked_calls_history"
     
-    // Default blocked prefixes (Démarchage Commercial)
+    // Default blocked prefixes (Démarchage Commercial) - normalized to digits only
     val DEFAULT_BLOCKED_PREFIXES = listOf(
-        "09 48", "09 49",
-        "01 62", "01 63",
-        "02 70", "02 71",
-        "03 77", "03 78",
-        "04 24", "04 25",
-        "05 68", "05 69"
+        "0948", "0949",
+        "0162", "0163",
+        "0270", "0271",
+        "0377", "0378",
+        "0424", "0425",
+        "0568", "0569"
     )
     
     // Default whitelisted countries (can be customized)

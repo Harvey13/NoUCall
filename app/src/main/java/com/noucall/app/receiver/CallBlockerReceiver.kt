@@ -51,63 +51,116 @@ class CallBlockerReceiver : BroadcastReceiver() {
         Log.d("CallBlockerReceiver", "Blocked prefixes: $blockedPrefixes")
         Log.d("CallBlockerReceiver", "Whitelisted countries: $whitelistedCountries")
 
-        // Normalize the phone number
-        val normalizedPhoneNumber = phoneNumber.replace(" ", "").replace("-", "").trim()
-        val nationalNumber = getNationalNumber(normalizedPhoneNumber)
+        // Normalize to E.164 format
+        val normalizedPhoneNumber = normalizeToE164(phoneNumber)
+        val countryCode = extractCountryCodeFromE164(normalizedPhoneNumber)
+        val nationalNumber = getNationalNumberFromE164(normalizedPhoneNumber)
 
-        Log.d("CallBlockerReceiver", "Original number: '$phoneNumber', normalized: '$normalizedPhoneNumber', national: '$nationalNumber'")
+        Log.d("CallBlockerReceiver", "Original: '$phoneNumber', E.164: '$normalizedPhoneNumber', country: $countryCode, national: '$nationalNumber'")
+
+        // First check if country is whitelisted (but this doesn't override explicit prefix blocking)
+        val isCountryWhitelisted = countryCode != null && whitelistedCountries.contains(countryCode)
+        Log.d("CallBlockerReceiver", "Country whitelisted: $isCountryWhitelisted")
 
         // Check if the phone number starts with any blocked prefix
         for (blockedPrefix in blockedPrefixes) {
-            val prefix = blockedPrefix.prefix
-            val normalizedPrefix = prefix.replace(" ", "").replace("-", "").trim()
+            val prefix = normalizePrefix(blockedPrefix.prefix)
+            
+            Log.d("CallBlockerReceiver", "Checking prefix: '$prefix' against national number: '$nationalNumber'")
 
-            Log.d("CallBlockerReceiver", "Checking prefix: '$normalizedPrefix' against national number: '$nationalNumber'")
-
-            if (nationalNumber.startsWith(normalizedPrefix)) {
-                Log.d("CallBlockerReceiver", "Prefix match found: $normalizedPrefix")
-                // Check if the number is from a whitelisted country
-                if (whitelistedCountries.isNotEmpty()) {
-                    val countryCode = extractCountryCode(phoneNumber)
-                    Log.d("CallBlockerReceiver", "Extracted country: $countryCode")
-                    if (countryCode != null && whitelistedCountries.contains(countryCode)) {
-                        Log.d("CallBlockerReceiver", "Country is whitelisted, not blocking")
-                        return false // Don't block if country is whitelisted
-                    }
-                }
-                Log.d("CallBlockerReceiver", "Blocking call")
-                return true // Block the call
+            if (nationalNumber.startsWith(prefix)) {
+                Log.d("CallBlockerReceiver", "Prefix match found: $prefix - BLOCKING (explicit prefix blocking overrides country whitelist)")
+                return true // Always block if prefix matches, even if country is whitelisted
             }
         }
 
-        Log.d("CallBlockerReceiver", "No prefix match, not blocking")
+        // If no prefix matched and country is whitelisted, don't block
+        if (isCountryWhitelisted) {
+            Log.d("CallBlockerReceiver", "No prefix match and country is whitelisted, not blocking")
+            return false
+        }
+
+        Log.d("CallBlockerReceiver", "No prefix match and country not whitelisted, not blocking")
         return false
     }
 
-    private fun getNationalNumber(phoneNumber: String): String {
-        // Remove country code for known countries
-        if (phoneNumber.startsWith("+33")) {
-            val withoutCountry = phoneNumber.substring(3) // Remove +33 for France
-            // For French mobile numbers starting with 6, add the leading 0
-            if (withoutCountry.startsWith("6") && withoutCountry.length == 9) {
-                return "0$withoutCountry"
+    private fun normalizeToE164(phoneNumber: String): String {
+        // Remove all non-numeric characters
+        var normalized = phoneNumber.replace("[^0-9+]".toRegex(), "")
+        
+        // Convert 00 prefix to +
+        if (normalized.startsWith("00")) {
+            normalized = "+" + normalized.substring(2)
+        }
+        
+        // For French numbers without country code, assume France
+        if (!normalized.startsWith("+")) {
+            // If it starts with 0 and has 9-10 digits, it's likely a French number
+            if (normalized.startsWith("0") && normalized.length >= 9 && normalized.length <= 10) {
+                return "+33" + normalized.substring(1)
             }
-            return withoutCountry
+            // For other short numbers, keep as is (might be special numbers)
+            return normalized
         }
-        if (phoneNumber.startsWith("0033")) {
-            val withoutCountry = phoneNumber.substring(4) // Remove 0033 for France
-            // For French mobile numbers starting with 6, add the leading 0
-            if (withoutCountry.startsWith("6") && withoutCountry.length == 9) {
-                return "0$withoutCountry"
+        
+        return normalized
+    }
+    
+    private fun normalizePrefix(prefix: String): String {
+        // Remove all non-numeric characters and spaces
+        return prefix.replace("[^0-9]".toRegex(), "")
+    }
+    
+    private fun extractCountryCodeFromE164(e164Number: String): String? {
+        if (!e164Number.startsWith("+")) return null
+        
+        // Common country codes mapping
+        val countryCodes = mapOf(
+            "+33" to "France",
+            "+41" to "Suisse",
+            "+32" to "Belgique",
+            "+352" to "Luxembourg",
+            "+49" to "Allemagne",
+            "+43" to "Autriche",
+            "+31" to "Pays-Bas",
+            "+34" to "Espagne",
+            "+39" to "Italie",
+            "+44" to "Royaume-Uni",
+            "+351" to "Portugal",
+            "+353" to "Irlande",
+            "+45" to "Danemark",
+            "+46" to "Suède",
+            "+47" to "Norvège",
+            "+358" to "Finlande",
+            "+354" to "Islande"
+        )
+        
+        for ((code, country) in countryCodes) {
+            if (e164Number.startsWith(code)) {
+                return country
             }
-            return withoutCountry
         }
-        // For numbers without country code, assume they are national
-        if (!phoneNumber.startsWith("+")) {
-            return phoneNumber
+        
+        return null
+    }
+    
+    private fun getNationalNumberFromE164(e164Number: String): String {
+        if (!e164Number.startsWith("+")) return e164Number
+        
+        // Remove country code to get national number
+        for (code in listOf("+33", "+41", "+32", "+352", "+49", "+43", "+31", "+34", "+39", "+44", "+351", "+353", "+45", "+46", "+47", "+358", "+354")) {
+            if (e164Number.startsWith(code)) {
+                var national = e164Number.substring(code.length)
+                // For France, add leading 0 if not present
+                if (code == "+33" && national.length == 9 && national.startsWith("6")) {
+                    national = "0" + national
+                }
+                return national
+            }
         }
-        // For other countries, keep as is for now
-        return phoneNumber.replace("+", "")
+        
+        // If no known country code, return number without +
+        return e164Number.substring(1)
     }
     
     private fun blockCall(context: Context, phoneNumber: String) {
@@ -161,41 +214,4 @@ class CallBlockerReceiver : BroadcastReceiver() {
         }
     }
     
-    private fun extractCountryCode(phoneNumber: String): String? {
-        val normalizedNumber = phoneNumber.replace(" ", "").replace("-", "").trim()
-        
-        // Common country codes mapping
-        val countryCodes = mapOf(
-            "+33" to "France",
-            "+41" to "Suisse",
-            "+32" to "Belgique",
-            "+352" to "Luxembourg",
-            "+49" to "Allemagne",
-            "+43" to "Autriche",
-            "+31" to "Pays-Bas",
-            "+34" to "Espagne",
-            "+39" to "Italie",
-            "+44" to "Royaume-Uni",
-            "+351" to "Portugal",
-            "+353" to "Irlande",
-            "+45" to "Danemark",
-            "+46" to "Suède",
-            "+47" to "Norvège",
-            "+358" to "Finlande",
-            "+354" to "Islande"
-        )
-        
-        for ((code, country) in countryCodes) {
-            if (normalizedNumber.startsWith(code.substring(1))) { // Remove + for comparison
-                return country
-            }
-        }
-        
-        // For French numbers starting with 0 (without country code)
-        if (normalizedNumber.startsWith("0") && normalizedNumber.length >= 9) {
-            return "France"
-        }
-        
-        return null
-    }
 }

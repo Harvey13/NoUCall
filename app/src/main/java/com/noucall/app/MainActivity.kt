@@ -316,6 +316,21 @@ class MainActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER
+            // Add text watcher to filter non-numeric characters
+            addTextChangedListener(object : android.text.TextWatcher {
+                override fun afterTextChanged(s: android.text.Editable?) {
+                    // Remove all non-numeric characters
+                    s?.let {
+                        val filtered = s.toString().replace("[^0-9]".toRegex(), "")
+                        if (s.toString() != filtered) {
+                            s.replace(0, s.length, filtered)
+                        }
+                    }
+                }
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            })
         }
 
         val commentEditText = EditText(this).apply {
@@ -333,7 +348,7 @@ class MainActivity : AppCompatActivity() {
             .setTitle(R.string.add_prefix)
             .setView(container)
             .setPositiveButton(R.string.save) { _, _ ->
-                val prefix = prefixEditText.text.toString().trim()
+                val prefix = normalizePrefix(prefixEditText.text.toString())
                 val comment = commentEditText.text.toString().trim()
                 if (prefix.isNotEmpty()) {
                     SharedPreferencesManager.addBlockedPrefix(this, prefix, comment)
@@ -362,6 +377,21 @@ class MainActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER
+            // Add text watcher to filter non-numeric characters
+            addTextChangedListener(object : android.text.TextWatcher {
+                override fun afterTextChanged(s: android.text.Editable?) {
+                    // Remove all non-numeric characters
+                    s?.let {
+                        val filtered = s.toString().replace("[^0-9]".toRegex(), "")
+                        if (s.toString() != filtered) {
+                            s.replace(0, s.length, filtered)
+                        }
+                    }
+                }
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            })
         }
 
         val commentEditText = EditText(this).apply {
@@ -381,7 +411,7 @@ class MainActivity : AppCompatActivity() {
             .setTitle(R.string.edit)
             .setView(container)
             .setPositiveButton(R.string.save) { _, _ ->
-                val newPrefix = prefixEditText.text.toString().trim()
+                val newPrefix = normalizePrefix(prefixEditText.text.toString())
                 val newComment = commentEditText.text.toString().trim()
                 if (newPrefix.isNotEmpty()) {
                     val current = SharedPreferencesManager.getBlockedPrefixes(this).toMutableList()
@@ -538,7 +568,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-
+    private fun normalizePrefix(prefix: String): String {
+        // Remove all non-numeric characters and spaces
+        return prefix.replace("[^0-9]".toRegex(), "")
+    }
+    
     override fun onDestroy() {
         super.onDestroy()
         try {
