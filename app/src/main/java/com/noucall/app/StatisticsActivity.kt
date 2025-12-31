@@ -153,7 +153,7 @@ class StatisticsActivity : AppCompatActivity() {
     }
     
     private fun clearHistory() {
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle("Effacer l'historique")
             .setMessage("Voulez-vous effacer tout l'historique des appels et SMS bloqués ?")
             .setPositiveButton("Oui") { _, _ ->
@@ -173,13 +173,13 @@ class StatisticsActivity : AppCompatActivity() {
             else -> "Numéro : $phoneNumber\nType : $type\n\nQue souhaitez-vous faire ?"
         }
         
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle("Options")
             .setMessage(fullMessage)
             .setPositiveButton("Ajouter aux préfixes bloqués") { _, _ ->
                 // Extract prefix from phone number
                 val prefix = extractPrefix(phoneNumber)
-                androidx.appcompat.app.AlertDialog.Builder(this)
+                androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
                     .setTitle("Ajouter un préfixe")
                     .setMessage("Ajouter '$prefix' aux préfixes bloqués ?")
                     .setPositiveButton("Oui") { _, _ ->
