@@ -86,7 +86,6 @@
     <string name="app_name">NoUCall</string>
     <string name="blocked_calls">Appels Bloqués</string>
     <string name="blocked_prefixes">Préfixes Bloqués</string>
-    <string name="blocked_sms">SMS Bloqués</string>
     <string name="blocking_disabled">Blocage désactivé</string>
     <string name="blocking_enabled">Blocage activé</string>
     <string name="cancel">Annuler</string>
@@ -102,7 +101,6 @@
     <string name="no_data">Aucune donnée</string>
     <string name="permission_call_phone">L\'application nécessite la permission de téléphoner pour bloquer les appels</string>
     <string name="permission_read_phone_state">L\'application nécessite la permission de lire l\'état du téléphone</string>
-    <string name="permission_receive_sms">L\'application nécessite la permission de recevoir les SMS</string>
     <string name="permission_required">Permission Requise</string>
     <string name="permission_system_alert_window">L\'application nécessite la permission d\'afficher par-dessus les autres applications pour bloquer les appels</string>
     <string name="prefix_hint">Ex: 09 48</string>

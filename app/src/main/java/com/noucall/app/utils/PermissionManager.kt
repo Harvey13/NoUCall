@@ -34,19 +34,6 @@ object PermissionManager {
         }
     }
     
-    fun hasSmsPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.RECEIVE_SMS
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-    
-    fun hasReadSmsPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.READ_SMS
-        ) == PackageManager.PERMISSION_GRANTED
-    }
     
     fun hasOverlayPermission(context: Context): Boolean {
         return Settings.canDrawOverlays(context)
@@ -74,8 +61,6 @@ object PermissionManager {
         return hasCallPermission(context) &&
                 hasReadPhoneStatePermission(context) &&
                 hasAnswerPhoneCallsPermission(context) &&
-                hasSmsPermission(context) &&
-                hasReadSmsPermission(context) &&
                 hasOverlayPermission(context) &&
                 hasNotificationPermission(context)
     }
@@ -93,14 +78,6 @@ object PermissionManager {
         
         if (!hasAnswerPhoneCallsPermission(context)) {
             missingPermissions.add(Manifest.permission.ANSWER_PHONE_CALLS)
-        }
-        
-        if (!hasSmsPermission(context)) {
-            missingPermissions.add(Manifest.permission.RECEIVE_SMS)
-        }
-        
-        if (!hasReadSmsPermission(context)) {
-            missingPermissions.add(Manifest.permission.READ_SMS)
         }
         
         if (!hasNotificationPermission(context)) {

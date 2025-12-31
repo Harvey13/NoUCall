@@ -96,15 +96,12 @@ id layout_whitelisted_countries
 id recyclerView_blocked_prefixes
 id recyclerView_whitelisted_countries
 id recycler_view_blocked_calls
-id recycler_view_blocked_sms
 id switch_blocking
 id toolbar
 id tv_blocked_calls
-id tv_blocked_sms
 id tv_country
 id tv_message
 id tv_no_calls_data
-id tv_no_sms_data
 id tv_phone_number
 id tv_prefix
 id tv_timestamp
@@ -123,7 +120,6 @@ string all_time
 string app_name
 string blocked_calls
 string blocked_prefixes
-string blocked_sms
 string blocking_disabled
 string blocking_enabled
 string cancel
@@ -139,7 +135,6 @@ string light_mode
 string no_data
 string permission_call_phone
 string permission_read_phone_state
-string permission_receive_sms
 string permission_required
 string permission_system_alert_window
 string prefix_hint

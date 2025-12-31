@@ -7,7 +7,6 @@
     <string name="blocked_prefixes">Préfixes Bloqués</string>
     <string name="whitelisted_countries">Pays Autorisés</string>
     <string name="blocked_calls">Appels Bloqués</string>
-    <string name="blocked_sms">SMS Bloqués</string>
     <string name="total_blocked">Total Bloqué</string>
     <string name="enable_blocking">Activer le Blocage</string>
     <string name="disable_blocking">Désactiver le Blocage</string>
@@ -24,7 +23,6 @@
     <string name="permission_required">Permission Requise</string>
     <string name="permission_call_phone">L\'application nécessite la permission de téléphoner pour bloquer les appels</string>
     <string name="permission_read_phone_state">L\'application nécessite la permission de lire l\'état du téléphone</string>
-    <string name="permission_receive_sms">L\'application nécessite la permission de recevoir les SMS</string>
     <string name="permission_system_alert_window">L\'application nécessite la permission d\'afficher par-dessus les autres applications pour bloquer les appels</string>
     <string name="grant_permission">Accorder la Permission</string>
     <string name="blocking_enabled">Blocage activé</string>

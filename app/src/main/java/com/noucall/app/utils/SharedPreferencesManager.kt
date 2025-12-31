@@ -77,21 +77,11 @@ class SharedPreferencesManager(context: Context) {
             getInstance(context).incrementBlockedCallsCount()
         }
         
-        fun getBlockedSmsCount(context: Context): Int {
-            return getInstance(context).getBlockedSmsCount()
-        }
-        
-        fun incrementBlockedSmsCount(context: Context) {
-            getInstance(context).incrementBlockedSmsCount()
-        }
         
         fun addBlockedCallToHistory(context: Context, phoneNumber: String, timestamp: Long) {
             getInstance(context).addBlockedCallToHistory(phoneNumber, timestamp)
         }
         
-        fun addBlockedSmsToHistory(context: Context, phoneNumber: String, message: String, timestamp: Long) {
-            getInstance(context).addBlockedSmsToHistory(phoneNumber, message, timestamp)
-        }
         
         fun clearHistory(context: Context) {
             getInstance(context).clearHistory()
@@ -101,9 +91,6 @@ class SharedPreferencesManager(context: Context) {
             return getInstance(context).getBlockedCallsHistory()
         }
         
-        fun getBlockedSmsHistory(context: Context): List<BlockedSms> {
-            return getInstance(context).getBlockedSmsHistory()
-        }
     }
     
     // Blocking enabled status
@@ -225,16 +212,6 @@ class SharedPreferencesManager(context: Context) {
         contextReference?.get()?.sendBroadcast(Intent("com.noucall.app.STATISTICS_UPDATED"))
     }
     
-    fun getBlockedSmsCount(): Int {
-        return sharedPreferences.getInt(Constants.KEY_BLOCKED_SMS_COUNT, 0)
-    }
-    
-    fun incrementBlockedSmsCount() {
-        val currentCount = getBlockedSmsCount()
-        sharedPreferences.edit().putInt(Constants.KEY_BLOCKED_SMS_COUNT, currentCount + 1).commit()
-        // Send broadcast to update UI
-        contextReference?.get()?.sendBroadcast(Intent("com.noucall.app.STATISTICS_UPDATED"))
-    }
     
     // History management
     fun addBlockedCallToHistory(phoneNumber: String, timestamp: Long) {
@@ -254,29 +231,11 @@ class SharedPreferencesManager(context: Context) {
         }
     }
     
-    fun addBlockedSmsToHistory(phoneNumber: String, message: String, timestamp: Long) {
-        val history = getBlockedSmsHistory().toMutableList()
-        history.add(BlockedSms(phoneNumber, message, timestamp))
-        val historyJson = gson.toJson(history)
-        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_SMS_HISTORY, historyJson).commit()
-    }
-    
-    fun getBlockedSmsHistory(): List<BlockedSms> {
-        val historyJson = sharedPreferences.getString(Constants.KEY_BLOCKED_SMS_HISTORY, null)
-        return if (historyJson != null) {
-            val type = object : TypeToken<List<BlockedSms>>() {}.type
-            gson.fromJson(historyJson, type) ?: emptyList()
-        } else {
-            emptyList()
-        }
-    }
     
     fun clearHistory() {
         sharedPreferences.edit()
             .remove(Constants.KEY_BLOCKED_CALLS_HISTORY)
-            .remove(Constants.KEY_BLOCKED_SMS_HISTORY)
             .putInt(Constants.KEY_BLOCKED_CALLS_COUNT, 0)
-            .putInt(Constants.KEY_BLOCKED_SMS_COUNT, 0)
             .commit()
     }
 }

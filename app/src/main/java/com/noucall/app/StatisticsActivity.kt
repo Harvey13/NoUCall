@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noucall.app.adapter.BlockedCallAdapter
-import com.noucall.app.adapter.BlockedSmsAdapter
 import com.noucall.app.databinding.ActivityStatisticsBinding
 import com.noucall.app.utils.SharedPreferencesManager
 import java.text.SimpleDateFormat
@@ -21,7 +20,6 @@ class StatisticsActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityStatisticsBinding
     private lateinit var blockedCallAdapter: BlockedCallAdapter
-    private lateinit var blockedSmsAdapter: BlockedSmsAdapter
     
     private val statisticsUpdateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -82,25 +80,14 @@ class StatisticsActivity : AppCompatActivity() {
             adapter = blockedCallAdapter
         }
         
-        blockedSmsAdapter = BlockedSmsAdapter { blockedSms ->
-            // Handle edit click for blocked SMS
-            showEditDialog(blockedSms.phoneNumber, "SMS", blockedSms.message)
-        }
-        binding.recyclerViewBlockedSms.apply {
-            layoutManager = LinearLayoutManager(this@StatisticsActivity)
-            adapter = blockedSmsAdapter
-        }
     }
     
     private fun loadStatistics() {
         val blockedCallsCount = SharedPreferencesManager.getBlockedCallsCount(this)
-        val blockedSmsCount = SharedPreferencesManager.getBlockedSmsCount(this)
 
-        binding.tvBlockedCalls.text = "Appels Bloqués\n$blockedCallsCount"
-        binding.tvBlockedSms.text = "SMS Bloqués\n$blockedSmsCount"
+        binding.tvBlockedCalls.text = "Appels Bloqués: $blockedCallsCount"
 
         loadBlockedCallsHistory()
-        loadBlockedSmsHistory()
     }
     
     private fun loadBlockedCallsHistory() {
@@ -118,20 +105,6 @@ class StatisticsActivity : AppCompatActivity() {
         }
     }
     
-    private fun loadBlockedSmsHistory() {
-        val blockedSms = SharedPreferencesManager.getBlockedSmsHistory(this)
-        
-        if (blockedSms.isEmpty()) {
-            binding.tvNoSmsData.visibility = android.view.View.VISIBLE
-            binding.recyclerViewBlockedSms.visibility = android.view.View.GONE
-        } else {
-            binding.tvNoSmsData.visibility = android.view.View.GONE
-            binding.recyclerViewBlockedSms.visibility = android.view.View.VISIBLE
-            // Sort by timestamp descending (most recent first)
-            val sortedSms = blockedSms.sortedByDescending { it.timestamp }
-            blockedSmsAdapter.submitList(sortedSms)
-        }
-    }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.statistics_menu, menu)
@@ -155,7 +128,7 @@ class StatisticsActivity : AppCompatActivity() {
     private fun clearHistory() {
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle("Effacer l'historique")
-            .setMessage("Voulez-vous effacer tout l'historique des appels et SMS bloqués ?")
+            .setMessage("Voulez-vous effacer tout l'historique des appels bloqués ?")
             .setPositiveButton("Oui") { _, _ ->
                 SharedPreferencesManager.clearHistory(this)
                 loadStatistics()
@@ -169,7 +142,6 @@ class StatisticsActivity : AppCompatActivity() {
         val message = message ?: ""
         val fullMessage = when (type) {
             "Appel" -> "Numéro : $phoneNumber\nType : Appel bloqué\n\nQue souhaitez-vous faire ?"
-            "SMS" -> "Numéro : $phoneNumber\nType : SMS bloqué\nMessage : $message\n\nQue souhaitez-vous faire ?"
             else -> "Numéro : $phoneNumber\nType : $type\n\nQue souhaitez-vous faire ?"
         }
         

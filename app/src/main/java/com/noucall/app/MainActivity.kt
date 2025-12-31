@@ -82,21 +82,12 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            checkAndRequestSmsPermission()
+            checkAndRequestOverlayPermission()
         } else {
             Toast.makeText(this, "Permission requise pour bloquer les appels", Toast.LENGTH_LONG).show()
         }
     }
 
-    private val smsPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            checkAndRequestOverlayPermission()
-        } else {
-            Toast.makeText(this, getString(R.string.permission_receive_sms), Toast.LENGTH_LONG).show()
-        }
-    }
 
     private val overlayPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -118,6 +109,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         
         sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE)
+        
         
         setupUI()
         setupRecyclerViews()
@@ -187,9 +179,6 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.checkSelfPermission(this, Manifest.permission.ANSWER_PHONE_CALLS) != PackageManager.PERMISSION_GRANTED -> {
                 answerCallPermissionLauncher.launch(Manifest.permission.ANSWER_PHONE_CALLS)
             }
-            ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED -> {
-                smsPermissionLauncher.launch(Manifest.permission.RECEIVE_SMS)
-            }
             !isDefaultDialer() -> {
                 requestDefaultDialer()
                 return
@@ -208,7 +197,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAndRequestCallPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-            checkAndRequestSmsPermission()
+            checkAndRequestOverlayPermission()
         } else {
             callPermissionLauncher.launch(Manifest.permission.CALL_PHONE)
         }
@@ -232,19 +221,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAndRequestAnswerCallPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED) {
-            checkAndRequestSmsPermission()
+            checkAndRequestOverlayPermission()
         } else {
             answerCallPermissionLauncher.launch(Manifest.permission.ANSWER_PHONE_CALLS)
         }
     }
 
-    private fun checkAndRequestSmsPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED) {
-            checkAndRequestOverlayPermission()
-        } else {
-            smsPermissionLauncher.launch(Manifest.permission.RECEIVE_SMS)
-        }
-    }
 
     private fun checkAndRequestOverlayPermission() {
         if (Settings.canDrawOverlays(this)) {
@@ -555,6 +537,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Veuillez définir NoUCall comme application téléphonique par défaut", Toast.LENGTH_LONG).show()
         }
     }
+    
 
     override fun onDestroy() {
         super.onDestroy()

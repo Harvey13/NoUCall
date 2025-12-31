@@ -25,36 +25,22 @@ public final class ActivityStatisticsBinding implements ViewBinding {
   public final RecyclerView recyclerViewBlockedCalls;
 
   @NonNull
-  public final RecyclerView recyclerViewBlockedSms;
-
-  @NonNull
   public final MaterialToolbar toolbar;
 
   @NonNull
   public final TextView tvBlockedCalls;
 
   @NonNull
-  public final TextView tvBlockedSms;
-
-  @NonNull
   public final TextView tvNoCallsData;
 
-  @NonNull
-  public final TextView tvNoSmsData;
-
   private ActivityStatisticsBinding(@NonNull CoordinatorLayout rootView,
-      @NonNull RecyclerView recyclerViewBlockedCalls, @NonNull RecyclerView recyclerViewBlockedSms,
-      @NonNull MaterialToolbar toolbar, @NonNull TextView tvBlockedCalls,
-      @NonNull TextView tvBlockedSms, @NonNull TextView tvNoCallsData,
-      @NonNull TextView tvNoSmsData) {
+      @NonNull RecyclerView recyclerViewBlockedCalls, @NonNull MaterialToolbar toolbar,
+      @NonNull TextView tvBlockedCalls, @NonNull TextView tvNoCallsData) {
     this.rootView = rootView;
     this.recyclerViewBlockedCalls = recyclerViewBlockedCalls;
-    this.recyclerViewBlockedSms = recyclerViewBlockedSms;
     this.toolbar = toolbar;
     this.tvBlockedCalls = tvBlockedCalls;
-    this.tvBlockedSms = tvBlockedSms;
     this.tvNoCallsData = tvNoCallsData;
-    this.tvNoSmsData = tvNoSmsData;
   }
 
   @Override
@@ -90,12 +76,6 @@ public final class ActivityStatisticsBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.recycler_view_blocked_sms;
-      RecyclerView recyclerViewBlockedSms = ViewBindings.findChildViewById(rootView, id);
-      if (recyclerViewBlockedSms == null) {
-        break missingId;
-      }
-
       id = R.id.toolbar;
       MaterialToolbar toolbar = ViewBindings.findChildViewById(rootView, id);
       if (toolbar == null) {
@@ -108,27 +88,14 @@ public final class ActivityStatisticsBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tv_blocked_sms;
-      TextView tvBlockedSms = ViewBindings.findChildViewById(rootView, id);
-      if (tvBlockedSms == null) {
-        break missingId;
-      }
-
       id = R.id.tv_no_calls_data;
       TextView tvNoCallsData = ViewBindings.findChildViewById(rootView, id);
       if (tvNoCallsData == null) {
         break missingId;
       }
 
-      id = R.id.tv_no_sms_data;
-      TextView tvNoSmsData = ViewBindings.findChildViewById(rootView, id);
-      if (tvNoSmsData == null) {
-        break missingId;
-      }
-
       return new ActivityStatisticsBinding((CoordinatorLayout) rootView, recyclerViewBlockedCalls,
-          recyclerViewBlockedSms, toolbar, tvBlockedCalls, tvBlockedSms, tvNoCallsData,
-          tvNoSmsData);
+          toolbar, tvBlockedCalls, tvNoCallsData);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
