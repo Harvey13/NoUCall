@@ -112,18 +112,29 @@ class CallBlockerReceiver : BroadcastReceiver() {
     
     private fun blockCall(context: Context, phoneNumber: String) {
         try {
-            // Update statistics
-            SharedPreferencesManager.incrementBlockedCallsCount(context)
-            SharedPreferencesManager.addBlockedCallToHistory(context, phoneNumber, System.currentTimeMillis())
+            // Check if this call was already blocked in the last 10 seconds (deduplication)
+            val currentTime = System.currentTimeMillis()
+            val blockedCallsHistory = SharedPreferencesManager.getBlockedCallsHistory(context)
+            val recentlyBlocked = blockedCallsHistory.any { 
+                it.phoneNumber == phoneNumber && (currentTime - it.timestamp) < 10000 
+            }
+            
+            if (recentlyBlocked) {
+                Log.d("CallBlockerReceiver", "Call from $phoneNumber was already blocked recently, skipping")
+                return
+            }
 
-            // Try to block using TelecomManager if we're the default dialer
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Try to end the call using TelecomManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val telecomManager = context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
-                if (telecomManager.defaultDialerPackage == context.packageName) {
-                    Log.d("CallBlockerReceiver", "Using TelecomManager to block call")
+                if (telecomManager != null) {
                     try {
                         telecomManager.endCall()
                         Log.d("CallBlockerReceiver", "Call blocked via TelecomManager")
+                        
+                        // Add to history and increment counter only after successful blocking
+                        SharedPreferencesManager.addBlockedCallToHistory(context, phoneNumber, System.currentTimeMillis())
+                        SharedPreferencesManager.incrementBlockedCallsCount(context)
                         return
                     } catch (e: Exception) {
                         Log.e("CallBlockerReceiver", "Failed to block via TelecomManager", e)

@@ -72,9 +72,21 @@ class SmsBlockerReceiver : BroadcastReceiver() {
     
     private fun blockSms(context: Context, sender: String, messageBody: String) {
         try {
+            // Check if this SMS was already blocked in the last 10 seconds (deduplication)
+            val currentTime = System.currentTimeMillis()
+            val blockedSmsHistory = SharedPreferencesManager.getBlockedSmsHistory(context)
+            val recentlyBlocked = blockedSmsHistory.any { 
+                it.phoneNumber == sender && it.message == messageBody && (currentTime - it.timestamp) < 10000 
+            }
+            
+            if (recentlyBlocked) {
+                Log.d("SmsBlockerReceiver", "SMS from $sender was already blocked recently, skipping")
+                return
+            }
+            
             // Update statistics
             SharedPreferencesManager.incrementBlockedSmsCount(context)
-            SharedPreferencesManager.addBlockedSmsToHistory(context, sender, messageBody, System.currentTimeMillis())
+            SharedPreferencesManager.addBlockedSmsToHistory(context, sender, messageBody, currentTime)
             
             // Show notification about blocked SMS
             showBlockedSmsNotification(context, sender, messageBody)
