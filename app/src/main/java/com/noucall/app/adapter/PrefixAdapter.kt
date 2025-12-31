@@ -27,17 +27,13 @@ class PrefixAdapter(
 
     inner class PrefixViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvPrefix: TextView = itemView.findViewById(R.id.tv_prefix)
-        private val btnDelete: ImageButton = itemView.findViewById(R.id.btn_delete)
+        private val btnEdit: ImageButton = itemView.findViewById(R.id.btn_edit)
 
         fun bind(blockedPrefix: BlockedPrefix) {
             tvPrefix.text = "${blockedPrefix.prefix} - ${blockedPrefix.comment}"
             
-            itemView.setOnClickListener {
-                onItemClick(blockedPrefix)
-            }
-            
-            btnDelete.setOnClickListener {
-                // Handle delete action
+            // Only the edit button is clickable, not the whole item
+            btnEdit.setOnClickListener {
                 onItemClick(blockedPrefix)
             }
         }

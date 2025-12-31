@@ -3,6 +3,7 @@ package com.noucall.app.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,7 +13,9 @@ import com.noucall.app.utils.BlockedCall
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BlockedCallAdapter : ListAdapter<BlockedCall, BlockedCallAdapter.BlockedCallViewHolder>(BlockedCallDiffCallback()) {
+class BlockedCallAdapter(
+    private val onEditClick: (BlockedCall) -> Unit
+) : ListAdapter<BlockedCall, BlockedCallAdapter.BlockedCallViewHolder>(BlockedCallDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockedCallViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -27,12 +30,18 @@ class BlockedCallAdapter : ListAdapter<BlockedCall, BlockedCallAdapter.BlockedCa
     inner class BlockedCallViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvPhoneNumber: TextView = itemView.findViewById(R.id.tv_phone_number)
         private val tvTimestamp: TextView = itemView.findViewById(R.id.tv_timestamp)
+        private val btnEdit: ImageButton = itemView.findViewById(R.id.btn_edit)
 
         fun bind(blockedCall: BlockedCall) {
             tvPhoneNumber.text = blockedCall.phoneNumber
 
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             tvTimestamp.text = sdf.format(Date(blockedCall.timestamp))
+            
+            // Only the edit button is clickable, not the whole item
+            btnEdit.setOnClickListener {
+                onEditClick(blockedCall)
+            }
         }
     }
 }

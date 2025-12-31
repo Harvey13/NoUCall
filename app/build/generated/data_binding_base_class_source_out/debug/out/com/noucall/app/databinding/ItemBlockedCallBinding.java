@@ -4,6 +4,7 @@ package com.noucall.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,14 +21,18 @@ public final class ItemBlockedCallBinding implements ViewBinding {
   private final MaterialCardView rootView;
 
   @NonNull
+  public final ImageButton btnEdit;
+
+  @NonNull
   public final TextView tvPhoneNumber;
 
   @NonNull
   public final TextView tvTimestamp;
 
-  private ItemBlockedCallBinding(@NonNull MaterialCardView rootView,
+  private ItemBlockedCallBinding(@NonNull MaterialCardView rootView, @NonNull ImageButton btnEdit,
       @NonNull TextView tvPhoneNumber, @NonNull TextView tvTimestamp) {
     this.rootView = rootView;
+    this.btnEdit = btnEdit;
     this.tvPhoneNumber = tvPhoneNumber;
     this.tvTimestamp = tvTimestamp;
   }
@@ -59,6 +64,12 @@ public final class ItemBlockedCallBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_edit;
+      ImageButton btnEdit = ViewBindings.findChildViewById(rootView, id);
+      if (btnEdit == null) {
+        break missingId;
+      }
+
       id = R.id.tv_phone_number;
       TextView tvPhoneNumber = ViewBindings.findChildViewById(rootView, id);
       if (tvPhoneNumber == null) {
@@ -71,7 +82,8 @@ public final class ItemBlockedCallBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemBlockedCallBinding((MaterialCardView) rootView, tvPhoneNumber, tvTimestamp);
+      return new ItemBlockedCallBinding((MaterialCardView) rootView, btnEdit, tvPhoneNumber,
+          tvTimestamp);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

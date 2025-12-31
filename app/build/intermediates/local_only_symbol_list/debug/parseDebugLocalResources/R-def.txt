@@ -88,7 +88,7 @@ drawable ic_launcher_round
 id action_clear_history
 id action_statistics
 id action_theme
-id btn_delete
+id btn_edit
 id fab_add_country
 id layout_blocked_prefixes
 id layout_blocking_switch

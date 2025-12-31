@@ -21,15 +21,15 @@ public final class ItemWhitelistBinding implements ViewBinding {
   private final MaterialCardView rootView;
 
   @NonNull
-  public final ImageButton btnDelete;
+  public final ImageButton btnEdit;
 
   @NonNull
   public final TextView tvCountry;
 
-  private ItemWhitelistBinding(@NonNull MaterialCardView rootView, @NonNull ImageButton btnDelete,
+  private ItemWhitelistBinding(@NonNull MaterialCardView rootView, @NonNull ImageButton btnEdit,
       @NonNull TextView tvCountry) {
     this.rootView = rootView;
-    this.btnDelete = btnDelete;
+    this.btnEdit = btnEdit;
     this.tvCountry = tvCountry;
   }
 
@@ -60,9 +60,9 @@ public final class ItemWhitelistBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.btn_delete;
-      ImageButton btnDelete = ViewBindings.findChildViewById(rootView, id);
-      if (btnDelete == null) {
+      id = R.id.btn_edit;
+      ImageButton btnEdit = ViewBindings.findChildViewById(rootView, id);
+      if (btnEdit == null) {
         break missingId;
       }
 
@@ -72,7 +72,7 @@ public final class ItemWhitelistBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemWhitelistBinding((MaterialCardView) rootView, btnDelete, tvCountry);
+      return new ItemWhitelistBinding((MaterialCardView) rootView, btnEdit, tvCountry);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

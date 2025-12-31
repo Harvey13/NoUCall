@@ -73,13 +73,19 @@ class StatisticsActivity : AppCompatActivity() {
     
     private fun setupUI() {
         // Setup RecyclerViews
-        blockedCallAdapter = BlockedCallAdapter()
+        blockedCallAdapter = BlockedCallAdapter { blockedCall ->
+            // Handle edit click for blocked call
+            showEditDialog(blockedCall.phoneNumber, "Appel")
+        }
         binding.recyclerViewBlockedCalls.apply {
             layoutManager = LinearLayoutManager(this@StatisticsActivity)
             adapter = blockedCallAdapter
         }
         
-        blockedSmsAdapter = BlockedSmsAdapter()
+        blockedSmsAdapter = BlockedSmsAdapter { blockedSms ->
+            // Handle edit click for blocked SMS
+            showEditDialog(blockedSms.phoneNumber, "SMS", blockedSms.message)
+        }
         binding.recyclerViewBlockedSms.apply {
             layoutManager = LinearLayoutManager(this@StatisticsActivity)
             adapter = blockedSmsAdapter
@@ -106,7 +112,9 @@ class StatisticsActivity : AppCompatActivity() {
         } else {
             binding.tvNoCallsData.visibility = android.view.View.GONE
             binding.recyclerViewBlockedCalls.visibility = android.view.View.VISIBLE
-            blockedCallAdapter.submitList(blockedCalls)
+            // Sort by timestamp descending (most recent first)
+            val sortedCalls = blockedCalls.sortedByDescending { it.timestamp }
+            blockedCallAdapter.submitList(sortedCalls)
         }
     }
     
@@ -119,7 +127,9 @@ class StatisticsActivity : AppCompatActivity() {
         } else {
             binding.tvNoSmsData.visibility = android.view.View.GONE
             binding.recyclerViewBlockedSms.visibility = android.view.View.VISIBLE
-            blockedSmsAdapter.submitList(blockedSms)
+            // Sort by timestamp descending (most recent first)
+            val sortedSms = blockedSms.sortedByDescending { it.timestamp }
+            blockedSmsAdapter.submitList(sortedSms)
         }
     }
     
@@ -153,6 +163,63 @@ class StatisticsActivity : AppCompatActivity() {
             }
             .setNegativeButton("Non", null)
             .show()
+    }
+    
+    private fun showEditDialog(phoneNumber: String, type: String, message: String? = null) {
+        val message = message ?: ""
+        val fullMessage = when (type) {
+            "Appel" -> "Numéro : $phoneNumber\nType : Appel bloqué\n\nQue souhaitez-vous faire ?"
+            "SMS" -> "Numéro : $phoneNumber\nType : SMS bloqué\nMessage : $message\n\nQue souhaitez-vous faire ?"
+            else -> "Numéro : $phoneNumber\nType : $type\n\nQue souhaitez-vous faire ?"
+        }
+        
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Options")
+            .setMessage(fullMessage)
+            .setPositiveButton("Ajouter aux préfixes bloqués") { _, _ ->
+                // Extract prefix from phone number
+                val prefix = extractPrefix(phoneNumber)
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Ajouter un préfixe")
+                    .setMessage("Ajouter '$prefix' aux préfixes bloqués ?")
+                    .setPositiveButton("Oui") { _, _ ->
+                        SharedPreferencesManager.addBlockedPrefix(this, prefix, "Ajouté depuis l'historique")
+                        android.widget.Toast.makeText(this, "Préfixe ajouté", android.widget.Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton("Non", null)
+                    .show()
+            }
+            .setNegativeButton("Copier le numéro") { _, _ ->
+                // Copy to clipboard
+                val clipboard = getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clip = android.content.ClipData.newPlainText("Numéro", phoneNumber)
+                clipboard.setPrimaryClip(clip)
+                android.widget.Toast.makeText(this, "Numéro copié", android.widget.Toast.LENGTH_SHORT).show()
+            }
+            .setNeutralButton("Fermer", null)
+            .show()
+    }
+    
+    private fun extractPrefix(phoneNumber: String): String {
+        // Remove spaces, +, and other characters
+        val cleanNumber = phoneNumber.replace("[^0-9]".toRegex(), "")
+        
+        // For French numbers, return first 2 digits after removing +33
+        if (phoneNumber.startsWith("+33") || phoneNumber.startsWith("0033")) {
+            val nationalNumber = if (phoneNumber.startsWith("+33")) {
+                cleanNumber.substring(2) // Remove 33
+            } else {
+                cleanNumber.substring(4) // Remove 0033
+            }
+            return if (nationalNumber.startsWith("0")) {
+                nationalNumber.substring(0, 2) // Return first 2 digits after 0
+            } else {
+                nationalNumber.substring(0, Math.min(2, nationalNumber.length))
+            }
+        }
+        
+        // For other countries, return first 2-3 digits
+        return cleanNumber.substring(0, Math.min(3, cleanNumber.length))
     }
     
     fun formatTimestamp(timestamp: Long): String {

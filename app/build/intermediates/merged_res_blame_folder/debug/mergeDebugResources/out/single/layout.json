@@ -1,15 +1,15 @@
 [
     {
-        "merged": "com.noucall.app-mergeDebugResources-46:/layout/item_country_dropdown.xml",
-        "source": "com.noucall.app-main-49:/layout/item_country_dropdown.xml"
-    },
-    {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-mergeDebugResources-46:\\layout\\item_blocked_call.xml",
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\item_blocked_call.xml"
     },
     {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-mergeDebugResources-46:\\layout\\item_prefix.xml",
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\item_prefix.xml"
+    },
+    {
+        "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-mergeDebugResources-46:\\layout\\item_country_dropdown.xml",
+        "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\item_country_dropdown.xml"
     },
     {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-mergeDebugResources-46:\\layout\\item_blocked_sms.xml",
@@ -20,11 +20,19 @@
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\activity_main.xml"
     },
     {
+        "merged": "com.noucall.app-mergeDebugResources-46:/layout/item_whitelist.xml",
+        "source": "com.noucall.app-main-49:/layout/item_whitelist.xml"
+    },
+    {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-mergeDebugResources-46:\\layout\\item_whitelist.xml",
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\item_whitelist.xml"
     },
     {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-mergeDebugResources-46:\\layout\\activity_statistics.xml",
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\activity_statistics.xml"
+    },
+    {
+        "merged": "com.noucall.app-mergeDebugResources-46:/layout/item_prefix.xml",
+        "source": "com.noucall.app-main-49:/layout/item_prefix.xml"
     }
 ]

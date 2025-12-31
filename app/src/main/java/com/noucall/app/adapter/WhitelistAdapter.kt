@@ -26,17 +26,13 @@ class WhitelistAdapter(
 
     inner class WhitelistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvCountry: TextView = itemView.findViewById(R.id.tv_country)
-        private val btnDelete: ImageButton = itemView.findViewById(R.id.btn_delete)
+        private val btnEdit: ImageButton = itemView.findViewById(R.id.btn_edit)
 
         fun bind(country: String) {
             tvCountry.text = country
             
-            itemView.setOnClickListener {
-                onItemClick(country)
-            }
-            
-            btnDelete.setOnClickListener {
-                // Handle delete action
+            // Only the edit button is clickable, not the whole item
+            btnEdit.setOnClickListener {
                 onItemClick(country)
             }
         }

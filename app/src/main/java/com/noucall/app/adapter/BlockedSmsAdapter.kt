@@ -3,6 +3,7 @@ package com.noucall.app.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,7 +13,9 @@ import com.noucall.app.utils.BlockedSms
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BlockedSmsAdapter : ListAdapter<BlockedSms, BlockedSmsAdapter.BlockedSmsViewHolder>(BlockedSmsDiffCallback()) {
+class BlockedSmsAdapter(
+    private val onEditClick: (BlockedSms) -> Unit
+) : ListAdapter<BlockedSms, BlockedSmsAdapter.BlockedSmsViewHolder>(BlockedSmsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockedSmsViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -28,6 +31,7 @@ class BlockedSmsAdapter : ListAdapter<BlockedSms, BlockedSmsAdapter.BlockedSmsVi
         private val tvPhoneNumber: TextView = itemView.findViewById(R.id.tv_phone_number)
         private val tvMessage: TextView = itemView.findViewById(R.id.tv_message)
         private val tvTimestamp: TextView = itemView.findViewById(R.id.tv_timestamp)
+        private val btnEdit: ImageButton = itemView.findViewById(R.id.btn_edit)
 
         fun bind(blockedSms: BlockedSms) {
             tvPhoneNumber.text = blockedSms.phoneNumber
@@ -35,6 +39,11 @@ class BlockedSmsAdapter : ListAdapter<BlockedSms, BlockedSmsAdapter.BlockedSmsVi
 
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             tvTimestamp.text = sdf.format(Date(blockedSms.timestamp))
+            
+            // Only the edit button is clickable, not the whole item
+            btnEdit.setOnClickListener {
+                onEditClick(blockedSms)
+            }
         }
     }
 }

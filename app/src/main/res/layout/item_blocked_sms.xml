@@ -44,6 +44,15 @@
                 android:textColor="@android:color/darker_gray"
                 tools:text="28/12/2025 13:45" />
 
+            <ImageButton
+                android:id="@+id/btn_edit"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_edit"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Éditer"
+                android:tint="@color/md_theme_light_primary" />
+
         </LinearLayout>
 
         <TextView

@@ -4,6 +4,7 @@ package com.noucall.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,9 @@ public final class ItemBlockedSmsBinding implements ViewBinding {
   private final MaterialCardView rootView;
 
   @NonNull
+  public final ImageButton btnEdit;
+
+  @NonNull
   public final TextView tvMessage;
 
   @NonNull
@@ -28,9 +32,10 @@ public final class ItemBlockedSmsBinding implements ViewBinding {
   @NonNull
   public final TextView tvTimestamp;
 
-  private ItemBlockedSmsBinding(@NonNull MaterialCardView rootView, @NonNull TextView tvMessage,
-      @NonNull TextView tvPhoneNumber, @NonNull TextView tvTimestamp) {
+  private ItemBlockedSmsBinding(@NonNull MaterialCardView rootView, @NonNull ImageButton btnEdit,
+      @NonNull TextView tvMessage, @NonNull TextView tvPhoneNumber, @NonNull TextView tvTimestamp) {
     this.rootView = rootView;
+    this.btnEdit = btnEdit;
     this.tvMessage = tvMessage;
     this.tvPhoneNumber = tvPhoneNumber;
     this.tvTimestamp = tvTimestamp;
@@ -63,6 +68,12 @@ public final class ItemBlockedSmsBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_edit;
+      ImageButton btnEdit = ViewBindings.findChildViewById(rootView, id);
+      if (btnEdit == null) {
+        break missingId;
+      }
+
       id = R.id.tv_message;
       TextView tvMessage = ViewBindings.findChildViewById(rootView, id);
       if (tvMessage == null) {
@@ -81,8 +92,8 @@ public final class ItemBlockedSmsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemBlockedSmsBinding((MaterialCardView) rootView, tvMessage, tvPhoneNumber,
-          tvTimestamp);
+      return new ItemBlockedSmsBinding((MaterialCardView) rootView, btnEdit, tvMessage,
+          tvPhoneNumber, tvTimestamp);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
