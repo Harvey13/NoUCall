@@ -91,6 +91,10 @@ class SharedPreferencesManager(context: Context) {
             return getInstance(context).getBlockedCallsHistory()
         }
         
+        fun setBlockedCallsHistory(context: Context, history: List<BlockedCall>) {
+            getInstance(context).setBlockedCallsHistory(history)
+        }
+        
     }
     
     // Blocking enabled status
@@ -229,6 +233,11 @@ class SharedPreferencesManager(context: Context) {
         } else {
             emptyList()
         }
+    }
+    
+    fun setBlockedCallsHistory(history: List<BlockedCall>) {
+        val historyJson = gson.toJson(history)
+        sharedPreferences.edit().putString(Constants.KEY_BLOCKED_CALLS_HISTORY, historyJson).commit()
     }
     
     

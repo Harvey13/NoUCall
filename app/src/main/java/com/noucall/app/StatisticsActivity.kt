@@ -148,18 +148,9 @@ class StatisticsActivity : AppCompatActivity() {
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle("Options")
             .setMessage(fullMessage)
-            .setPositiveButton("Ajouter aux préfixes bloqués") { _, _ ->
-                // Extract prefix from phone number
-                val prefix = extractPrefix(phoneNumber)
-                androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
-                    .setTitle("Ajouter un préfixe")
-                    .setMessage("Ajouter '$prefix' aux préfixes bloqués ?")
-                    .setPositiveButton("Oui") { _, _ ->
-                        SharedPreferencesManager.addBlockedPrefix(this, prefix, "Ajouté depuis l'historique")
-                        android.widget.Toast.makeText(this, "Préfixe ajouté", android.widget.Toast.LENGTH_SHORT).show()
-                    }
-                    .setNegativeButton("Non", null)
-                    .show()
+            .setPositiveButton("Supprimer") { _, _ ->
+                // Remove from history
+                removeFromHistory(phoneNumber, type)
             }
             .setNegativeButton("Copier le numéro") { _, _ ->
                 // Copy to clipboard
@@ -170,6 +161,20 @@ class StatisticsActivity : AppCompatActivity() {
             }
             .setNeutralButton("Fermer", null)
             .show()
+    }
+    
+    private fun removeFromHistory(phoneNumber: String, type: String) {
+        if (type == "Appel") {
+            // Remove from blocked calls history
+            val currentHistory = SharedPreferencesManager.getBlockedCallsHistory(this).toMutableList()
+            val itemToRemove = currentHistory.find { it.phoneNumber == phoneNumber }
+            if (itemToRemove != null) {
+                currentHistory.remove(itemToRemove)
+                SharedPreferencesManager.setBlockedCallsHistory(this, currentHistory)
+                android.widget.Toast.makeText(this, "Entrée supprimée de l'historique", android.widget.Toast.LENGTH_SHORT).show()
+                loadStatistics() // Refresh the display
+            }
+        }
     }
     
     private fun extractPrefix(phoneNumber: String): String {
