@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -25,8 +26,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.noucall.app.adapter.CountryAutoCompleteAdapter
 import com.noucall.app.adapter.PrefixAdapter
 import com.noucall.app.adapter.WhitelistAdapter
+import com.noucall.app.data.Country
+import com.noucall.app.data.CountryData
 import com.noucall.app.databinding.ActivityMainBinding
 import com.noucall.app.receiver.CallBlockerReceiver
 import com.noucall.app.utils.Constants
@@ -302,7 +306,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAddChoiceDialog() {
         val options = arrayOf(getString(R.string.add_prefix), getString(R.string.title_whitelist))
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle("Ajouter")
             .setItems(options) { _, which ->
                 when (which) {
@@ -323,7 +327,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle(R.string.add_prefix)
             .setView(editText)
             .setPositiveButton(R.string.save) { _, _ ->
@@ -348,7 +352,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle(R.string.edit)
             .setView(editText)
             .setPositiveButton(R.string.save) { _, _ ->
@@ -373,7 +377,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAddCountryDialog() {
-        val editText = EditText(this).apply {
+        val editText = AutoCompleteTextView(this).apply {
             hint = getString(R.string.country_hint)
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -381,15 +385,48 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        // Setup auto-completion
+        val adapter = CountryAutoCompleteAdapter(this)
+        editText.setAdapter(adapter)
+        editText.threshold = 1 // Start showing suggestions after 1 character
+
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle(R.string.title_whitelist)
             .setView(editText)
             .setPositiveButton(R.string.save) { _, _ ->
-                val value = editText.text.toString().trim()
-                if (value.isNotEmpty()) {
-                    SharedPreferencesManager.addWhitelistedCountry(this, value)
-                    val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
-                    whitelistAdapter.submitList(updated)
+                val input = editText.text.toString().trim()
+                if (input.isNotEmpty()) {
+                    // Try to find country by name or prefix
+                    var country: Country? = null
+                    
+                    // First try to find by exact name
+                    country = CountryData.findCountryByName(input)
+                    
+                    // If not found, try by prefix
+                    if (country == null && input.startsWith("+")) {
+                        country = CountryData.findCountryByPrefix(input)
+                    }
+                    
+                    // If still not found, try to search and take first result
+                    if (country == null) {
+                        val searchResults = CountryData.searchCountries(input)
+                        if (searchResults.isNotEmpty()) {
+                            country = searchResults[0]
+                        }
+                    }
+                    
+                    if (country != null) {
+                        // Save as "prefix name" format
+                        val countryDisplay = "${country.prefix} ${country.name}"
+                        SharedPreferencesManager.addWhitelistedCountry(this, countryDisplay)
+                        val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
+                        whitelistAdapter.submitList(updated)
+                    } else {
+                        // If no country found, save as is (for custom entries)
+                        SharedPreferencesManager.addWhitelistedCountry(this, input)
+                        val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
+                        whitelistAdapter.submitList(updated)
+                    }
                 }
             }
             .setNegativeButton(R.string.cancel, null)
@@ -406,7 +443,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle(R.string.edit)
             .setView(editText)
             .setPositiveButton(R.string.save) { _, _ ->

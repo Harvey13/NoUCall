@@ -51,4 +51,23 @@
     <style name="Theme.NoUCall.AppBarOverlay" parent="ThemeOverlay.Material3.Dark" />
 
     <style name="Theme.NoUCall.PopupOverlay" parent="ThemeOverlay.Material3.Light" />
+
+    <!-- Dialog theme with custom button colors -->
+    <style name="Theme.NoUCall.Dialog" parent="ThemeOverlay.Material3.Dialog">
+        <item name="buttonBarPositiveButtonStyle">@style/DialogButtonPositive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/DialogButtonNegative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/DialogButtonNeutral</item>
+    </style>
+
+    <style name="DialogButtonPositive" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/dialog_button_positive</item>
+    </style>
+
+    <style name="DialogButtonNegative" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/dialog_button_negative</item>
+    </style>
+
+    <style name="DialogButtonNeutral" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/dialog_button_neutral</item>
+    </style>
 </resources>

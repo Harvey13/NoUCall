@@ -28,10 +28,6 @@
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\menu\\statistics_menu.xml"
     },
     {
-        "merged": "com.noucall.app-debug-47:/layout_item_blocked_sms.xml.flat",
-        "source": "com.noucall.app-main-49:/layout/item_blocked_sms.xml"
-    },
-    {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-debug-47:\\layout_activity_statistics.xml.flat",
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\activity_statistics.xml"
     },
@@ -48,6 +44,10 @@
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\xml\\data_extraction_rules.xml"
     },
     {
+        "merged": "com.noucall.app-debug-47:/layout_item_country_dropdown.xml.flat",
+        "source": "com.noucall.app-main-49:/layout/item_country_dropdown.xml"
+    },
+    {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-debug-47:\\mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\mipmap-xxhdpi\\ic_launcher.png"
     },
@@ -60,12 +60,12 @@
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\item_blocked_call.xml"
     },
     {
-        "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-debug-47:\\drawable_ic_block.xml.flat",
-        "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\drawable\\ic_block.xml"
-    },
-    {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-debug-47:\\layout_item_blocked_sms.xml.flat",
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\item_blocked_sms.xml"
+    },
+    {
+        "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-debug-47:\\drawable_ic_block.xml.flat",
+        "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\drawable\\ic_block.xml"
     },
     {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-debug-47:\\drawable_ic_launcher.xml.flat",
@@ -78,9 +78,5 @@
     {
         "merged": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-debug-47:\\layout_item_whitelist.xml.flat",
         "source": "C:\\Users\\boby_\\.gradle\\daemon\\8.10.2\\com.noucall.app-main-49:\\layout\\item_whitelist.xml"
-    },
-    {
-        "merged": "com.noucall.app-debug-47:/layout_item_blocked_call.xml.flat",
-        "source": "com.noucall.app-main-49:/layout/item_blocked_call.xml"
     }
 ]

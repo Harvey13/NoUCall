@@ -4,6 +4,9 @@ color allowed_green
 color black
 color blocked_red
 color blue
+color dialog_button_negative
+color dialog_button_neutral
+color dialog_button_positive
 color green
 color md_theme_dark_background
 color md_theme_dark_error
@@ -109,6 +112,7 @@ layout activity_main
 layout activity_statistics
 layout item_blocked_call
 layout item_blocked_sms
+layout item_country_dropdown
 layout item_prefix
 layout item_whitelist
 menu main_menu
@@ -149,9 +153,13 @@ string title_whitelist
 string today
 string total_blocked
 string whitelisted_countries
+style DialogButtonNegative
+style DialogButtonNeutral
+style DialogButtonPositive
 style Theme.NoUCall
 style Theme.NoUCall.AppBarOverlay
 style Theme.NoUCall.Dark
+style Theme.NoUCall.Dialog
 style Theme.NoUCall.Light
 style Theme.NoUCall.PopupOverlay
 xml backup_rules

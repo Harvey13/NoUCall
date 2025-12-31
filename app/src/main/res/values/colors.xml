@@ -83,4 +83,8 @@
     <color name="blocked_red">#F44336</color>
     <color name="allowed_green">#4CAF50</color>
     <color name="warning_orange">#FF9800</color>
+    <!-- Dialog button colors -->
+    <color name="dialog_button_positive">#4CAF50</color>
+    <color name="dialog_button_negative">#F44336</color>
+    <color name="dialog_button_neutral">#2196F3</color>
 </resources>

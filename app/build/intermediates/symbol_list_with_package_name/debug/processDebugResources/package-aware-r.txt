@@ -1484,6 +1484,9 @@ color design_fab_stroke_top_inner_color
 color design_fab_stroke_top_outer_color
 color design_icon_tint
 color design_snackbar_background_color
+color dialog_button_negative
+color dialog_button_neutral
+color dialog_button_positive
 color dim_foreground_disabled_material_dark
 color dim_foreground_disabled_material_light
 color dim_foreground_material_dark
@@ -3885,6 +3888,7 @@ layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_blocked_call
 layout item_blocked_sms
+layout item_country_dropdown
 layout item_prefix
 layout item_whitelist
 layout m3_alert_dialog
@@ -4467,6 +4471,9 @@ style BasePreferenceThemeOverlay
 style CardView
 style CardView_Dark
 style CardView_Light
+style DialogButtonNegative
+style DialogButtonNeutral
+style DialogButtonPositive
 style MaterialAlertDialog_Material3
 style MaterialAlertDialog_Material3_Animation
 style MaterialAlertDialog_Material3_Body_Text
@@ -4836,6 +4843,7 @@ style Theme_MaterialComponents_NoActionBar_Bridge
 style Theme_NoUCall
 style Theme_NoUCall_AppBarOverlay
 style Theme_NoUCall_Dark
+style Theme_NoUCall_Dialog
 style Theme_NoUCall_Light
 style Theme_NoUCall_PopupOverlay
 style ThemeOverlay_AppCompat

@@ -2,8 +2,8 @@
     <string name="app_name">NoUCall</string>
     <string name="title_prefix_management">Gestion des Préfixes</string>
     <string name="title_statistics">Statistiques</string>
-    <string name="title_whitelist">Liste Blanche</string>
-    <string name="add_prefix">Ajouter un préfixe</string>
+    <string name="title_whitelist">Pays</string>
+    <string name="add_prefix">Préfixe</string>
     <string name="blocked_prefixes">Préfixes Bloqués</string>
     <string name="whitelisted_countries">Pays Autorisés</string>
     <string name="blocked_calls">Appels Bloqués</string>
