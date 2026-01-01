@@ -199,6 +199,7 @@ string country_croatia
 string country_cuba
 string country_cyprus
 string country_czech_republic
+string country_delete_confirmation
 string country_democratic_republic_congo
 string country_denmark
 string country_djibouti

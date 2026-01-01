@@ -159,6 +159,7 @@
     <string name="country_cuba">Cuba</string>
     <string name="country_cyprus">Chypre</string>
     <string name="country_czech_republic">République Tchèque</string>
+    <string name="country_delete_confirmation">Voulez-vous vraiment supprimer le pays \'%1$s\' de la liste blanche ?</string>
     <string name="country_democratic_republic_congo">République Démocratique du Congo</string>
     <string name="country_denmark">Danemark</string>
     <string name="country_djibouti">Djibouti</string>

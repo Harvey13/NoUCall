@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -523,37 +524,31 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun showEditCountryDialog(country: String) {
-        val editText = EditText(this).apply {
-            setText(country)
-            setSelection(text.length)
-            layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+    private fun showEditCountryDialog(countryPrefix: String) {
+        // Get localized country name
+        val country = CountryData.findCountryByPrefix(this, countryPrefix)
+        val countryDisplay = if (country != null) {
+            "${country.prefix} ${country.name}"
+        } else {
+            countryPrefix
+        }
+
+        // Create read-only text view to display country info
+        val textView = TextView(this).apply {
+            text = getString(R.string.country_delete_confirmation, countryDisplay)
+            textSize = 16f
+            setPadding(48, 48, 48, 24)
         }
 
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
-            .setTitle(R.string.edit)
-            .setView(editText)
-            .setPositiveButton(R.string.save) { _, _ ->
-                val newValue = editText.text.toString().trim()
-                if (newValue.isNotEmpty()) {
-                    val current = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
-                    val index = current.indexOf(country)
-                    if (index >= 0) {
-                        current[index] = newValue
-                        SharedPreferencesManager.getInstance(this).setWhitelistedCountries(current)
-                        whitelistAdapter.submitList(current.toMutableList())
-                    }
-                }
-            }
-            .setNegativeButton(R.string.delete) { _, _ ->
-                SharedPreferencesManager.removeWhitelistedCountry(this, country)
+            .setTitle(R.string.delete)
+            .setView(textView as android.view.View)
+            .setPositiveButton(R.string.delete) { _, _ ->
+                SharedPreferencesManager.removeWhitelistedCountry(this, countryPrefix)
                 val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
                 whitelistAdapter.submitList(updated)
             }
-            .setNeutralButton(R.string.cancel, null)
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 

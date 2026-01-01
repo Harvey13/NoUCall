@@ -80,6 +80,7 @@
     <string name="country_cuba">Cuba</string>
     <string name="country_cyprus">Cyprus</string>
     <string name="country_czech_republic">Czech Republic</string>
+    <string name="country_delete_confirmation">Do you really want to remove country \'%1$s\' from the whitelist?</string>
     <string name="country_democratic_republic_congo">Democratic Republic of Congo</string>
     <string name="country_denmark">Denmark</string>
     <string name="country_djibouti">Djibouti</string>

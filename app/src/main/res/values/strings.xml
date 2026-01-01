@@ -275,4 +275,5 @@
     <string name="error">Erreur</string>
     <string name="ok">OK</string>
     <string name="country_not_found">Pays \'%1$s\' non trouvé. Veuillez sélectionner un pays dans la liste.</string>
+    <string name="country_delete_confirmation">Voulez-vous vraiment supprimer le pays \'%1$s\' de la liste blanche ?</string>
 </resources>
