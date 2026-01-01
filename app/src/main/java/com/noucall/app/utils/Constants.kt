@@ -11,6 +11,9 @@ object Constants {
     const val KEY_DARK_MODE = "dark_mode"
     const val KEY_BLOCKED_CALLS_COUNT = "blocked_calls_count"
     const val KEY_BLOCKED_CALLS_HISTORY = "blocked_calls_history"
+    const val KEY_LAST_DETECTED_NUMBER = "last_detected_number"
+    const val KEY_LAST_DETECTION_REASON = "last_detection_reason"
+    const val KEY_LAST_DETECTION_TIMESTAMP = "last_detection_timestamp"
     
     // Default blocked prefixes (Démarchage Commercial) - normalized to digits only
     val DEFAULT_BLOCKED_PREFIXES = listOf(

@@ -7,28 +7,24 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noucall.app.data.BlockedPrefix
-import java.lang.ref.WeakReference
 
-class SharedPreferencesManager(context: Context) {
+class SharedPreferencesManager private constructor(context: Context) {
     
-    private val sharedPreferences: SharedPreferences = 
-        context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE)
-    
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE)
     private val gson = Gson()
+    private val contextReference = java.lang.ref.WeakReference(context)
     
     companion object {
-        private var instance: SharedPreferencesManager? = null
-        private var contextReference: WeakReference<Context>? = null
+        @Volatile
+        private var INSTANCE: SharedPreferencesManager? = null
         
         fun getInstance(context: Context): SharedPreferencesManager {
-            if (instance == null) {
-                instance = SharedPreferencesManager(context.applicationContext)
-                contextReference = WeakReference(context.applicationContext)
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: SharedPreferencesManager(context.applicationContext).also { INSTANCE = it }
             }
-            return instance!!
         }
         
-        // Convenience methods
+        // Blocking enabled status
         fun isBlockingEnabled(context: Context): Boolean {
             return getInstance(context).isBlockingEnabled()
         }
@@ -37,6 +33,7 @@ class SharedPreferencesManager(context: Context) {
             getInstance(context).setBlockingEnabled(enabled)
         }
         
+        // Blocked prefixes management
         fun getBlockedPrefixes(context: Context): List<BlockedPrefix> {
             return getInstance(context).getBlockedPrefixes()
         }
@@ -49,6 +46,7 @@ class SharedPreferencesManager(context: Context) {
             getInstance(context).removeBlockedPrefix(prefix)
         }
         
+        // Whitelisted countries management
         fun getWhitelistedCountries(context: Context): List<String> {
             return getInstance(context).getWhitelistedCountries()
         }
@@ -61,14 +59,7 @@ class SharedPreferencesManager(context: Context) {
             getInstance(context).removeWhitelistedCountry(country)
         }
         
-        fun isDarkMode(context: Context): Boolean {
-            return getInstance(context).isDarkMode()
-        }
-        
-        fun setDarkMode(context: Context, isDarkMode: Boolean) {
-            getInstance(context).setDarkMode(isDarkMode)
-        }
-        
+        // Statistics management
         fun getBlockedCallsCount(context: Context): Int {
             return getInstance(context).getBlockedCallsCount()
         }
@@ -77,11 +68,9 @@ class SharedPreferencesManager(context: Context) {
             getInstance(context).incrementBlockedCallsCount()
         }
         
-        
         fun addBlockedCallToHistory(context: Context, phoneNumber: String, timestamp: Long) {
             getInstance(context).addBlockedCallToHistory(phoneNumber, timestamp)
         }
-        
         
         fun clearHistory(context: Context) {
             getInstance(context).clearHistory()
@@ -95,9 +84,38 @@ class SharedPreferencesManager(context: Context) {
             getInstance(context).setBlockedCallsHistory(history)
         }
         
+        // Dark mode management
+        fun isDarkMode(context: Context): Boolean {
+            return getInstance(context).isDarkMode()
+        }
+        
+        fun setDarkMode(context: Context, isDark: Boolean) {
+            getInstance(context).setDarkMode(isDark)
+        }
+        
+        // Last detection management
+        fun getLastDetectedNumber(context: Context): String {
+            return getInstance(context).getLastDetectedNumber()
+        }
+        
+        fun getLastDetectionReason(context: Context): String {
+            return getInstance(context).getLastDetectionReason()
+        }
+        
+        fun getLastDetectionTimestamp(context: Context): Long {
+            return getInstance(context).getLastDetectionTimestamp()
+        }
+        
+        fun setLastDetection(context: Context, number: String, reason: String, timestamp: Long) {
+            getInstance(context).setLastDetection(number, reason, timestamp)
+        }
+        
+        fun clearLastDetection(context: Context) {
+            getInstance(context).clearLastDetection()
+        }
     }
     
-    // Blocking enabled status
+    // Instance methods
     fun isBlockingEnabled(): Boolean {
         val isEnabled = sharedPreferences.getBoolean(Constants.KEY_BLOCKING_ENABLED, false)
         Log.d("SPManager", "isBlockingEnabled read as: $isEnabled")
@@ -105,8 +123,8 @@ class SharedPreferencesManager(context: Context) {
     }
     
     fun setBlockingEnabled(enabled: Boolean) {
-        Log.d("SPManager", "setBlockingEnabled called with: $enabled")
         sharedPreferences.edit().putBoolean(Constants.KEY_BLOCKING_ENABLED, enabled).commit()
+        Log.d("SPManager", "isBlockingEnabled set to: $enabled")
     }
     
     // Blocked prefixes management
@@ -173,8 +191,12 @@ class SharedPreferencesManager(context: Context) {
     fun getWhitelistedCountries(): List<String> {
         val countriesJson = sharedPreferences.getString(Constants.KEY_WHITELISTED_COUNTRIES, null)
         return if (countriesJson != null) {
-            val type = object : TypeToken<List<String>>() {}.type
-            gson.fromJson(countriesJson, type) ?: Constants.DEFAULT_WHITELISTED_COUNTRIES
+            try {
+                val type = object : TypeToken<List<String>>() {}.type
+                gson.fromJson(countriesJson, type) ?: emptyList()
+            } catch (e: Exception) {
+                Constants.DEFAULT_WHITELISTED_COUNTRIES
+            }
         } else {
             Constants.DEFAULT_WHITELISTED_COUNTRIES
         }
@@ -195,17 +217,8 @@ class SharedPreferencesManager(context: Context) {
     
     fun removeWhitelistedCountry(country: String) {
         val currentCountries = getWhitelistedCountries().toMutableList()
-        currentCountries.remove(country)
+        currentCountries.removeAll { it == country }
         setWhitelistedCountries(currentCountries)
-    }
-    
-    // Theme management
-    fun isDarkMode(): Boolean {
-        return sharedPreferences.getBoolean(Constants.KEY_DARK_MODE, false)
-    }
-    
-    fun setDarkMode(isDarkMode: Boolean) {
-        sharedPreferences.edit().putBoolean(Constants.KEY_DARK_MODE, isDarkMode).commit()
     }
     
     // Statistics management
@@ -219,7 +232,6 @@ class SharedPreferencesManager(context: Context) {
         // Send broadcast to update UI
         contextReference?.get()?.sendBroadcast(Intent("com.noucall.app.STATISTICS_UPDATED"))
     }
-    
     
     // History management
     fun addBlockedCallToHistory(phoneNumber: String, timestamp: Long) {
@@ -244,11 +256,48 @@ class SharedPreferencesManager(context: Context) {
         sharedPreferences.edit().putString(Constants.KEY_BLOCKED_CALLS_HISTORY, historyJson).commit()
     }
     
-    
     fun clearHistory() {
         sharedPreferences.edit()
             .remove(Constants.KEY_BLOCKED_CALLS_HISTORY)
             .putInt(Constants.KEY_BLOCKED_CALLS_COUNT, 0)
+            .commit()
+    }
+    
+    // Dark mode management
+    fun isDarkMode(): Boolean {
+        return sharedPreferences.getBoolean(Constants.KEY_DARK_MODE, false)
+    }
+    
+    fun setDarkMode(isDark: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.KEY_DARK_MODE, isDark).commit()
+    }
+    
+    // Last detection management
+    fun getLastDetectedNumber(): String {
+        return sharedPreferences.getString(Constants.KEY_LAST_DETECTED_NUMBER, "") ?: ""
+    }
+    
+    fun getLastDetectionReason(): String {
+        return sharedPreferences.getString(Constants.KEY_LAST_DETECTION_REASON, "") ?: ""
+    }
+    
+    fun getLastDetectionTimestamp(): Long {
+        return sharedPreferences.getLong(Constants.KEY_LAST_DETECTION_TIMESTAMP, 0L)
+    }
+    
+    fun setLastDetection(number: String, reason: String, timestamp: Long) {
+        sharedPreferences.edit()
+            .putString(Constants.KEY_LAST_DETECTED_NUMBER, number)
+            .putString(Constants.KEY_LAST_DETECTION_REASON, reason)
+            .putLong(Constants.KEY_LAST_DETECTION_TIMESTAMP, timestamp)
+            .commit()
+    }
+    
+    fun clearLastDetection() {
+        sharedPreferences.edit()
+            .remove(Constants.KEY_LAST_DETECTED_NUMBER)
+            .remove(Constants.KEY_LAST_DETECTION_REASON)
+            .remove(Constants.KEY_LAST_DETECTION_TIMESTAMP)
             .commit()
     }
 }

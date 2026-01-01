@@ -16,7 +16,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <!-- Light theme -->
+    <!-- Light theme (for when DayNight is not used) -->
     <style name="Theme.NoUCall.Light" parent="Theme.NoUCall">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>

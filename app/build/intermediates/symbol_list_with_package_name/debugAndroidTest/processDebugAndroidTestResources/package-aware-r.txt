@@ -1,3 +1,0 @@
-com.noucall.app.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme

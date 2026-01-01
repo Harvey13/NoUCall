@@ -5,42 +5,43 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
+import android.telecom.TelecomManager
 import android.util.Log
+import com.noucall.app.utils.DebugLog
+import com.noucall.app.utils.SharedPreferencesManager
 import com.noucall.app.data.BlockedPrefix
 import com.noucall.app.service.CallBlockerService
-import com.noucall.app.utils.SharedPreferencesManager
 
 class CallBlockerReceiver : BroadcastReceiver() {
     
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("CallBlockerReceiver", "onReceive called with action: ${intent.action}")
+        DebugLog.d("CallBlockerReceiver", "onReceive called with action: ${intent.action}")
         val blockingEnabled = SharedPreferencesManager.isBlockingEnabled(context)
-        Log.d("CallBlockerReceiver", "Blocking enabled: $blockingEnabled")
+        DebugLog.d("CallBlockerReceiver", "Blocking enabled: $blockingEnabled")
         if (!blockingEnabled) {
-            Log.d("CallBlockerReceiver", "Blocking is disabled")
+            DebugLog.d("CallBlockerReceiver", "Blocking is disabled")
             return
         }
 
         try {
             val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
-            Log.d("CallBlockerReceiver", "Call state: $state")
+            DebugLog.d("CallBlockerReceiver", "Call state: $state")
 
             when (state) {
                 TelephonyManager.EXTRA_STATE_RINGING -> {
                     val incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                    Log.d("CallBlockerReceiver", "Incoming number: $incomingNumber")
+                    DebugLog.d("CallBlockerReceiver", "Incoming number: $incomingNumber")
                     if (incomingNumber != null && shouldBlockCall(context, incomingNumber)) {
-                        Log.d("CallBlockerReceiver", "Should block call from: $incomingNumber")
+                        DebugLog.d("CallBlockerReceiver", "Should block call from: $incomingNumber")
                         blockCall(context, incomingNumber)
                     } else {
-                        Log.d("CallBlockerReceiver", "Not blocking call from: $incomingNumber")
+                        DebugLog.d("CallBlockerReceiver", "Not blocking call from: $incomingNumber")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e("CallBlockerReceiver", "Error processing call", e)
+            DebugLog.e("CallBlockerReceiver", "Error processing call", e)
         }
     }
     
@@ -48,39 +49,48 @@ class CallBlockerReceiver : BroadcastReceiver() {
         val blockedPrefixes = SharedPreferencesManager.getBlockedPrefixes(context)
         val whitelistedCountries = SharedPreferencesManager.getWhitelistedCountries(context)
 
-        Log.d("CallBlockerReceiver", "Blocked prefixes: $blockedPrefixes")
-        Log.d("CallBlockerReceiver", "Whitelisted countries: $whitelistedCountries")
+        DebugLog.d("CallBlockerReceiver", "Blocked prefixes: $blockedPrefixes")
+        DebugLog.d("CallBlockerReceiver", "Whitelisted countries: $whitelistedCountries")
 
         // Normalize to E.164 format
         val normalizedPhoneNumber = normalizeToE164(phoneNumber)
         val countryCode = extractCountryCodeFromE164(normalizedPhoneNumber)
         val nationalNumber = getNationalNumberFromE164(normalizedPhoneNumber)
 
-        Log.d("CallBlockerReceiver", "Original: '$phoneNumber', E.164: '$normalizedPhoneNumber', country: $countryCode, national: '$nationalNumber'")
+        DebugLog.d("CallBlockerReceiver", "Original: '$phoneNumber', E.164: '$normalizedPhoneNumber', country: $countryCode, national: '$nationalNumber'")
 
         // First check if country is whitelisted (but this doesn't override explicit prefix blocking)
         val isCountryWhitelisted = countryCode != null && whitelistedCountries.contains(countryCode)
-        Log.d("CallBlockerReceiver", "Country whitelisted: $isCountryWhitelisted")
+        DebugLog.d("CallBlockerReceiver", "Country whitelisted: $isCountryWhitelisted")
 
         // Check if the phone number starts with any blocked prefix
         for (blockedPrefix in blockedPrefixes) {
             val prefix = normalizePrefix(blockedPrefix.prefix)
             
-            Log.d("CallBlockerReceiver", "Checking prefix: '$prefix' against national number: '$nationalNumber'")
+            DebugLog.d("CallBlockerReceiver", "Checking prefix: '$prefix' against national number: '$nationalNumber'")
 
             if (nationalNumber.startsWith(prefix)) {
-                Log.d("CallBlockerReceiver", "Prefix match found: $prefix - BLOCKING (explicit prefix blocking overrides country whitelist)")
+                val reason = "BLOQUÉ - Préfixe '$prefix' correspondant (pays: $countryCode, whitelist: $isCountryWhitelisted)"
+                DebugLog.d("CallBlockerReceiver", reason)
+                // Save last detection (works in both debug and release)
+                DebugLog.saveDetection(context, phoneNumber, reason)
                 return true // Always block if prefix matches, even if country is whitelisted
             }
         }
 
         // If no prefix matched and country is whitelisted, don't block
         if (isCountryWhitelisted) {
-            Log.d("CallBlockerReceiver", "No prefix match and country is whitelisted, not blocking")
+            val reason = "AUTORISÉ - Pays '$countryCode' dans la whitelist (aucun préfixe bloqué correspondant)"
+            DebugLog.d("CallBlockerReceiver", reason)
+            // Save last detection (works in both debug and release)
+            DebugLog.saveDetection(context, phoneNumber, reason)
             return false
         }
 
-        Log.d("CallBlockerReceiver", "No prefix match and country not whitelisted, not blocking")
+        val reason = "AUTORISÉ - Aucun préfixe bloqué correspondant et pays '$countryCode' non whitelisté"
+        DebugLog.d("CallBlockerReceiver", reason)
+        // Save last detection (works in both debug and release)
+        DebugLog.saveDetection(context, phoneNumber, reason)
         return false
     }
 
@@ -173,7 +183,7 @@ class CallBlockerReceiver : BroadcastReceiver() {
             }
             
             if (recentlyBlocked) {
-                Log.d("CallBlockerReceiver", "Call from $phoneNumber was already blocked recently, skipping")
+                DebugLog.d("CallBlockerReceiver", "Call from $phoneNumber was already blocked recently, skipping")
                 return
             }
 
@@ -183,14 +193,14 @@ class CallBlockerReceiver : BroadcastReceiver() {
                 if (telecomManager != null) {
                     try {
                         telecomManager.endCall()
-                        Log.d("CallBlockerReceiver", "Call blocked via TelecomManager")
+                        DebugLog.d("CallBlockerReceiver", "Call blocked via TelecomManager")
                         
                         // Add to history and increment counter only after successful blocking
                         SharedPreferencesManager.addBlockedCallToHistory(context, phoneNumber, System.currentTimeMillis())
                         SharedPreferencesManager.incrementBlockedCallsCount(context)
                         return
                     } catch (e: Exception) {
-                        Log.e("CallBlockerReceiver", "Failed to block via TelecomManager", e)
+                        DebugLog.e("CallBlockerReceiver", "Failed to block via TelecomManager", e)
                     }
                 }
             }
@@ -207,10 +217,10 @@ class CallBlockerReceiver : BroadcastReceiver() {
                 context.startService(serviceIntent)
             }
 
-            Log.d("CallBlockerReceiver", "Blocked call from: $phoneNumber")
+            DebugLog.d("CallBlockerReceiver", "Blocked call from: $phoneNumber")
 
         } catch (e: Exception) {
-            Log.e("CallBlockerReceiver", "Error blocking call", e)
+            DebugLog.e("CallBlockerReceiver", "Error blocking call", e)
         }
     }
     

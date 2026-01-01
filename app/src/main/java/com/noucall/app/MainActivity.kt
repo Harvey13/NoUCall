@@ -534,12 +534,122 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, StatisticsActivity::class.java))
                 true
             }
-            R.id.action_theme -> {
-                toggleTheme()
+            R.id.action_settings -> {
+                showSettingsMenu()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+    
+    private fun showSettingsMenu() {
+        val lastNumber = SharedPreferencesManager.getLastDetectedNumber(this)
+        val lastReason = SharedPreferencesManager.getLastDetectionReason(this)
+        val lastTimestamp = SharedPreferencesManager.getLastDetectionTimestamp(this)
+        val isDarkMode = SharedPreferencesManager.isDarkMode(this)
+        
+        val lastDetectionText = if (lastNumber.isNotEmpty()) {
+            "Dernier numéro: $lastNumber\n$lastReason\n${formatTimestamp(lastTimestamp)}"
+        } else {
+            "Aucun numéro détecté"
+        }
+        
+        // Create options list
+        val optionsList = mutableListOf<String>()
+        optionsList.add(if (isDarkMode) "Mode : 🌙 Sombre" else "Mode : ☀️ Clair")
+        optionsList.add(lastDetectionText)
+        
+        // Add "Add to blocked prefixes" option if last number exists and was allowed
+        if (lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ")) {
+            optionsList.add("➕ Ajouter '$lastNumber' aux préfixes bloqués")
+        }
+        
+        optionsList.add("Effacer les logs de détection")
+        
+        val options = optionsList.toTypedArray()
+        
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
+            .setTitle("Paramètres Rapides")
+            .setItems(options) { _, which ->
+                when {
+                    which == 0 -> {
+                        // Toggle dark mode
+                        val newDarkMode = !isDarkMode
+                        SharedPreferencesManager.setDarkMode(this, newDarkMode)
+                        applyTheme()
+                        recreate()
+                    }
+                    which == options.size - 1 -> {
+                        // Clear logs (always last option)
+                        SharedPreferencesManager.clearLastDetection(this)
+                        Toast.makeText(this, "Logs effacés", Toast.LENGTH_SHORT).show()
+                    }
+                    lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ") && which == 2 -> {
+                        // Add to blocked prefixes (third option when number is allowed)
+                        addPhoneNumberToBlockedPrefixes(lastNumber)
+                    }
+                }
+            }
+            .setNegativeButton("Fermer", null)
+            .show()
+    }
+    
+    private fun addPhoneNumberToBlockedPrefixes(phoneNumber: String) {
+        // Normalize the number to national format (remove country code)
+        val normalizedNumber = normalizeToNationalNumber(phoneNumber)
+        val prefix = normalizedNumber.take(6) // Take first 6 digits for national numbers
+        
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
+            .setTitle("Ajouter aux préfixes bloqués")
+            .setMessage("Ajouter le préfixe '$prefix' aux préfixes bloqués ?\n\nCela bloquera tous les appels commençant par ces chiffres.")
+            .setPositiveButton("Ajouter") { _, _ ->
+                SharedPreferencesManager.addBlockedPrefix(this, prefix, "Ajouté depuis détection rapide")
+                Toast.makeText(this, "Préfixe '$prefix' ajouté aux préfixes bloqués", Toast.LENGTH_SHORT).show()
+                loadBlockedPrefixes() // Refresh the UI
+            }
+            .setNegativeButton("Annuler", null)
+            .show()
+    }
+    
+    private fun normalizeToNationalNumber(phoneNumber: String): String {
+        // Remove all non-numeric characters
+        var normalized = phoneNumber.replace("[^0-9+]".toRegex(), "")
+        
+        // Convert 00 prefix to +
+        if (normalized.startsWith("00")) {
+            normalized = "+" + normalized.substring(2)
+        }
+        
+        // If it's an international number, remove country code
+        if (normalized.startsWith("+")) {
+            // Common country codes to remove
+            val countryCodes = listOf("+33", "+32", "+31", "+41", "+44", "+49", "+34", "+39", "+351", "+352", "+43", "+45", "+46", "+47", "+48", "+49", "+358", "+370", "+371", "+372", "+375", "+380", "+381", "+382", "+385", "+386", "+389", "+40", "+421", "+423")
+            
+            for (countryCode in countryCodes) {
+                if (normalized.startsWith(countryCode)) {
+                    // Remove country code and add leading 0 for French numbers
+                    val withoutCountryCode = normalized.substring(countryCode.length)
+                    return if (countryCode == "+33" && withoutCountryCode.length == 9) {
+                        "0$withoutCountryCode" // French format: 0XXXXXXXX
+                    } else {
+                        withoutCountryCode
+                    }
+                }
+            }
+        }
+        
+        // If no country code matched, return as-is (or add 0 if it looks like a French number)
+        return if (normalized.length == 9 && normalized.startsWith("6")) {
+            "0$normalized" // Add 0 for French mobile numbers
+        } else {
+            normalized
+        }
+    }
+    
+    private fun formatTimestamp(timestamp: Long): String {
+        if (timestamp == 0L) return ""
+        val sdf = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss", java.util.Locale.getDefault())
+        return sdf.format(java.util.Date(timestamp))
     }
 
     private fun toggleTheme() {

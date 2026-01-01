@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.noucall.app"
+    package="com.noucall.app.debug"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0-debug" >
 
     <uses-sdk
         android:minSdkVersion="23"
@@ -31,12 +31,13 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <permission
-        android:name="com.noucall.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="com.noucall.app.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.noucall.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+    <uses-permission android:name="com.noucall.app.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
+        android:name="com.noucall.app.NoUCallApplication"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -77,6 +78,12 @@
             android:exported="false"
             android:parentActivityName="com.noucall.app.MainActivity" />
 
+        <!-- Settings Activity -->
+        <activity
+            android:name="com.noucall.app.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName="com.noucall.app.MainActivity" />
+
         <!-- Call Blocker Service -->
         <service
             android:name="com.noucall.app.service.CallBlockerService"
@@ -96,7 +103,7 @@
 
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.noucall.app.androidx-startup"
+            android:authorities="com.noucall.app.debug.androidx-startup"
             android:exported="false" >
             <meta-data
                 android:name="androidx.emoji2.text.EmojiCompatInitializer"

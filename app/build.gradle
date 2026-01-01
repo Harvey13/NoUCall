@@ -18,9 +18,20 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
+            debuggable true
             minifyEnabled false
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            // Keep debug logs in debug version
+            buildConfigField "boolean", "DEBUG_LOGS", "true"
+        }
+        release {
+            debuggable false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Remove debug logs in release version
+            buildConfigField "boolean", "DEBUG_LOGS", "false"
         }
     }
     compileOptions {
@@ -32,6 +43,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
     lintOptions {
         abortOnError false

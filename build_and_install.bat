@@ -1,9 +1,13 @@
 @echo off
 setlocal enabledelayedexpansion
 
-echo Building NoUCall app...
+echo Building NoUCall app in DEBUG mode...
 cd /d "%~dp0"
 
+echo Cleaning previous build...
+call gradlew.bat clean
+
+echo Building debug APK with logs enabled...
 call gradlew.bat assembleDebug
 set BUILD_ERROR=%errorlevel%
 
@@ -13,7 +17,7 @@ if %BUILD_ERROR% neq 0 (
     exit /b 1
 )
 
-echo Build successful, installing app on device...
+echo Build successful, installing debug app on device...
 adb install -r app\build\outputs\apk\debug\app-debug.apk
 
 if %errorlevel% neq 0 (
@@ -23,7 +27,7 @@ if %errorlevel% neq 0 (
 )
 
 echo Installation successful, launching app...
-adb shell am start -n com.noucall.app/.MainActivity
+adb shell am start -n com.noucall.app.debug/com.noucall.app.MainActivity
 
 if %errorlevel% neq 0 (
     echo Launch failed!
@@ -31,5 +35,6 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo Done! App built, installed and launched.
+echo Done! Debug app built, installed and launched.
+echo Debug logs are ENABLED in this version
 pause

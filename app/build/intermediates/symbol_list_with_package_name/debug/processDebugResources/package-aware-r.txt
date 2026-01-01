@@ -3275,6 +3275,7 @@ id action_bar_spinner
 id action_bar_subtitle
 id action_bar_title
 id action_clear_history
+id action_clear_logs
 id action_container
 id action_context_bar
 id action_divider
@@ -3284,9 +3285,9 @@ id action_menu_presenter
 id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
+id action_settings
 id action_statistics
 id action_text
-id action_theme
 id actions
 id activity_chooser_view_content
 id add
@@ -3668,6 +3669,7 @@ id submit_area
 id supportScrollUp
 id switchWidget
 id switch_blocking
+id switch_dark_mode
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -3717,6 +3719,8 @@ id transition_transform
 id triangle
 id tv_blocked_calls
 id tv_country
+id tv_last_detected_number
+id tv_last_detection_reason
 id tv_message
 id tv_no_calls_data
 id tv_phone_number
@@ -3862,6 +3866,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
+layout activity_settings
 layout activity_statistics
 layout custom_dialog
 layout design_bottom_navigation_item
@@ -3966,6 +3971,7 @@ layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
 menu main_menu
+menu settings_menu
 menu statistics_menu
 mipmap ic_launcher
 plurals mtrl_badge_content_description
