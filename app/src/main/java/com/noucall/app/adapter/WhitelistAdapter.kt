@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.noucall.app.R
+import com.noucall.app.data.CountryData
 
 class WhitelistAdapter(
     private val onItemClick: (String) -> Unit
@@ -28,12 +29,21 @@ class WhitelistAdapter(
         private val tvCountry: TextView = itemView.findViewById(R.id.tv_country)
         private val btnDelete: ImageButton = itemView.findViewById(R.id.btn_edit)
 
-        fun bind(country: String) {
-            tvCountry.text = country
+        fun bind(countryPrefix: String) {
+            // Get localized country name from prefix
+            val context = itemView.context
+            val country = CountryData.findCountryByPrefix(context, countryPrefix)
+            val displayName = if (country != null) {
+                "${country.prefix} ${country.name}"
+            } else {
+                countryPrefix // Fallback to prefix if country not found
+            }
+            
+            tvCountry.text = displayName
             
             // Only the delete button is clickable, not the whole item
             btnDelete.setOnClickListener {
-                onItemClick(country)
+                onItemClick(countryPrefix)
             }
         }
     }

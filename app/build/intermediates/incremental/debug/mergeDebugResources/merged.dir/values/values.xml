@@ -2128,7 +2128,7 @@
     <string name="country_added">Pays ajouté avec succès</string>
     <string name="country_afghanistan">Afghanistan</string>
     <string name="country_algeria">Algérie</string>
-    <string name="country_already_whitelisted">Pays déjà dans la liste blanche</string>
+    <string name="country_already_whitelisted">Le pays \'%1$s\' est déjà dans la liste blanche</string>
     <string name="country_angola">Angola</string>
     <string name="country_antigua_barbuda">Antigua-et-Barbuda</string>
     <string name="country_argentina">Argentine</string>

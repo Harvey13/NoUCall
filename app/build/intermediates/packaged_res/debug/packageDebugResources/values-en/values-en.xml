@@ -40,7 +40,7 @@
     <string name="country_added">Country added successfully</string>
     <string name="country_afghanistan">Afghanistan</string>
     <string name="country_algeria">Algeria</string>
-    <string name="country_already_whitelisted">Country already whitelisted</string>
+    <string name="country_already_whitelisted">Country \'%1$s\' is already whitelisted</string>
     <string name="country_angola">Angola</string>
     <string name="country_antigua_barbuda">Antigua and Barbuda</string>
     <string name="country_argentina">Argentina</string>

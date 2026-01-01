@@ -493,11 +493,22 @@ class MainActivity : AppCompatActivity() {
                         ?: if (countryPrefix.isNotEmpty()) CountryData.findCountryByPrefix(this, countryPrefix) else null
                     
                     if (country != null) {
-                        // Save as "prefix name" format
-                        val countryDisplay = "${country.prefix} ${country.name}"
-                        SharedPreferencesManager.addWhitelistedCountry(this, countryDisplay)
-                        val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
-                        whitelistAdapter.submitList(updated)
+                        // Check if country is already whitelisted (by prefix only)
+                        val currentWhitelist = SharedPreferencesManager.getWhitelistedCountries(this)
+                        
+                        if (currentWhitelist.any { it.equals(country.prefix, ignoreCase = true) }) {
+                            // Show error if country already exists
+                            androidx.appcompat.app.AlertDialog.Builder(this)
+                                .setTitle(R.string.error)
+                                .setMessage(getString(R.string.country_already_whitelisted, country.name))
+                                .setPositiveButton(R.string.ok, null)
+                                .show()
+                        } else {
+                            // Save only the prefix
+                            SharedPreferencesManager.addWhitelistedCountry(this, country.prefix)
+                            val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
+                            whitelistAdapter.submitList(updated)
+                        }
                     } else {
                         // Show error if no exact match found
                         androidx.appcompat.app.AlertDialog.Builder(this)

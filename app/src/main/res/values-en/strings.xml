@@ -68,7 +68,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="prefix_already_exists">Prefix already exists</string>
-    <string name="country_already_whitelisted">Country already whitelisted</string>
+    <string name="country_already_whitelisted">Country \'%1$s\' is already whitelisted</string>
     <string name="invalid_prefix">Invalid prefix. Please enter only numbers.</string>
     <string name="choose_action">Choose Action</string>
     <string name="add_to_whitelist">Add to Whitelist</string>

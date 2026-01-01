@@ -67,7 +67,7 @@
     <string name="yes">Oui</string>
     <string name="no">Non</string>
     <string name="prefix_already_exists">Préfixe déjà existant</string>
-    <string name="country_already_whitelisted">Pays déjà dans la liste blanche</string>
+    <string name="country_already_whitelisted">Le pays \'%1$s\' est déjà dans la liste blanche</string>
     <string name="invalid_prefix">Préfixe invalide. Veuillez entrer uniquement des chiffres.</string>
     <string name="choose_action">Choisir l\'action</string>
     <string name="add_to_whitelist">Ajouter à la liste blanche</string>
