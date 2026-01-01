@@ -1,5 +1,7 @@
 package com.noucall.app.data
 
+import android.content.Context
+
 data class Country(
     val name: String,
     val code: String,
@@ -212,6 +214,39 @@ object CountryData {
     }
 
     fun findCountryByPrefix(prefix: String): Country? {
+        return countries.find { it.prefix == prefix }
+    }
+
+    // New localized functions
+    fun getAllCountries(context: Context): List<Country> {
+        return countries.map { country ->
+            val nameResId = context.resources.getIdentifier(
+                "country_${country.name.lowercase().replace(" ", "_").replace("-", "_").replace("é", "e").replace("è", "e").replace("ê", "e").replace("à", "a").replace("â", "a").replace("î", "i").replace("ï", "i").replace("ô", "o").replace("ö", "o").replace("ù", "u").replace("û", "u").replace("ç", "c")}", 
+                "string", 
+                context.packageName
+            )
+            val localized_name = if (nameResId != 0) context.getString(nameResId) else country.name
+            Country(localized_name, country.code, country.prefix)
+        }
+    }
+
+    fun searchCountries(context: Context, query: String): List<Country> {
+        val countries = getAllCountries(context)
+        val lowerQuery = query.lowercase()
+        return countries.filter { country ->
+            country.name.lowercase().contains(lowerQuery) ||
+            country.prefix.contains(query) ||
+            country.code.lowercase().contains(lowerQuery)
+        }
+    }
+
+    fun findCountryByName(context: Context, name: String): Country? {
+        val countries = getAllCountries(context)
+        return countries.find { it.name.equals(name, ignoreCase = true) }
+    }
+
+    fun findCountryByPrefix(context: Context, prefix: String): Country? {
+        val countries = getAllCountries(context)
         return countries.find { it.prefix == prefix }
     }
 }

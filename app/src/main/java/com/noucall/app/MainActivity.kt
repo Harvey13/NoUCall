@@ -302,7 +302,7 @@ class MainActivity : AppCompatActivity() {
     private fun showAddChoiceDialog() {
         val options = arrayOf(getString(R.string.add_prefix), getString(R.string.title_whitelist))
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
-            .setTitle("Ajouter")
+            .setTitle(R.string.add)
             .setItems(options) { _, which ->
                 when (which) {
                     0 -> showAddPrefixDialog()
@@ -468,16 +468,16 @@ class MainActivity : AppCompatActivity() {
                     var country: Country? = null
                     
                     // First try to find by exact name
-                    country = CountryData.findCountryByName(input)
+                    country = CountryData.findCountryByName(this, input)
                     
                     // If not found, try by prefix
                     if (country == null && input.startsWith("+")) {
-                        country = CountryData.findCountryByPrefix(input)
+                        country = CountryData.findCountryByPrefix(this, input)
                     }
                     
                     // If still not found, try to search and take first result
                     if (country == null) {
-                        val searchResults = CountryData.searchCountries(input)
+                        val searchResults = CountryData.searchCountries(this, input)
                         if (searchResults.isNotEmpty()) {
                             country = searchResults[0]
                         }

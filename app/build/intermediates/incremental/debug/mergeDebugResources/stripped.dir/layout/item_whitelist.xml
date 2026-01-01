@@ -34,9 +34,9 @@
             android:id="@+id/btn_edit"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@android:drawable/ic_menu_edit"
+            android:src="@android:drawable/ic_menu_delete"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/edit" />
+            android:contentDescription="@string/delete" />
 
     </LinearLayout>
 

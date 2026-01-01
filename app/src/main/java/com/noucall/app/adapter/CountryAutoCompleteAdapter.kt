@@ -13,7 +13,7 @@ import com.noucall.app.data.CountryData
 
 class CountryAutoCompleteAdapter(context: Context) : ArrayAdapter<Country>(context, R.layout.item_country_dropdown) {
     
-    private val allCountries = CountryData.getAllCountries()
+    private val allCountries = CountryData.getAllCountries(context)
     private var filteredCountries = allCountries
     
     override fun getCount(): Int = filteredCountries.size
@@ -41,7 +41,7 @@ class CountryAutoCompleteAdapter(context: Context) : ArrayAdapter<Country>(conte
                     results.values = allCountries
                     results.count = allCountries.size
                 } else {
-                    val filtered = CountryData.searchCountries(constraint.toString())
+                    val filtered = CountryData.searchCountries(context, constraint.toString())
                     results.values = filtered
                     results.count = filtered.size
                 }

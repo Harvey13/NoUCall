@@ -60,7 +60,7 @@ class CallBlockerReceiver : BroadcastReceiver() {
 
         // Normalize to E.164 format
         val normalizedPhoneNumber = normalizeToE164(phoneNumber)
-        val countryCode = extractCountryCodeFromE164(normalizedPhoneNumber)
+        val countryCode = extractCountryCodeFromE164(context, normalizedPhoneNumber)
         val nationalNumber = getNationalNumberFromE164(normalizedPhoneNumber)
 
         DebugLog.d("CallBlockerReceiver", "Original: '$phoneNumber', E.164: '$normalizedPhoneNumber', country: $countryCode, national: '$nationalNumber'")
@@ -137,28 +137,28 @@ class CallBlockerReceiver : BroadcastReceiver() {
         return prefix.replace("[^0-9]".toRegex(), "")
     }
     
-    private fun extractCountryCodeFromE164(e164Number: String): String? {
+    private fun extractCountryCodeFromE164(context: Context, e164Number: String): String? {
         if (!e164Number.startsWith("+")) return null
         
-        // Common country codes mapping
+        // Common country codes mapping with localized names
         val countryCodes = mapOf(
-            "+33" to "France",
-            "+41" to "Suisse",
-            "+32" to "Belgique",
-            "+352" to "Luxembourg",
-            "+49" to "Allemagne",
-            "+43" to "Autriche",
-            "+31" to "Pays-Bas",
-            "+34" to "Espagne",
-            "+39" to "Italie",
-            "+44" to "Royaume-Uni",
-            "+351" to "Portugal",
-            "+353" to "Irlande",
-            "+45" to "Danemark",
-            "+46" to "Suède",
-            "+47" to "Norvège",
-            "+358" to "Finlande",
-            "+354" to "Islande"
+            "+33" to context.getString(R.string.country_france),
+            "+41" to context.getString(R.string.country_switzerland),
+            "+32" to context.getString(R.string.country_belgium),
+            "+352" to context.getString(R.string.country_luxembourg),
+            "+49" to context.getString(R.string.country_germany),
+            "+43" to context.getString(R.string.country_austria),
+            "+31" to context.getString(R.string.country_netherlands),
+            "+34" to context.getString(R.string.country_spain),
+            "+39" to context.getString(R.string.country_italy),
+            "+44" to context.getString(R.string.country_united_kingdom),
+            "+351" to context.getString(R.string.country_portugal),
+            "+353" to context.getString(R.string.country_ireland),
+            "+45" to context.getString(R.string.country_denmark),
+            "+46" to context.getString(R.string.country_sweden),
+            "+47" to context.getString(R.string.country_norway),
+            "+358" to context.getString(R.string.country_finland),
+            "+354" to context.getString(R.string.country_iceland)
         )
         
         for ((code, country) in countryCodes) {
