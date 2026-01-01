@@ -15,8 +15,14 @@ object Constants {
     const val KEY_LAST_DETECTION_REASON = "last_detection_reason"
     const val KEY_LAST_DETECTION_TIMESTAMP = "last_detection_timestamp"
     
-    // Default blocked prefixes (Démarchage Commercial) - normalized to digits only
-    val DEFAULT_BLOCKED_PREFIXES = listOf(
+    // Default blocked prefixes (empty - managed dynamically with France)
+    val DEFAULT_BLOCKED_PREFIXES = listOf<String>()
+    
+    // Default whitelisted countries (can be customized)
+    val DEFAULT_WHITELISTED_COUNTRIES = listOf("+33")
+    
+    // French commercial prefixes (only active when France is whitelisted)
+    val FRENCH_COMMERCIAL_PREFIXES = listOf(
         "0948", "0949",
         "0162", "0163",
         "0270", "0271",
@@ -24,9 +30,6 @@ object Constants {
         "0424", "0425",
         "0568", "0569"
     )
-    
-    // Default whitelisted countries (can be customized)
-    val DEFAULT_WHITELISTED_COUNTRIES = listOf<String>()
     
     // Intent actions
     const val ACTION_CALL_BLOCKED = "com.noucall.app.CALL_BLOCKED"

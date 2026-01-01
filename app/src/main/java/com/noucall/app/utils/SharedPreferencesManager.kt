@@ -59,6 +59,18 @@ class SharedPreferencesManager private constructor(context: Context) {
             getInstance(context).removeWhitelistedCountry(country)
         }
         
+        fun initializeFrenchCommercialPrefixes(context: Context) {
+            getInstance(context).initializeFrenchCommercialPrefixes()
+        }
+        
+        fun cleanupFrenchCommercialPrefixes(context: Context) {
+            getInstance(context).cleanupFrenchCommercialPrefixes()
+        }
+        
+        fun forceResetFrenchCommercialPrefixes(context: Context) {
+            getInstance(context).forceResetFrenchCommercialPrefixes()
+        }
+        
         // Statistics management
         fun getBlockedCallsCount(context: Context): Int {
             return getInstance(context).getBlockedCallsCount()
@@ -140,22 +152,18 @@ class SharedPreferencesManager private constructor(context: Context) {
                 try {
                     val stringType = object : TypeToken<List<String>>() {}.type
                     val oldPrefixes = gson.fromJson<List<String>>(prefixesJson, stringType)
-                    // Migrate to BlockedPrefix with default comment for known prefixes
+                    // Migrate to BlockedPrefix with empty comment (no default prefixes)
                     oldPrefixes.map { prefix ->
-                        val comment = if (Constants.DEFAULT_BLOCKED_PREFIXES.contains(prefix)) {
-                            "Démarchage Commercial"
-                        } else {
-                            ""
-                        }
-                        BlockedPrefix(prefix, comment)
+                        BlockedPrefix(prefix, "")
                     }
                 } catch (e2: Exception) {
-                    // If both fail, return default
-                    Constants.DEFAULT_BLOCKED_PREFIXES.map { BlockedPrefix(it, "Démarchage Commercial") }
+                    // If both fail, return empty list (no default prefixes)
+                    emptyList<BlockedPrefix>()
                 }
             }
         } else {
-            Constants.DEFAULT_BLOCKED_PREFIXES.map { BlockedPrefix(it, "Démarchage Commercial") }
+            // No default prefixes - they will be added dynamically when France is whitelisted
+            emptyList<BlockedPrefix>()
         }
     }
     
@@ -171,12 +179,7 @@ class SharedPreferencesManager private constructor(context: Context) {
         
         val currentPrefixes = getBlockedPrefixes().toMutableList()
         if (!currentPrefixes.any { it.prefix == normalizedPrefix }) {
-            val finalComment = if (comment.isEmpty() && Constants.DEFAULT_BLOCKED_PREFIXES.contains(normalizedPrefix)) {
-                "Démarchage Commercial"
-            } else {
-                comment
-            }
-            currentPrefixes.add(BlockedPrefix(normalizedPrefix, finalComment))
+            currentPrefixes.add(BlockedPrefix(normalizedPrefix, comment))
             setBlockedPrefixes(currentPrefixes)
         }
     }
@@ -208,17 +211,128 @@ class SharedPreferencesManager private constructor(context: Context) {
     }
     
     fun addWhitelistedCountry(country: String) {
+        Log.d("SharedPreferencesManager", "Adding country: $country")
         val currentCountries = getWhitelistedCountries().toMutableList()
         if (!currentCountries.contains(country)) {
             currentCountries.add(country)
             setWhitelistedCountries(currentCountries)
+            
+            // If France is being added, add French commercial prefixes
+            if (country == "+33") {
+                Log.d("SharedPreferencesManager", "France added to whitelist, adding French commercial prefixes")
+                addFrenchCommercialPrefixes()
+            }
+        } else {
+            Log.d("SharedPreferencesManager", "Country $country already in whitelist")
         }
     }
     
     fun removeWhitelistedCountry(country: String) {
+        Log.d("SharedPreferencesManager", "Removing country: $country")
         val currentCountries = getWhitelistedCountries().toMutableList()
+        val wasPresent = currentCountries.contains(country)
         currentCountries.removeAll { it == country }
         setWhitelistedCountries(currentCountries)
+        
+        Log.d("SharedPreferencesManager", "Country $country was present: $wasPresent")
+        
+        // If France is being removed, remove French commercial prefixes
+        if (country == "+33" && wasPresent) {
+            Log.d("SharedPreferencesManager", "France removed from whitelist, removing French commercial prefixes")
+            removeFrenchCommercialPrefixes()
+        }
+    }
+    
+    // Initialize French commercial prefixes if France is in whitelist (for first startup)
+    fun initializeFrenchCommercialPrefixes() {
+        val whitelistedCountries = getWhitelistedCountries()
+        if (whitelistedCountries.contains("+33")) {
+            addFrenchCommercialPrefixes()
+        } else {
+            // If France is not in whitelist, ensure no French commercial prefixes exist
+            removeFrenchCommercialPrefixes()
+        }
+    }
+    
+    // Force cleanup of French commercial prefixes (for migration)
+    fun cleanupFrenchCommercialPrefixes() {
+        val whitelistedCountries = getWhitelistedCountries()
+        if (!whitelistedCountries.contains("+33")) {
+            removeFrenchCommercialPrefixes()
+        }
+    }
+    
+    // Force complete reset of French commercial prefixes
+    fun forceResetFrenchCommercialPrefixes() {
+        Log.d("SharedPreferencesManager", "Force reset of French commercial prefixes started")
+        val currentPrefixes = getBlockedPrefixes().toMutableList()
+        val beforeCount = currentPrefixes.size
+        Log.d("SharedPreferencesManager", "Current prefixes before reset: ${currentPrefixes.map { it.prefix }}")
+        
+        // Remove all French commercial prefixes aggressively
+        currentPrefixes.removeAll { prefix ->
+            val prefixStr = prefix.prefix
+            // Check for any French commercial prefix patterns
+            prefixStr == "0948" || prefixStr == "0949" ||
+            prefixStr == "0162" || prefixStr == "0163" ||
+            prefixStr == "0270" || prefixStr == "0271" ||
+            prefixStr == "0377" || prefixStr == "0378" ||
+            prefixStr == "0424" || prefixStr == "0425" ||
+            prefixStr == "0568" || prefixStr == "0569" ||
+            prefixStr.startsWith("094") || prefixStr.startsWith("016") ||
+            prefixStr.startsWith("027") || prefixStr.startsWith("037") ||
+            prefixStr.startsWith("042") || prefixStr.startsWith("056")
+        }
+        
+        val afterCount = currentPrefixes.size
+        Log.d("SharedPreferencesManager", "Force reset: removed ${beforeCount - afterCount} French commercial prefixes")
+        Log.d("SharedPreferencesManager", "Remaining prefixes after reset: ${currentPrefixes.map { it.prefix }}")
+        
+        setBlockedPrefixes(currentPrefixes)
+        Log.d("SharedPreferencesManager", "Force reset completed")
+    }
+    
+    private fun addFrenchCommercialPrefixes() {
+        val currentPrefixes = getBlockedPrefixes().toMutableList()
+        val beforeCount = currentPrefixes.size
+        var addedCount = 0
+        
+        Constants.FRENCH_COMMERCIAL_PREFIXES.forEach { prefix ->
+            if (!currentPrefixes.any { it.prefix == prefix }) {
+                currentPrefixes.add(BlockedPrefix(prefix, "Démarchage Commercial"))
+                addedCount++
+                Log.d("SharedPreferencesManager", "Added French commercial prefix: $prefix")
+            } else {
+                Log.d("SharedPreferencesManager", "French commercial prefix already exists: $prefix")
+            }
+        }
+        
+        val afterCount = currentPrefixes.size
+        Log.d("SharedPreferencesManager", "French commercial prefixes: before=$beforeCount, after=$afterCount, added=$addedCount")
+        
+        setBlockedPrefixes(currentPrefixes)
+    }
+    
+    private fun removeFrenchCommercialPrefixes() {
+        val currentPrefixes = getBlockedPrefixes().toMutableList()
+        val beforeCount = currentPrefixes.size
+        Log.d("SharedPreferencesManager", "Current prefixes before removal: ${currentPrefixes.map { "${it.prefix}(${it.comment})" }}")
+        
+        // Remove exact matches
+        currentPrefixes.removeAll { Constants.FRENCH_COMMERCIAL_PREFIXES.contains(it.prefix) }
+        
+        // Also remove any prefix that starts with commercial numbers (more aggressive)
+        currentPrefixes.removeAll { prefix ->
+            Constants.FRENCH_COMMERCIAL_PREFIXES.any { commercial ->
+                prefix.prefix.startsWith(commercial)
+            }
+        }
+        
+        val afterCount = currentPrefixes.size
+        Log.d("SharedPreferencesManager", "Removed ${beforeCount - afterCount} French commercial prefixes")
+        Log.d("SharedPreferencesManager", "Remaining prefixes after removal: ${currentPrefixes.map { "${it.prefix}(${it.comment})" }}")
+        
+        setBlockedPrefixes(currentPrefixes)
     }
     
     // Statistics management

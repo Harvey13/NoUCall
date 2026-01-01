@@ -1,3 +1,0 @@
-List of devices attached
-52116c904174	device
-

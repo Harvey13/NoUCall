@@ -116,8 +116,31 @@ class MainActivity : AppCompatActivity() {
         
         setupUI()
         setupRecyclerViews()
-        loadBlockedPrefixes()
+        
+        // 1. First, load the whitelist to know France status
         loadWhitelistedCountries()
+        
+        // 2. Then manage French commercial prefixes based on France status
+        val whitelistedCountries = SharedPreferencesManager.getWhitelistedCountries(this)
+        Log.d("MainActivity", "Current whitelisted countries: $whitelistedCountries")
+        
+        if (whitelistedCountries.contains("+33")) {
+            Log.d("MainActivity", "France is in whitelist, ensuring French commercial prefixes are present")
+            // Note: addFrenchCommercialPrefixes is private, so we need to trigger it through the logic
+            SharedPreferencesManager.removeWhitelistedCountry(this, "+33") // Remove first to clean state
+            SharedPreferencesManager.addWhitelistedCountry(this, "+33")    // Then add back with prefixes
+        } else {
+            Log.d("MainActivity", "France is NOT in whitelist, removing all French commercial prefixes")
+            SharedPreferencesManager.removeWhitelistedCountry(this, "+33") // This will trigger prefix removal
+            // Ensure France is not in whitelist after removal
+            val finalCountries = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
+            finalCountries.removeAll { it == "+33" }
+            SharedPreferencesManager.getInstance(this).setWhitelistedCountries(finalCountries)
+        }
+        
+        // 3. Finally, load prefixes into UI (after all changes are done)
+        loadBlockedPrefixes()
+        
         checkBlockingStatus()
     }
     
@@ -292,6 +315,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadBlockedPrefixes() {
         val prefixes = SharedPreferencesManager.getBlockedPrefixes(this)
+        Log.d("MainActivity", "Loading ${prefixes.size} prefixes into UI: ${prefixes.map { "${it.prefix}(${it.comment})" }}")
         prefixAdapter.submitList(prefixes)
     }
 
@@ -476,43 +500,38 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton(R.string.save) { _, _ ->
                 val input = editText.text.toString().trim()
                 if (input.isNotEmpty()) {
-                    // Extract prefix and name from input (format: "+90 Turkey" or "Turkey")
-                    var countryName = input
+                    // Extract phone prefix from input (only the +XXX part matters)
                     var countryPrefix = ""
                     
-                    // If input starts with +, extract prefix and name
+                    // If input starts with +, extract the prefix
                     if (input.startsWith("+")) {
                         val parts = input.split(" ", limit = 2)
-                        if (parts.size >= 2) {
-                            countryPrefix = parts[0]
-                            countryName = parts[1]
+                        countryPrefix = parts[0]  // "+33" from "+33 France"
+                    } else {
+                        // Try to find country by name and get its prefix
+                        val country = CountryData.findCountryByName(this, input)
+                        if (country != null) {
+                            countryPrefix = country.prefix
                         }
                     }
                     
-                    // Try to find country by name first, then by prefix
-                    val country = CountryData.findCountryByName(this, countryName) 
-                        ?: if (countryPrefix.isNotEmpty()) CountryData.findCountryByPrefix(this, countryPrefix) else null
+                    // Find country by prefix
+                    var country: Country? = null
+                    if (countryPrefix.isNotEmpty()) {
+                        country = CountryData.findCountryByPrefix(this, countryPrefix)
+                    }
                     
                     if (country != null) {
-                        // Check if country is already whitelisted (by prefix only)
-                        val currentWhitelist = SharedPreferencesManager.getWhitelistedCountries(this)
+                        // Save only the prefix
+                        SharedPreferencesManager.addWhitelistedCountry(this, country.prefix)
+                        val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
+                        whitelistAdapter.submitList(updated)
                         
-                        if (currentWhitelist.any { it.equals(country.prefix, ignoreCase = true) }) {
-                            // Show error if country already exists
-                            androidx.appcompat.app.AlertDialog.Builder(this)
-                                .setTitle(R.string.error)
-                                .setMessage(getString(R.string.country_already_whitelisted, country.name))
-                                .setPositiveButton(R.string.ok, null)
-                                .show()
-                        } else {
-                            // Save only the prefix
-                            SharedPreferencesManager.addWhitelistedCountry(this, country.prefix)
-                            val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
-                            whitelistAdapter.submitList(updated)
-                        }
+                        // Refresh the prefixes UI after country addition
+                        loadBlockedPrefixes()
                     } else {
-                        // Show error if no exact match found
-                        androidx.appcompat.app.AlertDialog.Builder(this)
+                        // If no country found, show error
+                        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
                             .setTitle(R.string.error)
                             .setMessage(getString(R.string.country_not_found, input))
                             .setPositiveButton(R.string.ok, null)
@@ -525,6 +544,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showEditCountryDialog(countryPrefix: String) {
+        Log.d("MainActivity", "Edit dialog called for countryPrefix: $countryPrefix")
+        
         // Get localized country name
         val country = CountryData.findCountryByPrefix(this, countryPrefix)
         val countryDisplay = if (country != null) {
@@ -544,9 +565,13 @@ class MainActivity : AppCompatActivity() {
             .setTitle(R.string.delete)
             .setView(textView as android.view.View)
             .setPositiveButton(R.string.delete) { _, _ ->
+                Log.d("MainActivity", "Delete button clicked for countryPrefix: $countryPrefix")
                 SharedPreferencesManager.removeWhitelistedCountry(this, countryPrefix)
                 val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
                 whitelistAdapter.submitList(updated)
+                
+                // Refresh the prefixes UI after country removal
+                loadBlockedPrefixes()
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
