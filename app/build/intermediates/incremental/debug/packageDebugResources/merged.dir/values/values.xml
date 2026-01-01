@@ -238,6 +238,7 @@
     <string name="country_north_korea">Corée du Nord</string>
     <string name="country_north_macedonia">Macédoine du Nord</string>
     <string name="country_norway">Norvège</string>
+    <string name="country_not_found">Pays \'%1$s\' non trouvé. Veuillez sélectionner un pays dans la liste.</string>
     <string name="country_pakistan">Pakistan</string>
     <string name="country_palau">Palaos</string>
     <string name="country_panama">Panama</string>
@@ -307,6 +308,7 @@
     <string name="disable_blocking">Désactiver le Blocage</string>
     <string name="edit">Modifier</string>
     <string name="enable_blocking">Activer le Blocage</string>
+    <string name="error">Erreur</string>
     <string name="full_phone_number_comment">Numéro complet - à affiner manuellement</string>
     <string name="grant_permission">Accorder la Permission</string>
     <string name="history_cleared">Historique effacé</string>
@@ -322,6 +324,7 @@
     <string name="no_data">Aucune donnée</string>
     <string name="no_number_detected">Aucun numéro détecté</string>
     <string name="not_default_dialer">L\'application n\'est pas l\'application téléphonique par défaut</string>
+    <string name="ok">OK</string>
     <string name="permission_answer_call">Permission de répondre aux appels requise pour bloquer les appels</string>
     <string name="permission_call_phone">L\'application nécessite la permission de téléphoner pour bloquer les appels</string>
     <string name="permission_read_call_log">Permission de lire le journal d\'appels requise pour lire l\'historique</string>

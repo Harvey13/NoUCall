@@ -4179,6 +4179,7 @@ string country_nigeria
 string country_north_korea
 string country_north_macedonia
 string country_norway
+string country_not_found
 string country_pakistan
 string country_palau
 string country_panama
@@ -4248,6 +4249,7 @@ string delete
 string disable_blocking
 string edit
 string enable_blocking
+string error
 string error_a11y_label
 string error_icon_content_description
 string expand_button_title
@@ -4373,6 +4375,7 @@ string no_data
 string no_number_detected
 string not_default_dialer
 string not_set
+string ok
 string password_toggle_content_description
 string path_password_eye
 string path_password_eye_mask_strike_through

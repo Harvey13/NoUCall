@@ -16,7 +16,7 @@
     <string name="allowed_whitelisted_country">ALLOWED - Country \'%1$s\' whitelisted (no blocked prefix matches)</string>
     <string name="allowed_whitelisted_country_reason">ALLOWED - Country \'%1$s\' whitelisted (no blocked prefix matches)</string>
     <string name="app_name">NoUCall</string>
-    <string name="blocked_calls">Blocked Calls: %1$d</string>
+    <string name="blocked_calls">Blocked Calls</string>
     <string name="blocked_calls_count">Blocked Calls: %1$d</string>
     <string name="blocked_calls_history">Blocked Calls History</string>
     <string name="blocked_full_number_match_reason">BLOCKED - Full number \'%1$s\' matches (country: %2$s, whitelist: %3$s)</string>
@@ -158,6 +158,7 @@
     <string name="country_north_korea">North Korea</string>
     <string name="country_north_macedonia">North Macedonia</string>
     <string name="country_norway">Norway</string>
+    <string name="country_not_found">Country \'%1$s\' not found. Please select a country from the list.</string>
     <string name="country_pakistan">Pakistan</string>
     <string name="country_palau">Palau</string>
     <string name="country_panama">Panama</string>
@@ -223,7 +224,10 @@
     <string name="default_dialer_error">Cannot set as default dialer</string>
     <string name="default_dialer_success">Set as default dialer successfully</string>
     <string name="delete">Delete</string>
+    <string name="disable_blocking">Disable Blocking</string>
     <string name="edit">Edit</string>
+    <string name="enable_blocking">Enable Blocking</string>
+    <string name="error">Error</string>
     <string name="full_phone_number_comment">Full number - to be refined manually</string>
     <string name="history_cleared">History cleared</string>
     <string name="invalid_prefix">Invalid prefix. Please enter only numbers.</string>
@@ -237,6 +241,7 @@
     <string name="no_data">No data</string>
     <string name="no_number_detected">No number detected</string>
     <string name="not_default_dialer">App is not the default dialer</string>
+    <string name="ok">OK</string>
     <string name="permission_answer_call">Answer call permission is required to block calls</string>
     <string name="permission_call_phone">Phone permission is required to block calls</string>
     <string name="permission_read_call_log">Call log permission is required to read call history</string>
@@ -250,7 +255,10 @@
     <string name="quick_settings">Quick Settings</string>
     <string name="save">Save</string>
     <string name="set_as_default_dialer">Set as Default Dialer</string>
+    <string name="title_prefix_management">Prefix Management</string>
     <string name="title_statistics">Statistics</string>
+    <string name="title_whitelist">Countries</string>
+    <string name="total_blocked">Total Blocked</string>
     <string name="whitelisted_countries">Whitelisted Countries</string>
     <string name="yes">Yes</string>
 </resources>

@@ -451,12 +451,23 @@ class MainActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
+            // Enable keyboard input for filtering, but only allow selection from list
+            isFocusable = true
+            isFocusableInTouchMode = true
         }
 
         // Setup auto-completion
         val adapter = CountryAutoCompleteAdapter(this)
         editText.setAdapter(adapter)
         editText.threshold = 1 // Start showing suggestions after 1 character
+        editText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                editText.showDropDown()
+            }
+        }
+        editText.setOnClickListener {
+            editText.showDropDown()
+        }
 
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
             .setTitle(R.string.title_whitelist)
@@ -464,24 +475,22 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton(R.string.save) { _, _ ->
                 val input = editText.text.toString().trim()
                 if (input.isNotEmpty()) {
-                    // Try to find country by name or prefix
-                    var country: Country? = null
+                    // Extract prefix and name from input (format: "+90 Turkey" or "Turkey")
+                    var countryName = input
+                    var countryPrefix = ""
                     
-                    // First try to find by exact name
-                    country = CountryData.findCountryByName(this, input)
-                    
-                    // If not found, try by prefix
-                    if (country == null && input.startsWith("+")) {
-                        country = CountryData.findCountryByPrefix(this, input)
-                    }
-                    
-                    // If still not found, try to search and take first result
-                    if (country == null) {
-                        val searchResults = CountryData.searchCountries(this, input)
-                        if (searchResults.isNotEmpty()) {
-                            country = searchResults[0]
+                    // If input starts with +, extract prefix and name
+                    if (input.startsWith("+")) {
+                        val parts = input.split(" ", limit = 2)
+                        if (parts.size >= 2) {
+                            countryPrefix = parts[0]
+                            countryName = parts[1]
                         }
                     }
+                    
+                    // Try to find country by name first, then by prefix
+                    val country = CountryData.findCountryByName(this, countryName) 
+                        ?: if (countryPrefix.isNotEmpty()) CountryData.findCountryByPrefix(this, countryPrefix) else null
                     
                     if (country != null) {
                         // Save as "prefix name" format
@@ -490,10 +499,12 @@ class MainActivity : AppCompatActivity() {
                         val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
                         whitelistAdapter.submitList(updated)
                     } else {
-                        // If no country found, save as is (for custom entries)
-                        SharedPreferencesManager.addWhitelistedCountry(this, input)
-                        val updated = SharedPreferencesManager.getWhitelistedCountries(this).toMutableList()
-                        whitelistAdapter.submitList(updated)
+                        // Show error if no exact match found
+                        androidx.appcompat.app.AlertDialog.Builder(this)
+                            .setTitle(R.string.error)
+                            .setMessage(getString(R.string.country_not_found, input))
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
                     }
                 }
             }

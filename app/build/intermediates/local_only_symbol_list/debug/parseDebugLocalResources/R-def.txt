@@ -278,6 +278,7 @@ string country_nigeria
 string country_north_korea
 string country_north_macedonia
 string country_norway
+string country_not_found
 string country_pakistan
 string country_palau
 string country_panama
@@ -347,6 +348,7 @@ string delete
 string disable_blocking
 string edit
 string enable_blocking
+string error
 string full_phone_number_comment
 string grant_permission
 string history_cleared
@@ -362,6 +364,7 @@ string no_blocked_calls
 string no_data
 string no_number_detected
 string not_default_dialer
+string ok
 string permission_answer_call
 string permission_call_phone
 string permission_read_call_log

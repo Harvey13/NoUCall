@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">NoUCall</string>
+    <string name="title_prefix_management">Prefix Management</string>
     <string name="title_statistics">Statistics</string>
+    <string name="title_whitelist">Countries</string>
     <string name="permission_call_phone">Phone permission is required to block calls</string>
     <string name="permission_system_alert_window">System overlay permission is required to block calls</string>
     <string name="permission_answer_call">Answer call permission is required to block calls</string>
@@ -11,7 +13,10 @@
     <string name="call_blocking_switch">Call Blocking</string>
     <string name="blocked_calls_history">Blocked Calls History</string>
     <string name="copy_number">Copy Number</string>
-    <string name="blocked_calls">Blocked Calls: %1$d</string>
+    <string name="blocked_calls">Blocked Calls</string>
+    <string name="total_blocked">Total Blocked</string>
+    <string name="enable_blocking">Enable Blocking</string>
+    <string name="disable_blocking">Disable Blocking</string>
     
     <!-- Quick Settings -->
     <string name="quick_settings">Quick Settings</string>
@@ -262,4 +267,7 @@
     <string name="country_madagascar">Madagascar</string>
     <string name="country_mayotte">Mayotte</string>
     <string name="country_reunion">Reunion</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+    <string name="country_not_found">Country \'%1$s\' not found. Please select a country from the list.</string>
 </resources>

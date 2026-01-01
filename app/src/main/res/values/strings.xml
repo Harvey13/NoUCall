@@ -272,4 +272,7 @@
     <string name="country_madagascar">Madagascar</string>
     <string name="country_mayotte">Mayotte</string>
     <string name="country_reunion">Réunion</string>
+    <string name="error">Erreur</string>
+    <string name="ok">OK</string>
+    <string name="country_not_found">Pays \'%1$s\' non trouvé. Veuillez sélectionner un pays dans la liste.</string>
 </resources>
