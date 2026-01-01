@@ -32,4 +32,52 @@
     <string name="this_week">Cette semaine</string>
     <string name="this_month">Ce mois</string>
     <string name="all_time">Depuis le début</string>
+    
+    <!-- Quick Settings -->
+    <string name="quick_settings">Paramètres Rapides</string>
+    <string name="mode_light">Mode : ☀️ Clair</string>
+    <string name="mode_dark">Mode : 🌙 Sombre</string>
+    <string name="no_number_detected">Aucun numéro détecté</string>
+    <string name="last_number">Dernier numéro: %1$s</string>
+    <string name="clear_detection_logs">Effacer les logs de détection</string>
+    <string name="add_to_blocked_prefixes">➕ Ajouter \'%1$s\' aux préfixes bloqués</string>
+    <string name="add_to_blocked_prefixes_title">Ajouter aux préfixes bloqués</string>
+    <string name="add_to_blocked_prefixes_message">Ajouter le préfixe \'%1$s\' aux préfixes bloqués ?\n\nCela bloquera tous les appels commençant par ces chiffres.</string>
+    <string name="add">Ajouter</string>
+    <string name="close">Fermer</string>
+    <string name="language_selection">Sélection de la langue</string>
+    <string name="prefix_added_success">Préfixe \'%1$s\' ajouté aux préfixes bloqués</string>
+    <string name="logs_cleared">Logs effacés</string>
+    
+    <!-- Additional strings -->
+    <string name="comment_hint">Commentaire (optionnel)</string>
+    <string name="prefix_added">Préfixe ajouté avec succès</string>
+    <string name="country_added">Pays ajouté avec succès</string>
+    <string name="confirm_delete_prefix">Supprimer ce préfixe ?</string>
+    <string name="confirm_delete_country">Retirer ce pays de la liste blanche ?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="prefix_already_exists">Préfixe déjà existant</string>
+    <string name="country_already_whitelisted">Pays déjà dans la liste blanche</string>
+    <string name="invalid_prefix">Préfixe invalide. Veuillez entrer uniquement des chiffres.</string>
+    <string name="choose_action">Choisir l\'action</string>
+    <string name="add_to_whitelist">Ajouter à la liste blanche</string>
+    <string name="add_to_blocked_list">Ajouter à la liste bloquée</string>
+    <string name="call_history">Historique des appels</string>
+    <string name="no_blocked_calls">Aucun appel bloqué pour le moment</string>
+    <string name="clear_history">Effacer l\'historique</string>
+    <string name="confirm_clear_history">Effacer tout l\'historique des appels bloqués ?</string>
+    <string name="history_cleared">Historique effacé</string>
+    <string name="default_dialer_error">Impossible de définir comme application téléphonique par défaut</string>
+    <string name="default_dialer_success">Défini comme application téléphonique par défaut avec succès</string>
+    <string name="not_default_dialer">L\'application n\'est pas l\'application téléphonique par défaut</string>
+    <string name="set_as_default_dialer">Définir comme application téléphonique par défaut</string>
+    <string name="permission_answer_call">Permission de répondre aux appels requise pour bloquer les appels</string>
+    <string name="permission_read_call_log">Permission de lire le journal d\'appels requise pour lire l\'historique</string>
+    <string name="blocked_calls_count">Appels Bloqués: %1$d</string>
+    
+    <!-- Missing strings for hard-coded text -->
+    <string name="call_blocking_switch">Blocage d\'appels</string>
+    <string name="blocked_calls_history">Historique des appels bloqués</string>
+    <string name="copy_number">Copier le numéro</string>
 </resources>

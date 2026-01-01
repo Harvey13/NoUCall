@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -37,6 +38,7 @@ import com.noucall.app.receiver.CallBlockerReceiver
 import com.noucall.app.utils.Constants
 import com.noucall.app.utils.PermissionManager
 import com.noucall.app.utils.SharedPreferencesManager
+import com.noucall.app.utils.LocaleManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -102,7 +104,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Apply theme before setting content view
+        // Apply language and theme before setting content view
+        applyLanguage()
         applyTheme()
         
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -110,12 +113,21 @@ class MainActivity : AppCompatActivity() {
         
         sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE)
         
-        
         setupUI()
         setupRecyclerViews()
         loadBlockedPrefixes()
         loadWhitelistedCountries()
         checkBlockingStatus()
+    }
+    
+    private fun applyLanguage() {
+        val languageCode = LocaleManager.getLanguage(this)
+        val locale = java.util.Locale(languageCode)
+        java.util.Locale.setDefault(locale)
+        
+        val config = Configuration(resources.configuration)
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     private fun applyTheme() {
@@ -547,29 +559,31 @@ class MainActivity : AppCompatActivity() {
         val lastReason = SharedPreferencesManager.getLastDetectionReason(this)
         val lastTimestamp = SharedPreferencesManager.getLastDetectionTimestamp(this)
         val isDarkMode = SharedPreferencesManager.isDarkMode(this)
+        val currentLanguage = LocaleManager.getLanguage(this)
         
         val lastDetectionText = if (lastNumber.isNotEmpty()) {
-            "Dernier numéro: $lastNumber\n$lastReason\n${formatTimestamp(lastTimestamp)}"
+            "${getString(R.string.last_number, lastNumber)}\n$lastReason\n${formatTimestamp(lastTimestamp)}"
         } else {
-            "Aucun numéro détecté"
+            getString(R.string.no_number_detected)
         }
         
         // Create options list
         val optionsList = mutableListOf<String>()
-        optionsList.add(if (isDarkMode) "Mode : 🌙 Sombre" else "Mode : ☀️ Clair")
+        optionsList.add(if (isDarkMode) getString(R.string.mode_dark) else getString(R.string.mode_light))
+        optionsList.add("${LocaleManager.getLanguageFlag(currentLanguage)} ${LocaleManager.getLanguageDisplayName(currentLanguage)}")
         optionsList.add(lastDetectionText)
         
         // Add "Add to blocked prefixes" option if last number exists and was allowed
         if (lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ")) {
-            optionsList.add("➕ Ajouter '$lastNumber' aux préfixes bloqués")
+            optionsList.add(getString(R.string.add_to_blocked_prefixes, lastNumber))
         }
         
-        optionsList.add("Effacer les logs de détection")
+        optionsList.add(getString(R.string.clear_detection_logs))
         
         val options = optionsList.toTypedArray()
         
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
-            .setTitle("Paramètres Rapides")
+            .setTitle(R.string.quick_settings)
             .setItems(options) { _, which ->
                 when {
                     which == 0 -> {
@@ -579,18 +593,49 @@ class MainActivity : AppCompatActivity() {
                         applyTheme()
                         recreate()
                     }
+                    which == 1 -> {
+                        // Show language selection
+                        showLanguageSelection()
+                    }
                     which == options.size - 1 -> {
                         // Clear logs (always last option)
                         SharedPreferencesManager.clearLastDetection(this)
-                        Toast.makeText(this, "Logs effacés", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, R.string.logs_cleared, Toast.LENGTH_SHORT).show()
                     }
-                    lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ") && which == 2 -> {
-                        // Add to blocked prefixes (third option when number is allowed)
+                    lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ") && which == 3 -> {
+                        // Add to blocked prefixes (fourth option when number is allowed)
                         addPhoneNumberToBlockedPrefixes(lastNumber)
                     }
                 }
             }
-            .setNegativeButton("Fermer", null)
+            .setNegativeButton(R.string.close, null)
+            .show()
+    }
+    
+    private fun showLanguageSelection() {
+        val currentLanguage = LocaleManager.getLanguage(this)
+        val languages = arrayOf(
+            "${LocaleManager.getLanguageFlag(LocaleManager.LANGUAGE_FRENCH)} ${LocaleManager.getLanguageDisplayName(LocaleManager.LANGUAGE_FRENCH)}",
+            "${LocaleManager.getLanguageFlag(LocaleManager.LANGUAGE_ENGLISH)} ${LocaleManager.getLanguageDisplayName(LocaleManager.LANGUAGE_ENGLISH)}"
+        )
+        
+        val checkedItem = if (currentLanguage == LocaleManager.LANGUAGE_ENGLISH) 1 else 0
+        
+        androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
+            .setTitle(R.string.language_selection)
+            .setSingleChoiceItems(languages, checkedItem) { dialog, which ->
+                val selectedLanguage = if (which == 0) LocaleManager.LANGUAGE_FRENCH else LocaleManager.LANGUAGE_ENGLISH
+                
+                if (selectedLanguage != currentLanguage) {
+                    LocaleManager.setLanguage(this, selectedLanguage)
+                    Toast.makeText(this, "Language changed to ${LocaleManager.getLanguageDisplayName(selectedLanguage)}", Toast.LENGTH_SHORT).show()
+                    
+                    // Restart activity to apply language
+                    recreate()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
     
@@ -600,14 +645,14 @@ class MainActivity : AppCompatActivity() {
         val prefix = normalizedNumber.take(6) // Take first 6 digits for national numbers
         
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
-            .setTitle("Ajouter aux préfixes bloqués")
-            .setMessage("Ajouter le préfixe '$prefix' aux préfixes bloqués ?\n\nCela bloquera tous les appels commençant par ces chiffres.")
-            .setPositiveButton("Ajouter") { _, _ ->
+            .setTitle(R.string.add_to_blocked_prefixes_title)
+            .setMessage(getString(R.string.add_to_blocked_prefixes_message, prefix))
+            .setPositiveButton(R.string.add) { _, _ ->
                 SharedPreferencesManager.addBlockedPrefix(this, prefix, "Ajouté depuis détection rapide")
-                Toast.makeText(this, "Préfixe '$prefix' ajouté aux préfixes bloqués", Toast.LENGTH_SHORT).show()
-                loadBlockedPrefixes() // Refresh the UI
+                Toast.makeText(this, getString(R.string.prefix_added_success, prefix), Toast.LENGTH_SHORT).show()
+                loadBlockedPrefixes() // Refresh UI
             }
-            .setNegativeButton("Annuler", null)
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
     

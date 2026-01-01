@@ -2070,12 +2070,20 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with <ns2:g example="Mail" id="application_name">%s</ns2:g></string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
+    <string name="add">Ajouter</string>
     <string name="add_prefix">Préfixe</string>
+    <string name="add_to_blocked_list">Ajouter à la liste bloquée</string>
+    <string name="add_to_blocked_prefixes">➕ Ajouter \'%1$s\' aux préfixes bloqués</string>
+    <string name="add_to_blocked_prefixes_message">Ajouter le préfixe \'%1$s\' aux préfixes bloqués ?\n\nCela bloquera tous les appels commençant par ces chiffres.</string>
+    <string name="add_to_blocked_prefixes_title">Ajouter aux préfixes bloqués</string>
+    <string name="add_to_whitelist">Ajouter à la liste blanche</string>
     <string name="all_time">Depuis le début</string>
     <string name="androidx_startup" translatable="false">androidx.startup</string>
     <string name="app_name">NoUCall</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
     <string name="blocked_calls">Appels Bloqués</string>
+    <string name="blocked_calls_count">Appels Bloqués: %1$d</string>
+    <string name="blocked_calls_history">Historique des appels bloqués</string>
     <string name="blocked_prefixes">Préfixes Bloqués</string>
     <string name="blocking_disabled">Blocage désactivé</string>
     <string name="blocking_enabled">Blocage activé</string>
@@ -2085,6 +2093,8 @@
     <string description="A description of an action that a user of an accessibility service can perform to expand a bottomsheet halfway to its full height. [CHAR LIMIT=25]" name="bottomsheet_action_expand_halfway">Expand halfway</string>
     <string description="An accessibility feedback when the bottom sheet drag handle is clicked [CHAR LIMIT=NONE]" name="bottomsheet_drag_handle_clicked">Drag handle double-tapped</string>
     <string description="The content description of bottom sheet drag handles [CHAR LIMIT=NONE]" name="bottomsheet_drag_handle_content_description">Drag handle</string>
+    <string name="call_blocking_switch">Blocage d\'appels</string>
+    <string name="call_history">Historique des appels</string>
     <string name="call_notification_answer_action">Answer</string>
     <string name="call_notification_answer_video_action">Video</string>
     <string name="call_notification_decline_action">Decline</string>
@@ -2096,11 +2106,24 @@
     <string name="character_counter_content_description">Characters entered %1$d of %2$d</string>
     <string name="character_counter_overflowed_content_description">Character limit exceeded %1$d of %2$d</string>
     <string name="character_counter_pattern" translatable="false">%1$d/%2$d</string>
+    <string name="choose_action">Choisir l\'action</string>
+    <string name="clear_detection_logs">Effacer les logs de détection</string>
+    <string name="clear_history">Effacer l\'historique</string>
     <string name="clear_text_end_icon_content_description">Clear text</string>
+    <string name="close">Fermer</string>
+    <string name="comment_hint">Commentaire (optionnel)</string>
     <string name="commercial_call_prefixes">Préfixes Démarchage Commercial</string>
+    <string name="confirm_clear_history">Effacer tout l\'historique des appels bloqués ?</string>
+    <string name="confirm_delete_country">Retirer ce pays de la liste blanche ?</string>
+    <string name="confirm_delete_prefix">Supprimer ce préfixe ?</string>
     <string name="copy">Copy</string>
+    <string name="copy_number">Copier le numéro</string>
+    <string name="country_added">Pays ajouté avec succès</string>
+    <string name="country_already_whitelisted">Pays déjà dans la liste blanche</string>
     <string name="country_hint">Ex: France</string>
     <string name="dark_mode">Mode Sombre</string>
+    <string name="default_dialer_error">Impossible de définir comme application téléphonique par défaut</string>
+    <string name="default_dialer_success">Défini comme application téléphonique par défaut avec succès</string>
     <string name="delete">Supprimer</string>
     <string name="disable_blocking">Désactiver le Blocage</string>
     <string name="edit">Modifier</string>
@@ -2115,9 +2138,14 @@
     <string name="fab_transformation_sheet_behavior" translatable="false">com.google.android.material.transformation.FabTransformationSheetBehavior</string>
     <string name="grant_permission">Accorder la Permission</string>
     <string name="hide_bottom_view_on_scroll_behavior" translatable="false">com.google.android.material.behavior.HideBottomViewOnScrollBehavior</string>
+    <string name="history_cleared">Historique effacé</string>
     <string description="Content description for an icon that appears in the title area of a dialog" name="icon_content_description">Dialog Icon</string>
+    <string name="invalid_prefix">Préfixe invalide. Veuillez entrer uniquement des chiffres.</string>
     <string name="item_view_role_description">Tab</string>
+    <string name="language_selection">Sélection de la langue</string>
+    <string name="last_number">Dernier numéro: %1$s</string>
     <string name="light_mode">Mode Clair</string>
+    <string name="logs_cleared">Logs effacés</string>
     <string name="m3_exceed_max_badge_text_suffix" translatable="false"><ns2:g example="Some te" id="part of a long text">%1$s</ns2:g><ns2:g example="…" id="suffix">%2$s</ns2:g></string>
     <string name="m3_ref_typeface_brand_medium" translatable="false">sans-serif-medium</string>
     <string name="m3_ref_typeface_brand_regular" translatable="false">sans-serif</string>
@@ -2156,6 +2184,8 @@
     <string description="Suffix for time in 12-hour standard, after noon. [CHAR_LIMIT=2]" name="material_timepicker_pm">PM</string>
     <string description="Title for the dialog with a time picker. [CHAR_LIMIT=32]" name="material_timepicker_select_time">Select time</string>
     <string name="material_timepicker_text_input_mode_description">Switch to text input mode for the time input.</string>
+    <string name="mode_dark">Mode : 🌙 Sombre</string>
+    <string name="mode_light">Mode : ☀️ Clair</string>
     <string description="Content description for new notification (no number count) [CHAR_LIMIT=NONE]" name="mtrl_badge_numberless_content_description">New notification</string>
     <string name="mtrl_checkbox_button_icon_path_checked" translatable="false">M14,18.2 11.4,15.6 10,17 14,21 22,13 20.6,11.6z</string>
     <string name="mtrl_checkbox_button_icon_path_group_name" translatable="false">icon</string>
@@ -2224,21 +2254,31 @@
     <string name="mtrl_switch_track_path" translatable="false">M0,16 A16,16 0 0,1 16,0 H36 A16,16 0 0,1 36,32 H16 A16,16 0 0,1 0,16</string>
     <string description="Button text to indicate that the widget will ignore the user&apos;s selection [CHAR_LIMIT=16]" name="mtrl_timepicker_cancel">Cancel</string>
     <string description="Button text to indicate that the widget will save the user&apos;s selection [CHAR_LIMIT=16]" name="mtrl_timepicker_confirm">OK</string>
+    <string name="no">Non</string>
+    <string name="no_blocked_calls">Aucun appel bloqué pour le moment</string>
     <string name="no_data">Aucune donnée</string>
+    <string name="no_number_detected">Aucun numéro détecté</string>
+    <string name="not_default_dialer">L\'application n\'est pas l\'application téléphonique par défaut</string>
     <string name="not_set">Not set</string>
     <string name="password_toggle_content_description">Show password</string>
     <string name="path_password_eye" translatable="false">M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27,-3.11 11,-7.5c-1.73,-4.39 -6,-7.5 -11,-7.5zM12,17c-2.76,0 -5,-2.24 -5,-5s2.24,-5 5,-5 5,2.24 5,5 -2.24,5 -5,5zM12,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3 3,-1.34 3,-3 -1.34,-3 -3,-3z</string>
     <string name="path_password_eye_mask_strike_through" translatable="false">M2,4.27 L19.73,22 L22.27,19.46 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z</string>
     <string name="path_password_eye_mask_visible" translatable="false">M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z</string>
     <string name="path_password_strike_through" translatable="false">M3.27,4.27 L19.74,20.74</string>
+    <string name="permission_answer_call">Permission de répondre aux appels requise pour bloquer les appels</string>
     <string name="permission_call_phone">L\'application nécessite la permission de téléphoner pour bloquer les appels</string>
+    <string name="permission_read_call_log">Permission de lire le journal d\'appels requise pour lire l\'historique</string>
     <string name="permission_read_phone_state">L\'application nécessite la permission de lire l\'état du téléphone</string>
     <string name="permission_required">Permission Requise</string>
     <string name="permission_system_alert_window">L\'application nécessite la permission d\'afficher par-dessus les autres applications pour bloquer les appels</string>
     <string name="preference_copied">
         \"<ns2:g example="Version 1.1" id="summary">%1$s</ns2:g>\" copied to clipboard.
     </string>
+    <string name="prefix_added">Préfixe ajouté avec succès</string>
+    <string name="prefix_added_success">Préfixe \'%1$s\' ajouté aux préfixes bloqués</string>
+    <string name="prefix_already_exists">Préfixe déjà existant</string>
     <string name="prefix_hint">Ex: 09 48</string>
+    <string name="quick_settings">Paramètres Rapides</string>
     <string name="save">Enregistrer</string>
     <string name="search_menu_title">Search</string>
     <string name="searchbar_scrolling_view_behavior" translatable="false">
@@ -2246,6 +2286,7 @@
   </string>
     <string description="Content description for the X button to clear text [CHAR_LIMIT=NONE]" name="searchview_clear_text_content_description">Clear text</string>
     <string description="Content description for the navigation button to return to the previous screen [CHAR_LIMIT=NONE]" name="searchview_navigation_content_description">Back</string>
+    <string name="set_as_default_dialer">Définir comme application téléphonique par défaut</string>
     <string description="Title of the side sheet&apos;s accessibility pane that is spoken by TalkBack when the side sheet appears on screen. [CHAR_LIMIT=NONE]" name="side_sheet_accessibility_pane_title">Side Sheet</string>
     <string name="side_sheet_behavior" translatable="false">com.google.android.material.sidesheet.SideSheetBehavior</string>
     <string name="status_bar_notification_info_overflow">999+</string>
@@ -2261,6 +2302,7 @@
     <string name="v7_preference_off">OFF</string>
     <string name="v7_preference_on">ON</string>
     <string name="whitelisted_countries">Pays Autorisés</string>
+    <string name="yes">Oui</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>

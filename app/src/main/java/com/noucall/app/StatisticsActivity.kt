@@ -85,7 +85,7 @@ class StatisticsActivity : AppCompatActivity() {
     private fun loadStatistics() {
         val blockedCallsCount = SharedPreferencesManager.getBlockedCallsCount(this)
 
-        binding.tvBlockedCalls.text = "Appels Bloqués: $blockedCallsCount"
+        binding.tvBlockedCalls.text = getString(R.string.blocked_calls_count, blockedCallsCount)
 
         loadBlockedCallsHistory()
     }
@@ -127,39 +127,40 @@ class StatisticsActivity : AppCompatActivity() {
     
     private fun clearHistory() {
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
-            .setTitle("Effacer l'historique")
-            .setMessage("Voulez-vous effacer tout l'historique des appels bloqués ?")
-            .setPositiveButton("Oui") { _, _ ->
+            .setTitle(getString(R.string.clear_history))
+            .setMessage(getString(R.string.confirm_clear_history))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 SharedPreferencesManager.clearHistory(this)
                 loadStatistics()
-                android.widget.Toast.makeText(this, "Historique effacé", android.widget.Toast.LENGTH_SHORT).show()
+                loadBlockedCallsHistory()
+                android.widget.Toast.makeText(this, getString(R.string.history_cleared), android.widget.Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("Non", null)
+            .setNegativeButton(getString(R.string.no), null)
             .show()
     }
     
     private fun showEditDialog(phoneNumber: String, type: String, message: String? = null) {
         val message = message ?: ""
         val fullMessage = when (type) {
-            "Appel" -> "Numéro : $phoneNumber\nType : Appel bloqué\n\nQue souhaitez-vous faire ?"
-            else -> "Numéro : $phoneNumber\nType : $type\n\nQue souhaitez-vous faire ?"
+            "Appel" -> "Number: $phoneNumber\nType: Blocked Call\n\nWhat would you like to do?"
+            else -> "Number: $phoneNumber\nType: $type\n\nWhat would you like to do?"
         }
         
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
-            .setTitle("Options")
+            .setTitle(getString(R.string.choose_action))
             .setMessage(fullMessage)
-            .setPositiveButton("Supprimer") { _, _ ->
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 // Remove from history
                 removeFromHistory(phoneNumber, type)
             }
-            .setNegativeButton("Copier le numéro") { _, _ ->
+            .setNegativeButton(getString(R.string.copy_number)) { _, _ ->
                 // Copy to clipboard
                 val clipboard = getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                val clip = android.content.ClipData.newPlainText("Numéro", phoneNumber)
+                val clip = android.content.ClipData.newPlainText("Number", phoneNumber)
                 clipboard.setPrimaryClip(clip)
-                android.widget.Toast.makeText(this, "Numéro copié", android.widget.Toast.LENGTH_SHORT).show()
+                android.widget.Toast.makeText(this, "Number copied", android.widget.Toast.LENGTH_SHORT).show()
             }
-            .setNeutralButton("Fermer", null)
+            .setNeutralButton(getString(R.string.close), null)
             .show()
     }
     
@@ -171,7 +172,7 @@ class StatisticsActivity : AppCompatActivity() {
             if (itemToRemove != null) {
                 currentHistory.remove(itemToRemove)
                 SharedPreferencesManager.setBlockedCallsHistory(this, currentHistory)
-                android.widget.Toast.makeText(this, "Entrée supprimée de l'historique", android.widget.Toast.LENGTH_SHORT).show()
+                android.widget.Toast.makeText(this, "Entry removed from history", android.widget.Toast.LENGTH_SHORT).show()
                 loadStatistics() // Refresh the display
             }
         }

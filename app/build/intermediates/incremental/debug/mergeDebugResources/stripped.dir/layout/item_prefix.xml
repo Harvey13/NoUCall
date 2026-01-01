@@ -36,7 +36,7 @@
             android:layout_height="32dp"
             android:src="@android:drawable/ic_menu_edit"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Éditer" />
+            android:contentDescription="@string/edit" />
 
     </LinearLayout>
 

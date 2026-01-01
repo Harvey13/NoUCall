@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">NoUCall</string>
+    <string name="title_statistics">Statistics</string>
+    <string name="permission_call_phone">Phone permission is required to block calls</string>
+    <string name="permission_system_alert_window">System overlay permission is required to block calls</string>
+    <string name="permission_answer_call">Answer call permission is required to block calls</string>
+    <string name="permission_read_call_log">Call log permission is required to read call history</string>
+    <string name="permission_read_phone_state">Phone state permission is required to detect calls</string>
+    
+    <!-- Missing strings for hard-coded text -->
+    <string name="call_blocking_switch">Call Blocking</string>
+    <string name="blocked_calls_history">Blocked Calls History</string>
+    <string name="copy_number">Copy Number</string>
+    <string name="blocked_calls">Blocked Calls: %1$d</string>
+    
+    <!-- Quick Settings -->
+    <string name="quick_settings">Quick Settings</string>
+    <string name="mode_light">Mode: ☀️ Light</string>
+    <string name="mode_dark">Mode: 🌙 Dark</string>
+    <string name="no_number_detected">No number detected</string>
+    <string name="last_number">Last number: %1$s</string>
+    <string name="clear_detection_logs">Clear detection logs</string>
+    <string name="add_to_blocked_prefixes">➕ Add \'%1$s\' to blocked prefixes</string>
+    <string name="add_to_blocked_prefixes_title">Add to blocked prefixes</string>
+    <string name="add_to_blocked_prefixes_message">Add prefix \'%1$s\' to blocked prefixes?\n\nThis will block all calls starting with these digits.</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="language_selection">Language Selection</string>
+    <string name="prefix_added_success">Prefix \'%1$s\' added to blocked prefixes</string>
+    <string name="logs_cleared">Logs cleared</string>
+    
+    <!-- Call blocking reasons -->
+    <string name="blocked_prefix_match">BLOCKED - Prefix \'%1$s\' matches (country: %2$s, whitelist: %3$s)</string>
+    <string name="allowed_whitelisted_country">ALLOWED - Country \'%1$s\' whitelisted (no blocked prefix matches)</string>
+    <string name="allowed_no_prefix_no_whitelist">ALLOWED - No blocked prefix matches and country \'%1$s\' not whitelisted</string>
+    
+    <!-- Main activity -->
+    <string name="blocked_prefixes">Blocked Prefixes</string>
+    <string name="whitelisted_countries">Whitelisted Countries</string>
+    <string name="add_prefix">Add Prefix</string>
+    <string name="add_country">Add Country</string>
+    <string name="prefix_hint">Enter prefix (e.g., 061234)</string>
+    <string name="comment_hint">Comment (optional)</string>
+    <string name="prefix_added">Prefix added successfully</string>
+    <string name="country_added">Country added successfully</string>
+    <string name="blocking_enabled">Call blocking enabled</string>
+    <string name="blocking_disabled">Call blocking disabled</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="confirm_delete_prefix">Delete this prefix?</string>
+    <string name="confirm_delete_country">Remove this country from whitelist?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="prefix_already_exists">Prefix already exists</string>
+    <string name="country_already_whitelisted">Country already whitelisted</string>
+    <string name="invalid_prefix">Invalid prefix. Please enter only numbers.</string>
+    <string name="choose_action">Choose Action</string>
+    <string name="add_to_whitelist">Add to Whitelist</string>
+    <string name="add_to_blocked_list">Add to Blocked List</string>
+    <string name="blocked_calls_count">Blocked Calls: %1$d</string>
+    <string name="call_history">Call History</string>
+    <string name="no_blocked_calls">No blocked calls yet</string>
+    <string name="no_data">No data</string>
+    <string name="clear_history">Clear History</string>
+    <string name="confirm_clear_history">Clear all blocked call history?</string>
+    <string name="history_cleared">History cleared</string>
+    <string name="default_dialer_error">Cannot set as default dialer</string>
+    <string name="default_dialer_success">Set as default dialer successfully</string>
+    <string name="not_default_dialer">App is not the default dialer</string>
+    <string name="set_as_default_dialer">Set as Default Dialer</string>
+</resources>
