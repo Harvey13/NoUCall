@@ -92,10 +92,14 @@
     <string name="add_to_blocked_prefixes_title">Ajouter aux préfixes bloqués</string>
     <string name="add_to_whitelist">Ajouter à la liste blanche</string>
     <string name="all_time">Depuis le début</string>
+    <string name="allowed_no_prefix_whitelist_reason">AUTORISÉ - Aucun préfixe bloqué correspondant et pays \'%1$s\' non whitelisté</string>
+    <string name="allowed_whitelisted_country_reason">AUTORISÉ - Pays \'%1$s\' dans la whitelist (aucun préfixe bloqué correspondant)</string>
     <string name="app_name">NoUCall</string>
     <string name="blocked_calls">Appels Bloqués</string>
     <string name="blocked_calls_count">Appels Bloqués: %1$d</string>
     <string name="blocked_calls_history">Historique des appels bloqués</string>
+    <string name="blocked_full_number_match_reason">BLOQUÉ - Numéro complet \'%1$s\' correspondant (pays: %2$s, whitelist: %3$s)</string>
+    <string name="blocked_prefix_match_reason">BLOQUÉ - Préfixe \'%1$s\' correspondant (pays: %2$s, whitelist: %3$s)</string>
     <string name="blocked_prefixes">Préfixes Bloqués</string>
     <string name="blocking_disabled">Blocage désactivé</string>
     <string name="blocking_enabled">Blocage activé</string>

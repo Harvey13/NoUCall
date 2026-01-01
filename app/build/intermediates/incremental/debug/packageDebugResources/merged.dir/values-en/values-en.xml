@@ -12,12 +12,16 @@
     <string name="add_to_blocked_prefixes_title">Add to blocked prefixes</string>
     <string name="add_to_whitelist">Add to Whitelist</string>
     <string name="allowed_no_prefix_no_whitelist">ALLOWED - No blocked prefix matches and country \'%1$s\' not whitelisted</string>
+    <string name="allowed_no_prefix_whitelist_reason">ALLOWED - No blocked prefix matches and country \'%1$s\' not whitelisted</string>
     <string name="allowed_whitelisted_country">ALLOWED - Country \'%1$s\' whitelisted (no blocked prefix matches)</string>
+    <string name="allowed_whitelisted_country_reason">ALLOWED - Country \'%1$s\' whitelisted (no blocked prefix matches)</string>
     <string name="app_name">NoUCall</string>
     <string name="blocked_calls">Blocked Calls: %1$d</string>
     <string name="blocked_calls_count">Blocked Calls: %1$d</string>
     <string name="blocked_calls_history">Blocked Calls History</string>
+    <string name="blocked_full_number_match_reason">BLOCKED - Full number \'%1$s\' matches (country: %2$s, whitelist: %3$s)</string>
     <string name="blocked_prefix_match">BLOCKED - Prefix \'%1$s\' matches (country: %2$s, whitelist: %3$s)</string>
+    <string name="blocked_prefix_match_reason">BLOCKED - Prefix \'%1$s\' matches (country: %2$s, whitelist: %3$s)</string>
     <string name="blocked_prefixes">Blocked Prefixes</string>
     <string name="blocking_disabled">Call blocking disabled</string>
     <string name="blocking_enabled">Call blocking enabled</string>

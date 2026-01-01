@@ -132,10 +132,14 @@ string add_to_blocked_prefixes_message
 string add_to_blocked_prefixes_title
 string add_to_whitelist
 string all_time
+string allowed_no_prefix_whitelist_reason
+string allowed_whitelisted_country_reason
 string app_name
 string blocked_calls
 string blocked_calls_count
 string blocked_calls_history
+string blocked_full_number_match_reason
+string blocked_prefix_match_reason
 string blocked_prefixes
 string blocking_disabled
 string blocking_enabled

@@ -8,8 +8,10 @@ import android.os.Build
 import android.telephony.TelephonyManager
 import android.telecom.TelecomManager
 import android.util.Log
+import com.noucall.app.R
 import com.noucall.app.utils.DebugLog
 import com.noucall.app.utils.SharedPreferencesManager
+import com.noucall.app.utils.LocaleManager
 import com.noucall.app.data.BlockedPrefix
 import com.noucall.app.service.CallBlockerService
 
@@ -17,7 +19,11 @@ class CallBlockerReceiver : BroadcastReceiver() {
     
     override fun onReceive(context: Context, intent: Intent) {
         DebugLog.d("CallBlockerReceiver", "onReceive called with action: ${intent.action}")
-        val blockingEnabled = SharedPreferencesManager.isBlockingEnabled(context)
+        
+        // Create localized context for proper string resolution
+        val localizedContext = LocaleManager.updateContextLanguage(context, LocaleManager.getLanguage(context))
+        
+        val blockingEnabled = SharedPreferencesManager.isBlockingEnabled(localizedContext)
         DebugLog.d("CallBlockerReceiver", "Blocking enabled: $blockingEnabled")
         if (!blockingEnabled) {
             DebugLog.d("CallBlockerReceiver", "Blocking is disabled")
@@ -32,9 +38,9 @@ class CallBlockerReceiver : BroadcastReceiver() {
                 TelephonyManager.EXTRA_STATE_RINGING -> {
                     val incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
                     DebugLog.d("CallBlockerReceiver", "Incoming number: $incomingNumber")
-                    if (incomingNumber != null && shouldBlockCall(context, incomingNumber)) {
+                    if (incomingNumber != null && shouldBlockCall(localizedContext, incomingNumber)) {
                         DebugLog.d("CallBlockerReceiver", "Should block call from: $incomingNumber")
-                        blockCall(context, incomingNumber)
+                        blockCall(localizedContext, incomingNumber)
                     } else {
                         DebugLog.d("CallBlockerReceiver", "Not blocking call from: $incomingNumber")
                     }
@@ -69,8 +75,18 @@ class CallBlockerReceiver : BroadcastReceiver() {
             
             DebugLog.d("CallBlockerReceiver", "Checking prefix: '$prefix' against national number: '$nationalNumber'")
 
+            // Check for exact match with full phone numbers (E.164 format)
+            if (normalizedPhoneNumber == "+$prefix" || normalizedPhoneNumber == prefix) {
+                val reason = context.getString(R.string.blocked_full_number_match_reason, prefix, countryCode, isCountryWhitelisted)
+                DebugLog.d("CallBlockerReceiver", reason)
+                // Save last detection (works in both debug and release)
+                DebugLog.saveDetection(context, phoneNumber, reason)
+                return true // Always block if exact number matches, even if country is whitelisted
+            }
+            
+            // Check for prefix match with national number
             if (nationalNumber.startsWith(prefix)) {
-                val reason = "BLOQUÉ - Préfixe '$prefix' correspondant (pays: $countryCode, whitelist: $isCountryWhitelisted)"
+                val reason = context.getString(R.string.blocked_prefix_match_reason, prefix, countryCode, isCountryWhitelisted)
                 DebugLog.d("CallBlockerReceiver", reason)
                 // Save last detection (works in both debug and release)
                 DebugLog.saveDetection(context, phoneNumber, reason)
@@ -80,14 +96,14 @@ class CallBlockerReceiver : BroadcastReceiver() {
 
         // If no prefix matched and country is whitelisted, don't block
         if (isCountryWhitelisted) {
-            val reason = "AUTORISÉ - Pays '$countryCode' dans la whitelist (aucun préfixe bloqué correspondant)"
+            val reason = context.getString(R.string.allowed_whitelisted_country_reason, countryCode)
             DebugLog.d("CallBlockerReceiver", reason)
             // Save last detection (works in both debug and release)
             DebugLog.saveDetection(context, phoneNumber, reason)
             return false
         }
-
-        val reason = "AUTORISÉ - Aucun préfixe bloqué correspondant et pays '$countryCode' non whitelisté"
+        
+        val reason = context.getString(R.string.allowed_no_prefix_whitelist_reason, countryCode)
         DebugLog.d("CallBlockerReceiver", reason)
         // Save last detection (works in both debug and release)
         DebugLog.saveDetection(context, phoneNumber, reason)

@@ -34,6 +34,10 @@
     <string name="prefix_added_success">Prefix \'%1$s\' added to blocked prefixes</string>
     <string name="phone_number_added">Number added. Edit to define the prefix.</string>
     <string name="full_phone_number_comment">Full number - to be refined manually</string>
+    <string name="allowed_whitelisted_country_reason">ALLOWED - Country \'%1$s\' whitelisted (no blocked prefix matches)</string>
+    <string name="allowed_no_prefix_whitelist_reason">ALLOWED - No blocked prefix matches and country \'%1$s\' not whitelisted</string>
+    <string name="blocked_prefix_match_reason">BLOCKED - Prefix \'%1$s\' matches (country: %2$s, whitelist: %3$s)</string>
+    <string name="blocked_full_number_match_reason">BLOCKED - Full number \'%1$s\' matches (country: %2$s, whitelist: %3$s)</string>
     <string name="logs_cleared">Logs cleared</string>
     
     <!-- Call blocking reasons -->

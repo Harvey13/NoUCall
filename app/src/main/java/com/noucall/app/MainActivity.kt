@@ -574,7 +574,7 @@ class MainActivity : AppCompatActivity() {
         optionsList.add(lastDetectionText)
         
         // Add "Add to blocked numbers" option if last number exists and was allowed
-        if (lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ")) {
+        if (lastNumber.isNotEmpty() && (lastReason.contains("AUTORISÉ") || lastReason.contains("ALLOWED"))) {
             optionsList.add(getString(R.string.add_phone_number_to_blocked, lastNumber))
         }
         
@@ -602,7 +602,7 @@ class MainActivity : AppCompatActivity() {
                         SharedPreferencesManager.clearLastDetection(this)
                         Toast.makeText(this, R.string.logs_cleared, Toast.LENGTH_SHORT).show()
                     }
-                    lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ") && which == 3 -> {
+                    lastNumber.isNotEmpty() && (lastReason.contains("AUTORISÉ") || lastReason.contains("ALLOWED")) && which == 3 -> {
                         // Add phone number to blocked list (fourth option when number is allowed)
                         addPhoneNumberToBlockedList(lastNumber)
                     }
