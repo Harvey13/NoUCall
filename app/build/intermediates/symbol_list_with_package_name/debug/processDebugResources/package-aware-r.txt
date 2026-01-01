@@ -4069,6 +4069,7 @@ string expand_button_title
 string exposed_dropdown_menu_content_description
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
+string full_phone_number_comment
 string grant_permission
 string hide_bottom_view_on_scroll_behavior
 string history_cleared

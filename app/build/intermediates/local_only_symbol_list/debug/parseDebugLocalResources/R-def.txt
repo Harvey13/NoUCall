@@ -162,6 +162,7 @@ string delete
 string disable_blocking
 string edit
 string enable_blocking
+string full_phone_number_comment
 string grant_permission
 string history_cleared
 string invalid_prefix

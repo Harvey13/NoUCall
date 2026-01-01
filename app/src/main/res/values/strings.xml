@@ -51,6 +51,7 @@
     <string name="language_selection">Sélection de la langue</string>
     <string name="prefix_added_success">Préfixe \'%1$s\' ajouté aux préfixes bloqués</string>
     <string name="phone_number_added">Numéro ajouté. Éditez pour définir le préfixe.</string>
+    <string name="full_phone_number_comment">Numéro complet - à affiner manuellement</string>
     <string name="logs_cleared">Logs effacés</string>
     
     <!-- Additional strings -->

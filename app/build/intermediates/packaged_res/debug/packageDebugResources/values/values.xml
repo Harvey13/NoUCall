@@ -122,6 +122,7 @@
     <string name="disable_blocking">Désactiver le Blocage</string>
     <string name="edit">Modifier</string>
     <string name="enable_blocking">Activer le Blocage</string>
+    <string name="full_phone_number_comment">Numéro complet - à affiner manuellement</string>
     <string name="grant_permission">Accorder la Permission</string>
     <string name="history_cleared">Historique effacé</string>
     <string name="invalid_prefix">Préfixe invalide. Veuillez entrer uniquement des chiffres.</string>

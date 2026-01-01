@@ -645,7 +645,7 @@ class MainActivity : AppCompatActivity() {
             .setMessage(getString(R.string.add_phone_number_to_blocked_message, phoneNumber))
             .setPositiveButton(R.string.add) { _, _ ->
                 // Store the full phone number with a special comment
-                SharedPreferencesManager.addBlockedPrefix(this, phoneNumber, "Numéro complet - à affiner manuellement")
+                SharedPreferencesManager.addBlockedPrefix(this, phoneNumber, getString(R.string.full_phone_number_comment))
                 Toast.makeText(this, getString(R.string.phone_number_added), Toast.LENGTH_LONG).show()
                 loadBlockedPrefixes() // Refresh UI
             }

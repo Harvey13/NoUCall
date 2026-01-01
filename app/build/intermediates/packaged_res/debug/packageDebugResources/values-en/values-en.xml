@@ -39,6 +39,7 @@
     <string name="default_dialer_success">Set as default dialer successfully</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="full_phone_number_comment">Full number - to be refined manually</string>
     <string name="history_cleared">History cleared</string>
     <string name="invalid_prefix">Invalid prefix. Please enter only numbers.</string>
     <string name="language_selection">Language Selection</string>
