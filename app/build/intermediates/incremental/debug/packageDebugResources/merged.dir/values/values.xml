@@ -82,6 +82,9 @@
     <color name="warning_orange">#FF9800</color>
     <color name="white">#FFFFFFFF</color>
     <string name="add">Ajouter</string>
+    <string name="add_phone_number_to_blocked">➕ Ajouter \'%1$s\' aux numéros bloqués</string>
+    <string name="add_phone_number_to_blocked_message">Numéro détecté : %1$s\n\nVoulez-vous ajouter ce numéro complet à la liste de blocage ?\n\nVous pourrez ensuite définir manuellement le préfixe à bloquer.</string>
+    <string name="add_phone_number_to_blocked_title">Ajouter le numéro complet</string>
     <string name="add_prefix">Préfixe</string>
     <string name="add_to_blocked_list">Ajouter à la liste bloquée</string>
     <string name="add_to_blocked_prefixes">➕ Ajouter \'%1$s\' aux préfixes bloqués</string>
@@ -139,6 +142,7 @@
     <string name="permission_read_phone_state">L\'application nécessite la permission de lire l\'état du téléphone</string>
     <string name="permission_required">Permission Requise</string>
     <string name="permission_system_alert_window">L\'application nécessite la permission d\'afficher par-dessus les autres applications pour bloquer les appels</string>
+    <string name="phone_number_added">Numéro ajouté. Éditez pour définir le préfixe.</string>
     <string name="prefix_added">Préfixe ajouté avec succès</string>
     <string name="prefix_added_success">Préfixe \'%1$s\' ajouté aux préfixes bloqués</string>
     <string name="prefix_already_exists">Préfixe déjà existant</string>

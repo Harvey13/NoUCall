@@ -2,6 +2,9 @@
 <resources>
     <string name="add">Add</string>
     <string name="add_country">Add Country</string>
+    <string name="add_phone_number_to_blocked">➕ Add \'%1$s\' to blocked numbers</string>
+    <string name="add_phone_number_to_blocked_message">Detected number: %1$s\n\nDo you want to add this full number to the block list?\n\nYou can then manually define which prefix to block.</string>
+    <string name="add_phone_number_to_blocked_title">Add full phone number</string>
     <string name="add_prefix">Add Prefix</string>
     <string name="add_to_blocked_list">Add to Blocked List</string>
     <string name="add_to_blocked_prefixes">➕ Add \'%1$s\' to blocked prefixes</string>
@@ -53,6 +56,7 @@
     <string name="permission_read_call_log">Call log permission is required to read call history</string>
     <string name="permission_read_phone_state">Phone state permission is required to detect calls</string>
     <string name="permission_system_alert_window">System overlay permission is required to block calls</string>
+    <string name="phone_number_added">Number added. Edit to define the prefix.</string>
     <string name="prefix_added">Prefix added successfully</string>
     <string name="prefix_added_success">Prefix \'%1$s\' added to blocked prefixes</string>
     <string name="prefix_already_exists">Prefix already exists</string>

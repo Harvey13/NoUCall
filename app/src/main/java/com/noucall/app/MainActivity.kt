@@ -573,9 +573,9 @@ class MainActivity : AppCompatActivity() {
         optionsList.add("${LocaleManager.getLanguageFlag(currentLanguage)} ${LocaleManager.getLanguageDisplayName(currentLanguage)}")
         optionsList.add(lastDetectionText)
         
-        // Add "Add to blocked prefixes" option if last number exists and was allowed
+        // Add "Add to blocked numbers" option if last number exists and was allowed
         if (lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ")) {
-            optionsList.add(getString(R.string.add_to_blocked_prefixes, lastNumber))
+            optionsList.add(getString(R.string.add_phone_number_to_blocked, lastNumber))
         }
         
         optionsList.add(getString(R.string.clear_detection_logs))
@@ -603,8 +603,8 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, R.string.logs_cleared, Toast.LENGTH_SHORT).show()
                     }
                     lastNumber.isNotEmpty() && lastReason.contains("AUTORISÉ") && which == 3 -> {
-                        // Add to blocked prefixes (fourth option when number is allowed)
-                        addPhoneNumberToBlockedPrefixes(lastNumber)
+                        // Add phone number to blocked list (fourth option when number is allowed)
+                        addPhoneNumberToBlockedList(lastNumber)
                     }
                 }
             }
@@ -639,17 +639,14 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
     
-    private fun addPhoneNumberToBlockedPrefixes(phoneNumber: String) {
-        // Normalize the number to national format (remove country code)
-        val normalizedNumber = normalizeToNationalNumber(phoneNumber)
-        val prefix = normalizedNumber.take(6) // Take first 6 digits for national numbers
-        
+    private fun addPhoneNumberToBlockedList(phoneNumber: String) {
         androidx.appcompat.app.AlertDialog.Builder(this, R.style.Theme_NoUCall_Dialog)
-            .setTitle(R.string.add_to_blocked_prefixes_title)
-            .setMessage(getString(R.string.add_to_blocked_prefixes_message, prefix))
+            .setTitle(R.string.add_phone_number_to_blocked_title)
+            .setMessage(getString(R.string.add_phone_number_to_blocked_message, phoneNumber))
             .setPositiveButton(R.string.add) { _, _ ->
-                SharedPreferencesManager.addBlockedPrefix(this, prefix, "Ajouté depuis détection rapide")
-                Toast.makeText(this, getString(R.string.prefix_added_success, prefix), Toast.LENGTH_SHORT).show()
+                // Store the full phone number with a special comment
+                SharedPreferencesManager.addBlockedPrefix(this, phoneNumber, "Numéro complet - à affiner manuellement")
+                Toast.makeText(this, getString(R.string.phone_number_added), Toast.LENGTH_LONG).show()
                 loadBlockedPrefixes() // Refresh UI
             }
             .setNegativeButton(R.string.cancel, null)

@@ -43,10 +43,14 @@
     <string name="add_to_blocked_prefixes">➕ Ajouter \'%1$s\' aux préfixes bloqués</string>
     <string name="add_to_blocked_prefixes_title">Ajouter aux préfixes bloqués</string>
     <string name="add_to_blocked_prefixes_message">Ajouter le préfixe \'%1$s\' aux préfixes bloqués ?\n\nCela bloquera tous les appels commençant par ces chiffres.</string>
+    <string name="add_phone_number_to_blocked">➕ Ajouter \'%1$s\' aux numéros bloqués</string>
+    <string name="add_phone_number_to_blocked_title">Ajouter le numéro complet</string>
+    <string name="add_phone_number_to_blocked_message">Numéro détecté : %1$s\n\nVoulez-vous ajouter ce numéro complet à la liste de blocage ?\n\nVous pourrez ensuite définir manuellement le préfixe à bloquer.</string>
     <string name="add">Ajouter</string>
     <string name="close">Fermer</string>
     <string name="language_selection">Sélection de la langue</string>
     <string name="prefix_added_success">Préfixe \'%1$s\' ajouté aux préfixes bloqués</string>
+    <string name="phone_number_added">Numéro ajouté. Éditez pour définir le préfixe.</string>
     <string name="logs_cleared">Logs effacés</string>
     
     <!-- Additional strings -->

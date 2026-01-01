@@ -122,6 +122,9 @@ menu settings_menu
 menu statistics_menu
 mipmap ic_launcher
 string add
+string add_phone_number_to_blocked
+string add_phone_number_to_blocked_message
+string add_phone_number_to_blocked_title
 string add_prefix
 string add_to_blocked_list
 string add_to_blocked_prefixes
@@ -179,6 +182,7 @@ string permission_read_call_log
 string permission_read_phone_state
 string permission_required
 string permission_system_alert_window
+string phone_number_added
 string prefix_added
 string prefix_added_success
 string prefix_already_exists

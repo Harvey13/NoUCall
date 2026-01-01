@@ -23,12 +23,16 @@
     <string name="add_to_blocked_prefixes">➕ Add \'%1$s\' to blocked prefixes</string>
     <string name="add_to_blocked_prefixes_title">Add to blocked prefixes</string>
     <string name="add_to_blocked_prefixes_message">Add prefix \'%1$s\' to blocked prefixes?\n\nThis will block all calls starting with these digits.</string>
+    <string name="add_phone_number_to_blocked">➕ Add \'%1$s\' to blocked numbers</string>
+    <string name="add_phone_number_to_blocked_title">Add full phone number</string>
+    <string name="add_phone_number_to_blocked_message">Detected number: %1$s\n\nDo you want to add this full number to the block list?\n\nYou can then manually define which prefix to block.</string>
     <string name="add">Add</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="language_selection">Language Selection</string>
     <string name="prefix_added_success">Prefix \'%1$s\' added to blocked prefixes</string>
+    <string name="phone_number_added">Number added. Edit to define the prefix.</string>
     <string name="logs_cleared">Logs cleared</string>
     
     <!-- Call blocking reasons -->
