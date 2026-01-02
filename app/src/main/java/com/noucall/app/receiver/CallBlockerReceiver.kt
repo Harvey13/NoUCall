@@ -20,6 +20,26 @@ class CallBlockerReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         DebugLog.d("CallBlockerReceiver", "onReceive called with action: ${intent.action}")
         
+        // Handle boot completion and app restart
+        when (intent.action) {
+            Intent.ACTION_BOOT_COMPLETED,
+            Intent.ACTION_MY_PACKAGE_REPLACED,
+            Intent.ACTION_PACKAGE_REPLACED,
+            "android.intent.action.QUICKBOOT_POWERON" -> {
+                DebugLog.d("CallBlockerReceiver", "Boot/restart detected, checking if service should start")
+                if (SharedPreferencesManager.isBlockingEnabled(context)) {
+                    startCallBlockerService(context)
+                }
+                return
+            }
+        }
+        
+        // Handle phone state changes
+        if (intent.action != TelephonyManager.ACTION_PHONE_STATE_CHANGED) {
+            DebugLog.d("CallBlockerReceiver", "Ignoring action: ${intent.action}")
+            return
+        }
+        
         // Create localized context for proper string resolution
         val localizedContext = LocaleManager.updateContextLanguage(context, LocaleManager.getLanguage(context))
         
@@ -48,6 +68,24 @@ class CallBlockerReceiver : BroadcastReceiver() {
             }
         } catch (e: Exception) {
             DebugLog.e("CallBlockerReceiver", "Error processing call", e)
+        }
+    }
+    
+    private fun startCallBlockerService(context: Context) {
+        try {
+            val serviceIntent = Intent(context, CallBlockerService::class.java).apply {
+                action = CallBlockerService.ACTION_START
+            }
+            
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(serviceIntent)
+            } else {
+                context.startService(serviceIntent)
+            }
+            
+            DebugLog.d("CallBlockerReceiver", "Call blocker service started successfully")
+        } catch (e: Exception) {
+            DebugLog.e("CallBlockerReceiver", "Failed to start call blocker service", e)
         }
     }
     

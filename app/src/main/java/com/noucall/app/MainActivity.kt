@@ -280,7 +280,17 @@ class MainActivity : AppCompatActivity() {
         SharedPreferencesManager.setBlockingEnabled(this, true)
         binding.switchBlocking.isChecked = true
 
-        // Register the call blocker receiver
+        // Start foreground service
+        val serviceIntent = Intent(this, com.noucall.app.service.CallBlockerService::class.java)
+        serviceIntent.action = com.noucall.app.service.CallBlockerService.ACTION_START
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent)
+        } else {
+            startService(serviceIntent)
+        }
+
+        // Register call blocker receiver
         val filter = IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
         registerReceiver(callBlockerReceiver, filter)
 
@@ -292,7 +302,12 @@ class MainActivity : AppCompatActivity() {
         SharedPreferencesManager.setBlockingEnabled(this, false)
         binding.switchBlocking.isChecked = false
 
-        // Unregister the call blocker receiver
+        // Stop foreground service
+        val serviceIntent = Intent(this, com.noucall.app.service.CallBlockerService::class.java)
+        serviceIntent.action = com.noucall.app.service.CallBlockerService.ACTION_STOP
+        startService(serviceIntent)
+
+        // Unregister call blocker receiver
         try {
             unregisterReceiver(callBlockerReceiver)
         } catch (e: Exception) {
@@ -310,6 +325,20 @@ class MainActivity : AppCompatActivity() {
         if (isBlockingEnabled) {
             val filter = IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
             registerReceiver(callBlockerReceiver, filter)
+            
+            // Ensure service is also running
+            val serviceIntent = Intent(this, com.noucall.app.service.CallBlockerService::class.java)
+            serviceIntent.action = com.noucall.app.service.CallBlockerService.ACTION_START
+            
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent)
+            } else {
+                startService(serviceIntent)
+            }
+            
+            Log.d("MainActivity", "Blocking enabled - receiver registered and service started")
+        } else {
+            Log.d("MainActivity", "Blocking disabled")
         }
     }
 

@@ -17,6 +17,8 @@ import com.noucall.app.utils.Constants
 class CallBlockerService : Service() {
     
     companion object {
+        const val ACTION_START = "start_service"
+        const val ACTION_STOP = "stop_service"
         const val ACTION_BLOCK_CALL = "block_call"
         const val EXTRA_PHONE_NUMBER = "phone_number"
         const val NOTIFICATION_ID = 1001
@@ -26,16 +28,26 @@ class CallBlockerService : Service() {
     
     override fun onCreate() {
         super.onCreate()
+        Log.d("CallBlockerService", "Service created")
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel()
-        val notification = createForegroundNotification()
-        startForeground(NOTIFICATION_ID, notification)
     }
     
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("CallBlockerService", "onStartCommand called with action: ${intent?.action}")
 
         when (intent?.action) {
+            ACTION_START -> {
+                Log.d("CallBlockerService", "Starting foreground service")
+                val notification = createForegroundNotification()
+                startForeground(NOTIFICATION_ID, notification)
+            }
+            ACTION_STOP -> {
+                Log.d("CallBlockerService", "Stopping service")
+                stopForeground(true)
+                stopSelf()
+                return START_NOT_STICKY
+            }
             ACTION_BLOCK_CALL -> {
                 val phoneNumber = intent.getStringExtra(EXTRA_PHONE_NUMBER)
                 Log.d("CallBlockerService", "Blocking call from: $phoneNumber")
@@ -45,7 +57,8 @@ class CallBlockerService : Service() {
             }
         }
 
-        return START_NOT_STICKY
+        // Make service sticky to ensure it stays running
+        return START_STICKY
     }
     
     override fun onBind(intent: Intent?): IBinder? {
